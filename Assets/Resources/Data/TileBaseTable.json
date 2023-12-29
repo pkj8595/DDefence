@@ -1,0 +1,16 @@
+{
+  "201001001": {
+    "tileType": 1,
+    "name": "땅",
+    "desc": "그냥 땅이다.",
+    "layer": 0,
+    "isTrigger": 0
+  },
+  "201001002": {
+    "tileType": 2,
+    "name": "벽",
+    "desc": "그냥 벽이다.",
+    "layer": 1,
+    "isTrigger": 1
+  }
+}

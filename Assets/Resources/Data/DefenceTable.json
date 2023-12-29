@@ -1,0 +1,127 @@
+{
+  "CharacterTable": [
+    {
+      "tableNum": "101001001",
+      "name": "나이트",
+      "desc": "나이트다",
+      "attackType": "0",
+      "Head": "HumanShadow#FFFFFF/0:0:0",
+      "Ears": null,
+      "Eyes": "Human#FFFFFF/0:0:0",
+      "Body": "Human#FFFFFF/0:0:0",
+      "Hair": "Hair2#FFFFFF/0:0:0",
+      "Armor": "HornsKnight#FFFFFF/0:0:0",
+      "Helmet": "HornsKnightHelmet#FFFFFF/0:0:0",
+      "Weapon": "Sword#FFFFFF/0:0:0",
+      "Shield": null,
+      "Cape": null,
+      "Back": "SmallBackpack#FFFFFF/0:0:0",
+      "Mask": null,
+      "Horns": null
+    }
+  ],
+  "TileBaseTable": [
+    {
+      "tableNum": "201001001",
+      "tileType": "1",
+      "name": "땅",
+      "desc": "그냥 땅이다.",
+      "layer": "0",
+      "isTrigger": "0"
+    },
+    {
+      "tableNum": "201001002",
+      "tileType": "2",
+      "name": "벽",
+      "desc": "그냥 벽이다.",
+      "layer": "1",
+      "isTrigger": "1"
+    }
+  ],
+  "BuildingTable": [
+    {
+      "tableNum": "202101001",
+      "name": "화살 함정1",
+      "desc": "화살이 날아온다 아플듯",
+      "installableLayer": "0",
+      "prefab": "ArrowTrab",
+      "sprite": "arrowTrap",
+      "tier": "1",
+      "range": "3",
+      "damege": "10",
+      "attackSpeed": "1",
+      "goods_amount": "100",
+      "bulletName": "Arrow"
+    },
+    {
+      "tableNum": "202101002",
+      "name": "화살 함정2",
+      "desc": "화살이 날아온다 아플듯",
+      "installableLayer": "0",
+      "prefab": "ArrowTrab",
+      "sprite": "arrowTrap",
+      "tier": "2",
+      "range": "5",
+      "damege": "20",
+      "attackSpeed": "1.2",
+      "goods_amount": "100",
+      "bulletName": "Arrow"
+    },
+    {
+      "tableNum": "202101003",
+      "name": "화살 함정3",
+      "desc": "화살이 날아온다 아플듯",
+      "installableLayer": "0",
+      "prefab": "ArrowTrab",
+      "sprite": "arrowTrap",
+      "tier": "3",
+      "range": "7",
+      "damege": "30",
+      "attackSpeed": "1.5",
+      "goods_amount": "100",
+      "bulletName": "Arrow"
+    },
+    {
+      "tableNum": "202102001",
+      "name": "회전칼날함정1",
+      "desc": "칼날이 회전하고 있다.",
+      "installableLayer": "1",
+      "prefab": "RotatingBladeTrap",
+      "sprite": "rotatingBladeTrap",
+      "tier": "1",
+      "range": "5",
+      "damege": "10",
+      "attackSpeed": "1",
+      "goods_amount": null,
+      "bulletName": null
+    }
+  ],
+  "GoodsTable": [
+    {
+      "tableNum": "301001001",
+      "name": "금화",
+      "desc": "반짝반짝하다",
+      "imageStr": "testImg"
+    },
+    {
+      "tableNum": "301001002",
+      "name": "마석",
+      "desc": "무언가 느껴진다.",
+      "imageStr": "testImg"
+    }
+  ],
+  "ItemTable": [
+    {
+      "tableNum": "302001001",
+      "name": "투구",
+      "desc": "투구지만 사용하진 못할거 같다. 소환에 도움이 될지도?",
+      "imageStr": "testImg"
+    },
+    {
+      "tableNum": "302001002",
+      "name": "검",
+      "desc": "낡은 검이다. 소환에 도움이 될지도?",
+      "imageStr": "testImg"
+    }
+  ]
+}

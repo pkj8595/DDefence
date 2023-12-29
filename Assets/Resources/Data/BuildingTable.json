@@ -1,0 +1,60 @@
+{
+  "BuildingTable": [
+    {
+      "tableNum": "202002001",
+      "name": "화살 함정1",
+      "desc": "화살이 날아온다 아플듯",
+      "installableLayer": "0",
+      "prefab": "ArrowTrab",
+      "sprite": "arrowTrap",
+      "tier": "1",
+      "range": "3",
+      "damege": "10",
+      "attackSpeed": "1",
+      "goods_amount": "100",
+      "bulletName": "Arrow"
+    },
+    {
+      "tableNum": "202002002",
+      "name": "화살 함정2",
+      "desc": "화살이 날아온다 아플듯",
+      "installableLayer": "0",
+      "prefab": "ArrowTrab",
+      "sprite": "arrowTrap",
+      "tier": "2",
+      "range": "5",
+      "damege": "20",
+      "attackSpeed": "1.2",
+      "goods_amount": "100",
+      "bulletName": "Arrow"
+    },
+    {
+      "tableNum": "202002003",
+      "name": "화살 함정3",
+      "desc": "화살이 날아온다 아플듯",
+      "installableLayer": "0",
+      "prefab": "ArrowTrab",
+      "sprite": "arrowTrap",
+      "tier": "3",
+      "range": "7",
+      "damege": "30",
+      "attackSpeed": "1.5",
+      "goods_amount": "100",
+      "bulletName": "Arrow"
+    },
+    {
+      "tableNum": "202002001",
+      "name": "회전칼날함정1",
+      "desc": "칼날이 회전하고 있다.",
+      "installableLayer": "1",
+      "prefab": "RotatingBladeTrap",
+      "sprite": "rotatingBladeTrap",
+      "tier": "1",
+      "range": "5",
+      "damege": "10",
+      "attackSpeed": "1",
+      "goods_amount": null,
+      "bulletName": null
+    }
+  ]
+}
