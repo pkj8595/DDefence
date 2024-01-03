@@ -4,36 +4,33 @@ using UnityEngine;
 
 public class Stat : MonoBehaviour
 {
-    private int _statDataNum;
+    private int _statDataBaseNum;
+    private Data.StatData _statData;
 
     //todo stat클래스 정리
-    [SerializeField] protected int _level;
-    [SerializeField] protected int _maxHp;
-    [SerializeField] protected int _maxMana;
-    [SerializeField] protected int _attack;
-    [SerializeField] protected int _bellruns;
-    [SerializeField] protected int _defense;
-    [SerializeField] protected float _moveSpeed;
-    [SerializeField] protected float _attackSpeed;
-    [SerializeField] protected int _exp;
-
-    [SerializeField] protected int _hp;
-    [SerializeField] protected int _mana;
-    [SerializeField] protected int _gold;
+    [SerializeField] protected int  _level;
+    [SerializeField] protected int  _exp;
+    [SerializeField] protected int  _hp;
+    [SerializeField] protected int  _mana;
 
     public int Level { get => _level; set => _level = value; }
     public int Hp { get => _hp; set => _hp = value; }
-    public int MaxHp { get => _maxHp; set => _maxHp = value; }
-    public int Attack { get => _attack; set => _attack = value; }
-    public int Defense { get => _defense; set => _defense = value; }
-    public float MoveSpeed { get => _moveSpeed; set => _moveSpeed = value; }
-    public int Gold { get => _gold; set => _gold = value; }
-
-
+    public int MaxHp { get => _statData.hp;}
+    public int MaxMana { get => _statData.mana; }
+    public int Attack { get => _statData.attack; }
+    public int Defense { get => _statData.defense; }
+    public float MoveSpeed { get => _statData.moveSpeed;}
+    public float AttackSpeed { get => _statData.attackSpeed; }
+    public float AttackRange { get => _statData.attackRange; }
+    public float Bellruns { get => _statData.bellruns; }
+    public int TotalExp { get => _statData.totalExp; }
+    public int DropExp { get => _statData.dropExp; }
+    
+    //exp 를 
     public int Exp
     {
         get => _exp;
-        set
+        private set
         {
             _exp = value;
             int level = Level;
@@ -49,29 +46,15 @@ public class Stat : MonoBehaviour
             {
                 Debug.Log($"Level Up {Level}");
                 Level = level;
-                //SetStat(Level);
+                SetStat(CalculateStatDataNum());
             }
         }
     }
 
-    private void Start()
-    {
-        _level = 1;
-        _hp = 100;
-        _maxHp = 100;
-        _attack = 10;
-        _defense = 5;
-        _moveSpeed = 5.0f;
-
-        _exp = 0;
-        _gold = 0;
-
-        //SetStat(_level);
-    }
-
+    //받는 데미지 계산
     public virtual void OnAttacked(Stat attacker)
     {
-        int damage = Mathf.Max(0, attacker.Attack - Defense);
+        int damage = (int)Mathf.Max(0, attacker.OnAttack() - Defense);
         Hp -= damage;
         if (Hp < 0)
         {
@@ -80,39 +63,54 @@ public class Stat : MonoBehaviour
         }
     }
 
+    //어택 데미지 산출
+    public virtual float OnAttack()
+    {
+        const float bellMaxValue = 1.0f;
+        const float bellMinValue = 0.01f;
+
+        float bell = Mathf.Clamp(Bellruns, bellMinValue, bellMaxValue);
+        float min = Attack * bell; //0.2
+        float max = Attack * (2.0f - bell); //1.8
+        
+        return Random.Range(min, max);
+    }
+
     private void OnDead(Stat attacker)
     {
         if (attacker != null)
         {
-            attacker.Exp += 15;
+            attacker.Exp += DropExp;
         }
 
         Managers.Game.Despawn(gameObject);
     }
 
-
-    public void SetStat(int level)
-    {
-        var dict = Managers.Data.StatDict;
-        Data.StatData stat = dict[level];
-        _hp = stat.hp;
-        _maxHp = stat.hp;
-        _attack = stat.attack;
-        _defense = 5;
-        _moveSpeed = 5.0f;
-    }
-
     public void Init(int statDataNum)
     {
-        _statDataNum = statDataNum;
+        _statDataBaseNum = statDataNum;
         _level = 0;
+        _exp = 0;
         SetStat(CalculateStatDataNum());
         //todo init이랑 
     }
 
+    private void SetStat(int statDataNum)
+    {
+        SetStat(Managers.Data.StatDict[statDataNum]);
+    }
+
+    private void SetStat(Data.StatData statData)
+    {
+        _statData = statData;
+        _hp = statData.hp;
+        _mana = statData.mana;
+
+    }
+
     private int CalculateStatDataNum()
     {
-        return _statDataNum + _level;
+        return _statDataBaseNum + _level;
     }
 
 }

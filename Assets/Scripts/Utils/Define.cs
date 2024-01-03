@@ -31,7 +31,7 @@ public class Define
         Unit = 9,
     }
 
-    public enum State
+    public enum PawnState
     {
         Idle,
         Moving,
@@ -39,6 +39,18 @@ public class Define
         Skill,
         Take_Damage,
         Die,
+    }
+
+    public enum AttackType
+    {
+        MeleeAttack,
+        RangeAttack
+    }
+
+    public enum TrapState
+    {
+        Idle,
+        Attack,
     }
 
     public enum Scene

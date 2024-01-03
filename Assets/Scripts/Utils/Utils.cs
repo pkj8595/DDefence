@@ -57,7 +57,13 @@ public static class Utils
         return tableNum / 1000000;
     }
 
-    
+    public static int CalculateCategory(int tableNum)
+    {
+        return CalculateTable(tableNum) / 1000;
+    }
+
+
+
     public static int MakeFalg(params int[] falg)
     {
         int sum = 0;
@@ -68,5 +74,7 @@ public static class Utils
 
         return sum;
     }
+
+    
 
 }

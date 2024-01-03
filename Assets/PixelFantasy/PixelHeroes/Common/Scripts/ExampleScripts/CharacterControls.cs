@@ -1,4 +1,4 @@
-﻿using Assets.PixelFantasy.PixelHeroes.Common.Scripts.CharacterScripts;
+using Assets.PixelFantasy.PixelHeroes.Common.Scripts.CharacterScripts;
 using UnityEngine;
 using AnimationState = Assets.PixelFantasy.PixelHeroes.Common.Scripts.CharacterScripts.AnimationState;
 

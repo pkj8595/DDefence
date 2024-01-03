@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PawnController : BaseController
 {
-    PawnAnimationController _pawnAnimationController;
 
 
     public override void Init(int characterNum)

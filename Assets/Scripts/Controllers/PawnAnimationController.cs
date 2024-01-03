@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Assets.PixelFantasy.PixelHeroes.Common.Scripts.CharacterScripts;
+using PixelHero = Assets.PixelFantasy.PixelHeroes.Common.Scripts.CharacterScripts;
 using System;
 
 public class PawnAnimationController : MonoBehaviour
 {
-    public Character _pawn;
-    public CharacterBuilder _pawnBuilder;
+    public PixelHero.Character _pawn;
+    public PixelHero.CharacterBuilder _pawnBuilder;
+    public Define.AttackType _attackType = Define.AttackType.MeleeAttack;
 
 #if UNITY_EDITOR
     public int CharacterDataNum;
@@ -27,6 +28,8 @@ public class PawnAnimationController : MonoBehaviour
 
     public void Init(Data.CharacterData data)
     {
+        _attackType = (Define.AttackType)data.attackType;
+
         _pawnBuilder.Head = data.Head;
         _pawnBuilder.Ears = data.Ears;
         _pawnBuilder.Eyes = data.Eyes;
@@ -40,6 +43,7 @@ public class PawnAnimationController : MonoBehaviour
         _pawnBuilder.Back = data.Back;
         _pawnBuilder.Mask = data.Mask;
         _pawnBuilder.Horns = data.Horns;
+
         _pawnBuilder.Rebuild();
     }
 
@@ -48,18 +52,31 @@ public class PawnAnimationController : MonoBehaviour
         Init(Managers.Data.CharacterDict[characterDataNum]);
     }
 
-    public void SetAniState(Define.State state)
+    public void SetAniState(Define.PawnState state)
     {
-        Assets.PixelFantasy.PixelHeroes.Common.Scripts.CharacterScripts.AnimationState pawnState = 0;
+        PixelHero.AnimationState pawnState = 0;
         switch (state)
         {
-            case Define.State.Die:
+            case Define.PawnState.Idle:
+                pawnState = PixelHero.AnimationState.Idle;
                 break;
-            case Define.State.Moving:
+            case Define.PawnState.Moving:
+                pawnState = PixelHero.AnimationState.Idle;
                 break;
-            case Define.State.Idle:
+            case Define.PawnState.Attack:
+                if(_attackType == Define.AttackType.MeleeAttack)
+                    _pawn.Animator.SetTrigger("Slash");
+                else
+                    _pawn.Animator.SetTrigger("Shot");
+                return;
+            case Define.PawnState.Skill:
+                pawnState = PixelHero.AnimationState.Jumping;
                 break;
-            case Define.State.Skill:
+            case Define.PawnState.Take_Damage:
+                pawnState = PixelHero.AnimationState.Blocking;
+                break;
+            case Define.PawnState.Die:
+                pawnState = PixelHero.AnimationState.Dead;
                 break;
             default: throw new NotSupportedException();
 

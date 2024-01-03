@@ -6,14 +6,14 @@ public abstract class BaseController : MonoBehaviour, IWorldObject
 {
     [SerializeField] protected Vector3 _destPos;
     [SerializeField] protected GameObject _lockTarget;
-    [SerializeField] protected Define.State _state = Define.State.Idle;
-    
     [SerializeField] protected Stat _stat;
     [SerializeField] protected PawnAnimationController _pawnController;
+    [SerializeField] protected Define.PawnState _state = Define.PawnState.Idle;
+
     private Data.CharacterData _characterData;
 
     public Define.WorldObject WorldObjectType { get; protected set; } = Define.WorldObject.Unknown;
-    public virtual Define.State State
+    public virtual Define.PawnState State
     {
         get { return _state; }
         set
@@ -38,16 +38,16 @@ public abstract class BaseController : MonoBehaviour, IWorldObject
     {
         switch (State)
         {
-            case Define.State.Die:
+            case Define.PawnState.Die:
                 UpdateDie();
                 break;
-            case Define.State.Moving:
+            case Define.PawnState.Moving:
                 UpdateMove();
                 break;
-            case Define.State.Idle:
+            case Define.PawnState.Idle:
                 UpdateIdle();
                 break;
-            case Define.State.Skill:
+            case Define.PawnState.Skill:
                 UpdateSkill();
                 break;
         }
