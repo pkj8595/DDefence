@@ -7,7 +7,6 @@ using UnityEngine.AI;
 
 public class PlayerContoroller : BaseController
 {
-    PlayerStat _stat;
     //float wait_run_retio = 0.0f;
 
     int _mask = Utils.MakeFalg(Define.Layer.Ground.ToInt());
@@ -15,7 +14,7 @@ public class PlayerContoroller : BaseController
     protected override void Init()
     {
         WorldObjectType = Define.WorldObject.Player;
-        _stat = gameObject.GetComponent<PlayerStat>();
+        _stat = gameObject.GetComponent<Stat>();
 
         //Managers.Input.KeyAction -= OnKeyboard;
         //Managers.Input.KeyAction += OnKeyboard;
@@ -34,7 +33,7 @@ public class PlayerContoroller : BaseController
 
     protected override void UpdateIdle()
     {
-        //animation
+
     }
 
     protected override void UpdateDie()
@@ -44,7 +43,7 @@ public class PlayerContoroller : BaseController
     protected override void UpdateMove()
     {
     }
-
+    
 
     void OnKeyboard()
     {

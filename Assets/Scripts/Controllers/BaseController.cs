@@ -8,8 +8,9 @@ public abstract class BaseController : MonoBehaviour, IWorldObject
     [SerializeField] protected GameObject _lockTarget;
     [SerializeField] protected Define.State _state = Define.State.Idle;
     
-    private Stat _stat;
-    private PawnAnimationController _pawnController;
+    [SerializeField] protected Stat _stat;
+    [SerializeField] protected PawnAnimationController _pawnController;
+    private Data.CharacterData _characterData;
 
     public Define.WorldObject WorldObjectType { get; protected set; } = Define.WorldObject.Unknown;
     public virtual Define.State State
@@ -18,25 +19,17 @@ public abstract class BaseController : MonoBehaviour, IWorldObject
         set
         {
             _state = value;
-            
-            switch (_state)
-            {
-                case Define.State.Die:
-                    break;
-                case Define.State.Moving:
-                    break;
-                case Define.State.Idle:
-                    break;
-                case Define.State.Skill:
-                    break;
-            }
+            _pawnController.SetAniState(_state);
         }
     }
 
     private void Awake()
     {
-        _pawnController = gameObject.GetComponent<PawnAnimationController>();
-        _stat = gameObject.GetOrAddComponent<Stat>();
+        if(_pawnController == null)
+            _pawnController = gameObject.GetOrAddComponent<PawnAnimationController>();
+
+        if(_stat == null)
+            _stat = gameObject.GetOrAddComponent<Stat>();
 
     }
 
@@ -63,6 +56,9 @@ public abstract class BaseController : MonoBehaviour, IWorldObject
     public virtual void Init(int characterNum)
     {
         Init();
+        _characterData = Managers.Data.CharacterDict[characterNum];
+        _pawnController.Init(_characterData);
+        _stat.Init(_characterData.statDataNum);
     }
 
     protected virtual void Init() { }

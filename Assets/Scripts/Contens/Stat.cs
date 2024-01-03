@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Stat : MonoBehaviour
 {
+    private int _statDataNum;
 
+    //todo stat클래스 정리
     [SerializeField] protected int _level;
     [SerializeField] protected int _maxHp;
     [SerializeField] protected int _maxMana;
@@ -12,7 +14,7 @@ public class Stat : MonoBehaviour
     [SerializeField] protected int _bellruns;
     [SerializeField] protected int _defense;
     [SerializeField] protected float _moveSpeed;
-    [SerializeField] protected int _attackSpeed;
+    [SerializeField] protected float _attackSpeed;
     [SerializeField] protected int _exp;
 
     [SerializeField] protected int _hp;
@@ -37,7 +39,7 @@ public class Stat : MonoBehaviour
             int level = Level;
             while (true)
             {
-                if (Managers.Data.StatDict.TryGetValue(level + 1, out Data.Stat stat) == false)
+                if (Managers.Data.StatDict.TryGetValue(CalculateStatDataNum(), out Data.StatData stat) == false)
                     break;
                 if (_exp < stat.totalExp)
                     break;
@@ -78,30 +80,39 @@ public class Stat : MonoBehaviour
         }
     }
 
-    protected virtual void OnDead(Stat attacker)
+    private void OnDead(Stat attacker)
     {
-        PlayerStat playerStat = attacker as PlayerStat;
-        
-        if (playerStat != null)
+        if (attacker != null)
         {
-            playerStat.Exp += 15;
+            attacker.Exp += 15;
         }
 
         Managers.Game.Despawn(gameObject);
     }
 
 
-    private void SetStat(int tableNum)
+    public void SetStat(int level)
     {
         var dict = Managers.Data.StatDict;
-        Data.Stat stat = dict[tableNum];
-        _hp = stat.maxHp;
-        _maxHp = stat.maxHp;
+        Data.StatData stat = dict[level];
+        _hp = stat.hp;
+        _maxHp = stat.hp;
         _attack = stat.attack;
         _defense = 5;
         _moveSpeed = 5.0f;
     }
 
+    public void Init(int statDataNum)
+    {
+        _statDataNum = statDataNum;
+        _level = 0;
+        SetStat(CalculateStatDataNum());
+        //todo init이랑 
+    }
 
-    
+    private int CalculateStatDataNum()
+    {
+        return _statDataNum + _level;
+    }
+
 }

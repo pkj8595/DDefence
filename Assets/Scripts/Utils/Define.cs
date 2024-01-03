@@ -4,13 +4,23 @@ using UnityEngine;
 
 public class Define
 {
+    /// <summary>
+    /// player의 소환수 및 NonePlayable 몬스터 간의 관계
+    /// </summary>
+    public enum ERelationShip
+    {
+        Friendly,
+        Neutrality,
+        Enemy
+    }
+
     public enum WorldObject
     {
         Unknown,
         Player,
-        Playable,
+        Summon,
         NonePlayable,
-
+        trap,
     }
 
     public enum Layer
@@ -23,10 +33,12 @@ public class Define
 
     public enum State
     {
-        Die,
-        Moving,
         Idle,
+        Moving,
+        Attack,
         Skill,
+        Take_Damage,
+        Die,
     }
 
     public enum Scene

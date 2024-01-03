@@ -57,7 +57,7 @@ public class BoardManager : MonoBehaviour
     private void CreateTileObject(string tilePrefabName)
     {
         Vector3 cellWorldPosition = _colliderTilemap.GetCellCenterWorld(GetCellPositionToMouse());
-        GameObject testTile = Managers.Resource.Instantiate($"Tiles/{tilePrefabName}");
+        GameObject testTile = Managers.Resource.Instantiate($"Tiles/{tilePrefabName}", gameObject.transform);
         testTile.transform.position = cellWorldPosition;
     }
 }

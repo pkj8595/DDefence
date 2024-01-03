@@ -18,7 +18,6 @@ public class SceneManagerEx : ManagerBase
 
     public void LoadScene(Define.Scene type)
     {
-        Managers.Clear();
         SceneManager.LoadScene(type.ToString());
     }
 

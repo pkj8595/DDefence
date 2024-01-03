@@ -15,14 +15,15 @@ namespace Data
     [Serializable]
     public class TableGroupData
     {
-        public CharacterTable[] CharacterTable;
-        public TileBaseTable[] TileBaseTable;
-        public BuildingTable[] BuildingTable;
-        public GoodsTable[] GoodsTable;
-        public ItemTable[] ItemTable;
+        public CharacterData[] CharacterTable;
+        public StatData[] StatTable;
+        public TileBaseData[] TileBaseTable;
+        public BuildingData[] BuildingTable;
+        public GoodsData[] GoodsTable;
+        public ItemData[] ItemTable;
 
 
-        public void MakeCharacterTableData(Dictionary<int, CharacterTable> tableData)
+        public void MakeTableData(Dictionary<int, CharacterData> tableData)
         {
             for(int i = 0; i < CharacterTable.Length; i++)
             {
@@ -30,7 +31,15 @@ namespace Data
             }
         }
 
-        public void MakeTileBaseTableData(Dictionary<int, TileBaseTable> tableData)
+        public void MakeTableData(Dictionary<int, StatData> tableData)
+        {
+            for (int i = 0; i < StatTable.Length; i++)
+            {
+                tableData.Add(StatTable[i].tableNum, StatTable[i]);
+            }
+        }
+
+        public void MakeTableData(Dictionary<int, TileBaseData> tableData)
         {
             for (int i = 0; i < TileBaseTable.Length; i++)
             {
@@ -38,7 +47,7 @@ namespace Data
             }
         }
 
-        public void MakeBuildingTableData(Dictionary<int, BuildingTable> tableData)
+        public void MakeTableData(Dictionary<int, BuildingData> tableData)
         {
             for (int i = 0; i < BuildingTable.Length; i++)
             {
@@ -46,7 +55,7 @@ namespace Data
             }
         }
 
-        public void MakeGoodsTableData(Dictionary<int, GoodsTable> tableData)
+        public void MakeTableData(Dictionary<int, GoodsData> tableData)
         {
             for (int i = 0; i < GoodsTable.Length; i++)
             {
@@ -54,7 +63,7 @@ namespace Data
             }
         }
 
-        public void MakeItemTableData(Dictionary<int, ItemTable> tableData)
+        public void MakeTableData(Dictionary<int, ItemData> tableData)
         {
             for (int i = 0; i < ItemTable.Length; i++)
             {
@@ -62,31 +71,18 @@ namespace Data
             }
         }
 
-
     }
-
-
-    #region Stat
-    [Serializable]
-    public class Stat 
-    {
-        public int level;
-        public int maxHp;
-        public int attack;
-        public int totalExp;
-    }
-
-    
-    #endregion
+   
 
     #region 101
     [Serializable]
-    public class CharacterTable : TableBase
+    public class CharacterData : TableBase
     {
         public const int Table = 101;
 
         public string name;
         public string desc;
+        public int statDataNum;
         public int attackType;
         public string Head;
         public string Ears;
@@ -104,9 +100,29 @@ namespace Data
     }
     #endregion
 
+    #region 102 
+    [Serializable]
+    public class StatData : TableBase
+    {
+        public const int Table = 102;
+
+        public int level;
+        public int hp;
+        public int mana;
+        public int attack;
+        public int defense;
+        public float moveSpeed;
+        public float attackSpeed;
+        public float attackRange;
+        public float bellruns;
+        public int totalExp;
+        public int dropExp;
+    }
+    #endregion
+
     #region 201
     [Serializable]
-    public class TileBaseTable : TableBase
+    public class TileBaseData : TableBase
     {
         public const int Table = 201;
 
@@ -120,7 +136,7 @@ namespace Data
 
     #region 202
     [Serializable]
-    public class BuildingTable : TableBase
+    public class BuildingData : TableBase
     {
         public const int Table = 202;
 
@@ -134,7 +150,7 @@ namespace Data
 
     #region 301
     [Serializable]
-    public class GoodsTable : TableBase
+    public class GoodsData : TableBase
     {
         public const int Table = 301;
 
@@ -146,7 +162,7 @@ namespace Data
 
     #region 302
     [Serializable]
-    public class ItemTable : TableBase
+    public class ItemData : TableBase
     {
         public const int Table = 302;
 

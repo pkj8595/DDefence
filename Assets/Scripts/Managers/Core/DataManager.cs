@@ -5,12 +5,12 @@ using System;
 
 public class DataManager : ManagerBase
 {
-    public Dictionary<int, Data.Stat> StatDict { get; private set; } = new Dictionary<int, Data.Stat>();
-    public Dictionary<int, Data.CharacterTable> CharacterDict { get; private set; } = new Dictionary<int, Data.CharacterTable>();
-    public Dictionary<int, Data.TileBaseTable> TileBaseDict { get; private set; } = new Dictionary<int, Data.TileBaseTable>();
-    public Dictionary<int, Data.BuildingTable> BuildingDict { get; private set; } = new Dictionary<int, Data.BuildingTable>();
-    public Dictionary<int, Data.GoodsTable> GoodsDict { get; private set; } = new Dictionary<int, Data.GoodsTable>();
-    public Dictionary<int, Data.ItemTable> ItemDict { get; private set; } = new Dictionary<int, Data.ItemTable>();
+    public Dictionary<int, Data.CharacterData> CharacterDict { get; private set; } = new Dictionary<int, Data.CharacterData>();
+    public Dictionary<int, Data.StatData> StatDict { get; private set; } = new Dictionary<int, Data.StatData>();
+    public Dictionary<int, Data.TileBaseData> TileBaseDict { get; private set; } = new Dictionary<int, Data.TileBaseData>();
+    public Dictionary<int, Data.BuildingData> BuildingDict { get; private set; } = new Dictionary<int, Data.BuildingData>();
+    public Dictionary<int, Data.GoodsData> GoodsDict { get; private set; } = new Dictionary<int, Data.GoodsData>();
+    public Dictionary<int, Data.ItemData> ItemDict { get; private set; } = new Dictionary<int, Data.ItemData>();
 
 
     public override void Init()
@@ -18,11 +18,12 @@ public class DataManager : ManagerBase
         TextAsset textAsset = Managers.Resource.Load<TextAsset>($"Data/DefenceTable");
         Data.TableGroupData tableGroupData = JsonUtility.FromJson<Data.TableGroupData>(textAsset.text);
 
-        tableGroupData.MakeCharacterTableData(CharacterDict);
-        tableGroupData.MakeTileBaseTableData(TileBaseDict);
-        tableGroupData.MakeBuildingTableData(BuildingDict);
-        tableGroupData.MakeGoodsTableData(GoodsDict);
-        tableGroupData.MakeItemTableData(ItemDict);
+        tableGroupData.MakeTableData(CharacterDict);
+        tableGroupData.MakeTableData(StatDict);
+        tableGroupData.MakeTableData(TileBaseDict);
+        tableGroupData.MakeTableData(BuildingDict);
+        tableGroupData.MakeTableData(GoodsDict);
+        tableGroupData.MakeTableData(ItemDict);
 
     }
 
@@ -31,28 +32,33 @@ public class DataManager : ManagerBase
         Data.TableBase ret = null;
         switch (Utils.CalculateTable(tableNum))
         {
-            case Data.CharacterTable.Table:
-                Data.CharacterTable characterTable;
+            case Data.CharacterData.Table:
+                Data.CharacterData characterTable;
                 CharacterDict.TryGetValue(tableNum,out characterTable);
                 ret = characterTable;
                 break;
-            case Data.TileBaseTable.Table:
-                Data.TileBaseTable tileBaseTable;
+            case Data.StatData.Table:
+                Data.StatData statTable;
+                StatDict.TryGetValue(tableNum, out statTable);
+                ret = statTable;
+                break;
+            case Data.TileBaseData.Table:
+                Data.TileBaseData tileBaseTable;
                 TileBaseDict.TryGetValue(tableNum, out tileBaseTable);
                 ret = tileBaseTable;
                 break;
-            case Data.BuildingTable.Table:
-                Data.BuildingTable buildingTable;
+            case Data.BuildingData.Table:
+                Data.BuildingData buildingTable;
                 BuildingDict.TryGetValue(tableNum, out buildingTable);
                 ret = buildingTable;
                 break;
-            case Data.GoodsTable.Table:
-                Data.GoodsTable goodsTable;
+            case Data.GoodsData.Table:
+                Data.GoodsData goodsTable;
                 GoodsDict.TryGetValue(tableNum, out goodsTable);
                 ret = goodsTable;
                 break;
-            case Data.ItemTable.Table:
-                Data.ItemTable itemTable;
+            case Data.ItemData.Table:
+                Data.ItemData itemTable;
                 ItemDict.TryGetValue(tableNum, out itemTable);
                 ret = itemTable;
                 break;
