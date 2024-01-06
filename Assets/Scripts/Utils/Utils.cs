@@ -52,14 +52,24 @@ public static class Utils
         return null;
     }
 
-    public static int CalculateTable(int tableNum)
+    public static int CalculateTableNum(int tableNum)
     {
         return tableNum / 1000000;
     }
 
     public static int CalculateCategory(int tableNum)
     {
-        return CalculateTable(tableNum) / 1000;
+        return CalculateTableNum(tableNum) / 1000;
+    }
+
+    public static int CalculateTable(int tableNum, int category, int index)
+    {
+        return (tableNum * 1000000) + (category * 1000) + index;
+    }
+
+    public static int CalculateTableBaseNumber(int tableNum)
+    {
+        return tableNum - (tableNum % 1000);
     }
 
 
@@ -69,6 +79,9 @@ public static class Utils
         int sum = 0;
         for (int i = 0; i < falg.Length; i++)
         {
+            if (falg[i] > 9)
+                break;
+
             sum += 1 << falg[i];
         }
 

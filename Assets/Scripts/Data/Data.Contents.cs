@@ -107,8 +107,8 @@ namespace Data
         public const int Table = 102;
 
         public int level;
-        public int hp;
-        public int mana;
+        public int maxHp;
+        public int maxMana;
         public int attack;
         public int defense;
         public float moveSpeed;

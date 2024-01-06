@@ -20,7 +20,7 @@ public class Define
         Player,
         Summon,
         NonePlayable,
-        trap,
+        Trap,
     }
 
     public enum Layer

@@ -10,22 +10,13 @@ public class PawnAnimationController : MonoBehaviour
     public PixelHero.CharacterBuilder _pawnBuilder;
     public Define.AttackType _attackType = Define.AttackType.MeleeAttack;
 
-#if UNITY_EDITOR
-    public int CharacterDataNum;
-#endif
+    //todo : particleManager 만들기
+    //[SerializeField] private ParticleSystem _moveDust;
 
-    void Start()
-    {
-#if UNITY_EDITOR
-        Init(CharacterDataNum);
-#endif
-    }
-
-    void Update()
-    {
-
-    }
-
+    /// <summary>
+    /// 캐릭터 생성시 테이블 데이터로 CharacterSprite와 attackType 셋팅
+    /// </summary>
+    /// <param name="data"></param>
     public void Init(Data.CharacterData data)
     {
         _attackType = (Define.AttackType)data.attackType;
@@ -54,14 +45,14 @@ public class PawnAnimationController : MonoBehaviour
 
     public void SetAniState(Define.PawnState state)
     {
-        PixelHero.AnimationState pawnState = 0;
+        PixelHero.AnimationState pawnState = PixelHero.AnimationState.Idle;
         switch (state)
         {
             case Define.PawnState.Idle:
                 pawnState = PixelHero.AnimationState.Idle;
                 break;
             case Define.PawnState.Moving:
-                pawnState = PixelHero.AnimationState.Idle;
+                pawnState = PixelHero.AnimationState.Walking;
                 break;
             case Define.PawnState.Attack:
                 if(_attackType == Define.AttackType.MeleeAttack)
@@ -83,5 +74,12 @@ public class PawnAnimationController : MonoBehaviour
         }
         _pawn.SetState(pawnState);
 
+    }
+
+    public void Turn(float direction)
+    {
+        var scale = gameObject.transform.localScale;
+        scale.x = Mathf.Sign(direction) * Mathf.Abs(scale.x);
+        gameObject.transform.localScale = scale;
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using NavMeshPlus.Components;
 
 public class BoardManager : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class BoardManager : MonoBehaviour
     public Tilemap _groundTilemap;
     public Tilemap _colliderTilemap;
     public List<TileBase> _tileBaseList = new List<TileBase>();
+    public NavMeshSurface _surface2D;
 
 
     public void Start()
@@ -25,12 +27,13 @@ public class BoardManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown(KeyCode.S))
         {
             CreateTile(TILE_TYPE.WALL);
-            CreateTileObject("TilePrefabBase");
+            //CreateTileObject("TilePrefabBase");
+
         }
-        else if (Input.GetMouseButton(1))
+        else if (Input.GetKeyDown(KeyCode.D))
         {
             RemoveTile();
         }
@@ -40,11 +43,14 @@ public class BoardManager : MonoBehaviour
     private void CreateTile(TILE_TYPE tileType)
     {
         _colliderTilemap.SetTile(GetCellPositionToMouse(), _tileBaseList[(int)tileType]);
+        UpdateNavimeshSurface();
+
     }
 
     private void RemoveTile()
     {
         _colliderTilemap.SetTile(GetCellPositionToMouse(), null);
+        UpdateNavimeshSurface();
     }
 
     private Vector3Int GetCellPositionToMouse()
@@ -53,11 +59,15 @@ public class BoardManager : MonoBehaviour
         return _colliderTilemap.WorldToCell(mouseWorldPosition);
     }
 
-    //
     private void CreateTileObject(string tilePrefabName)
     {
         Vector3 cellWorldPosition = _colliderTilemap.GetCellCenterWorld(GetCellPositionToMouse());
         GameObject testTile = Managers.Resource.Instantiate($"Tiles/{tilePrefabName}", gameObject.transform);
         testTile.transform.position = cellWorldPosition;
+    }
+
+    public void UpdateNavimeshSurface()
+    {
+        _surface2D.BuildNavMeshAsync();
     }
 }

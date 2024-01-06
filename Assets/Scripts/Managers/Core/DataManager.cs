@@ -30,7 +30,7 @@ public class DataManager : ManagerBase
     public Data.TableBase GetTableData(int tableNum)
     {
         Data.TableBase ret = null;
-        switch (Utils.CalculateTable(tableNum))
+        switch (Utils.CalculateTableNum(tableNum))
         {
             case Data.CharacterData.Table:
                 Data.CharacterData characterTable;
