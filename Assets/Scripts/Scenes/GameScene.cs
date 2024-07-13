@@ -9,15 +9,11 @@ public class GameScene : BaseScene
     {
         base.Init();
         SCENE_TYPE = Define.Scene.Game;
-        //gameObject.GetOrAddComponent<CursorController>();
-
-        //Dictionary<int, Data.Stat> dic = Managers.Data.StatDict;
-        //플레이어 캐릭터 생성
-        //Managers.Game.Spawn(Define.WorldObject.Monster, "Knight");
-
+        
         GameObject go = new GameObject { name = "SpawningPool" };
         SpawningPool pool = go.GetOrAddComponent<SpawningPool>();
         pool.SetKeepMonsterCount(5);
+
 
     }
 

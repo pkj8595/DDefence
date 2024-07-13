@@ -9,6 +9,7 @@ public class Managers : MonoBehaviour
 
     #region Contens
     GameManager _game = new GameManager();
+    
     public static GameManager Game { get { return Instance._game; } }
     #endregion
     
@@ -42,17 +43,19 @@ public class Managers : MonoBehaviour
 
     public static void Init()
     {
-        if(s_Instance is null)
+        if(s_Instance == null)
         {
             GameObject go = GameObject.Find("@Managers");
-            if (go is null)
+            if (go == null)
             {
                 go = new GameObject { name = "@Managers" };
                 go.AddComponent<Managers>();
             }
+
             DontDestroyOnLoad(go);
             s_Instance = go.GetComponent<Managers>();
 
+            s_Instance._scene.Init();
             s_Instance._data.Init();
             s_Instance._pool.Init();
             s_Instance._sound.Init();

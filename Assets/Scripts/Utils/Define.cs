@@ -6,14 +6,21 @@ public class Define
 {
     /// <summary>
     /// player의 소환수 및 NonePlayable 몬스터 간의 관계
+    /// summon && friendly == playable
+    /// summon && enemy == 적대 -> 제어는 가능하지만 플레이어를 때림(제어 x)
+    /// NonePlayable && friendly == 친밀관계 -> 제어할순없지만 적을 때림
+    /// NonePlayable && enemy == 적대 -> 제어할 수 없고 플레이어를 때림
     /// </summary>
     public enum ERelationShip
     {
         Friendly,
-        Neutrality,
+        //Neutrality,
         Enemy
     }
 
+    /// <summary>
+    /// worldObject 상태
+    /// </summary>
     public enum WorldObject
     {
         Unknown,
@@ -74,6 +81,8 @@ public class Define
         PointerUp,
         Click,
     }
+
+    
 
     public static class Path
     {

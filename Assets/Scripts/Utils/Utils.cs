@@ -74,18 +74,32 @@ public static class Utils
 
 
 
-    public static int MakeFalg(params int[] falg)
+    public static int MakeFalg(params int[] flag)
     {
         int sum = 0;
-        for (int i = 0; i < falg.Length; i++)
+        for (int i = 0; i < flag.Length; i++)
         {
-            if (falg[i] > 9)
+            if (flag[i] > 9)
                 break;
 
-            sum += 1 << falg[i];
+            sum += 1 << flag[i];
         }
 
         return sum;
+    }
+
+    /// <summary>
+    /// 비트 연산자를 사용해 자리값이 1이 맞는지 확인한다.
+    /// </summary>
+    /// <param name="v">비교할 값</param>
+    /// <param name="flag">비교할 값</param>
+    /// <returns>
+    /// true : 두 비트의 자리수가 1이 맞을 경우
+    /// false : 두 비트의 자리수가 1이 아닐경우
+    /// </returns>
+    public static bool CompareFlag(int v ,int flag)
+    {
+        return (1 << v & 1 << flag) == 1;
     }
 
     

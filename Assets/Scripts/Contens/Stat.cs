@@ -72,10 +72,7 @@ public class Stat : MonoBehaviour
         const float bellMinValue = 0.01f;
 
         float bell = Mathf.Clamp(Bellruns, bellMinValue, bellMaxValue);
-        float min = Attack * bell; //0.2
-        float max = Attack * (2.0f - bell); //1.8
-        
-        return Random.Range(min, max);
+        return Random.Range(Attack * bell, Attack);
     }
 
     private void OnDead(Stat attacker)

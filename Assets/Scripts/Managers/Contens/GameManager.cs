@@ -11,8 +11,9 @@ public class GameManager
 
     GameObject _player;
     HashSet<GameObject> _monster = new HashSet<GameObject>();
-    public Action<int> OnSpawnEvent;
+    public CombatSystem _combatSystem = new CombatSystem();
 
+    public Action<int> OnSpawnEvent;
     public GameObject GetPlayer() { return _player; }
 
     public GameObject Spawn(Define.WorldObject type, string path, Transform parent = null)
@@ -27,7 +28,6 @@ public class GameManager
                 _player = go;
                 break;
         }
-
         return go;
     }
 
@@ -61,6 +61,18 @@ public class GameManager
                 }
                 break;
         }
-
     }
+
+    /// <summary>
+    /// 1. 공격자가 attack class를 상속받은 공격 클래스를 combatSystem에 보낸다.(공격스킬 확정)
+    /// 2. 공격자가 대상으로한 타겟(근접) 및 position(원거리 공격)를 인수로 받는다.
+    /// 3. 방어자의 stat를 계산하고 데미지를 준다.
+    /// </summary>
+    /// <param name="attack"></param>
+    public void SetAttack(Attack attack, GameObject obj)
+    {
+        //_combatSystem.SetAttack(attack);
+    }
+    
+
 }

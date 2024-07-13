@@ -172,5 +172,27 @@ namespace Data
     }
     #endregion
 
-    
+    [Serializable]
+    public class SkillData : TableBase
+    {
+        public const int Table = 401;
+
+        public string name;
+        public string desc;
+        public string effectStr;
+        public string iconStr;
+        public int tire;
+        public float damagePer;
+        public float skillRange;
+        public float splashRange;
+        public float costAmount;
+        public int costNumber;
+        public bool isRangedSkill;
+        public bool isSplash;
+        public int targetType; // 0.player 1.gameobject 2.position
+        public int buffType; // 0. none 1. buff 2.debuff
+        public int splashType; // 0. none, 1.circle 2.rect 
+        public int buffStatDataNum;
+        
+    }
 }

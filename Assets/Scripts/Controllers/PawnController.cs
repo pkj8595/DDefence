@@ -5,11 +5,11 @@ using UnityEngine.AI;
 
 public class PawnController : BaseController
 {
-    public int testCharacterNum;
+    public int _testCharacterNum;
 
     private void Start()
     {
-        Init(testCharacterNum);
+        Init(_testCharacterNum);
     }
 
     public override void Init(int characterNum)
@@ -57,7 +57,9 @@ public class PawnController : BaseController
         base.Update();
         if (Input.GetMouseButtonDown(0))
         {
-            OnMove(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            Vector2 rayOrigin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            if (BoardManager.Instance.GetMoveablePosition(rayOrigin, out Vector2 moveablePosition))
+                OnMove(moveablePosition);
         }
 
         if (Input.GetKeyDown(KeyCode.A))

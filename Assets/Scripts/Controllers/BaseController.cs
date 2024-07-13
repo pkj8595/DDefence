@@ -17,6 +17,7 @@ public abstract class BaseController : MonoBehaviour, IWorldObject
     public NavMeshAgent _navAgent;
 
     public Define.WorldObject WorldObjectType { get; protected set; } = Define.WorldObject.Unknown;
+    public Define.ERelationShip Relationship { get; set; } = Define.ERelationShip.Friendly;
 
     public virtual Define.PawnState State
     {
@@ -100,37 +101,22 @@ public abstract class BaseController : MonoBehaviour, IWorldObject
                 _navAgent.isStopped = true;
                 _navAgent.ResetPath();
                 State = Define.PawnState.Idle;
-                break;
+                return;
         }
 
         //naviAgent가 이동을 마쳤을 경우 idle로 돌아감
         if (_navAgent.velocity == Vector3.zero && Vector3.Distance(_destPos, transform.position) < 0.1f)
-        {
             State = Define.PawnState.Idle;
-        }
         else
-        {
             _pawnController.Turn(_navAgent.velocity.x);
-        }
-
     }
 
     protected virtual void UpdateIdle() { }
     protected virtual void UpdateSkill() { }
-    protected virtual void UpdateAttack() 
-    {
-    
-    }
+    protected virtual void UpdateAttack() { }
+    protected virtual void UpdateTakeDamage() { }
 
-    protected virtual void UpdateTakeDamage() 
-    {
-        
-    }
-
-    public void DoNoting()
-    {
-
-    }
+    public void DoNoting() { }
 
 
 }
