@@ -68,6 +68,11 @@ public abstract class BaseController : MonoBehaviour, IWorldObject
 
     }
 
+    public void LateUpdate()
+    {
+        OnLateUpdate();
+    }
+
     public virtual void Init(int characterNum)
     {
         //table data setting
@@ -76,7 +81,8 @@ public abstract class BaseController : MonoBehaviour, IWorldObject
         _stat.Init(_characterData.statDataNum);
 
         //component setting
-        _colliderAttackRange.radius = _stat.AttackRange;
+
+        //_colliderAttackRange.radius = _stat.AttackRange;
         _navAgent.speed = _stat.MoveSpeed;
 
         Init();
@@ -107,9 +113,11 @@ public abstract class BaseController : MonoBehaviour, IWorldObject
         //naviAgent가 이동을 마쳤을 경우 idle로 돌아감
         if (_navAgent.velocity == Vector3.zero && Vector3.Distance(_destPos, transform.position) < 0.1f)
             State = Define.PawnState.Idle;
-        else
-            _pawnController.Turn(_navAgent.velocity.x);
+        /*else
+            _pawnController.Turn(_navAgent.velocity.x);*/
     }
+
+    protected virtual void OnLateUpdate() {}
 
     protected virtual void UpdateIdle() { }
     protected virtual void UpdateSkill() { }

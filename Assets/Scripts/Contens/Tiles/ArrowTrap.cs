@@ -18,17 +18,6 @@ public class ArrowTrap : TilePrefabBase
         
     }
 
-    public override void Init()
-    {
-        base.Init();
-
-    }
-
-    public override void Clear()
-    {
-        base.Clear();
-
-    }
 
     public void SetTarget(GameObject target)
     {

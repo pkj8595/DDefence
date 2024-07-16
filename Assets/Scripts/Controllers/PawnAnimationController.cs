@@ -43,6 +43,12 @@ public class PawnAnimationController : MonoBehaviour
         Init(Managers.Data.CharacterDict[characterDataNum]);
     }
 
+
+    public void LateUpdate()
+    {
+       
+    }
+
     public void SetAniState(Define.PawnState state)
     {
         PixelHero.AnimationState pawnState = PixelHero.AnimationState.Idle;
@@ -76,10 +82,4 @@ public class PawnAnimationController : MonoBehaviour
 
     }
 
-    public void Turn(float direction)
-    {
-        var scale = gameObject.transform.localScale;
-        scale.x = Mathf.Sign(direction) * Mathf.Abs(scale.x);
-        gameObject.transform.localScale = scale;
-    }
 }

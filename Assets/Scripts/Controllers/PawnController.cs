@@ -43,10 +43,15 @@ public class PawnController : BaseController
         base.UpdateSkill();
     }
 
+    protected override void OnLateUpdate()
+    {
+        base.OnLateUpdate();
+
+    }
+
     public void OnMove(Vector3 destPosition)
     {
         _destPos = destPosition;
-        _destPos.z = 0;
         State = Define.PawnState.Moving;
         _navAgent.SetDestination(_destPos);
 
@@ -57,14 +62,39 @@ public class PawnController : BaseController
         base.Update();
         if (Input.GetMouseButtonDown(0))
         {
-            Vector2 rayOrigin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            if (BoardManager.Instance.GetMoveablePosition(rayOrigin, out Vector2 moveablePosition))
-                OnMove(moveablePosition);
+            Utils.GetMouseWorldPositionToRay((position) => {
+                if (BoardManager.Instance.GetMoveablePosition(position, out Vector3 moveablePosition))
+                {
+                    OnMove(moveablePosition);
+                }
+            });
         }
 
         if (Input.GetKeyDown(KeyCode.A))
         {
             State = Define.PawnState.Attack;
+            OnStop();
+
         }
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            State = Define.PawnState.Idle;
+            OnStop();
+        }
+
     }
+
+    /// <summary>
+    /// 길찾기 종료
+    /// </summary>
+    public void OnStop()
+    {
+        _destPos = gameObject.transform.position;
+        _destPos.z = 0;
+        _navAgent.ResetPath();
+        
+    }
+
+
 }

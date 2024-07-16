@@ -102,6 +102,17 @@ public static class Utils
         return (1 << v & 1 << flag) == 1;
     }
 
-    
+    /// <summary>
+    /// 카메라 마우스 포지션에서 Ray를 쏘고 제일 먼저 맞는 worldPosition 반환
+    /// </summary>
+    /// <param name="action">Action<Vector3> </param>
+    public static void GetMouseWorldPositionToRay(Action<Vector3> action)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            action?.Invoke(hit.point);
+        }
+    }
 
 }

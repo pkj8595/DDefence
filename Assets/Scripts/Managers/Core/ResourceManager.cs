@@ -41,6 +41,16 @@ public class ResourceManager : ManagerBase
         return go;
     }
 
+    public GameObject Instantiate(GameObject prefab, Transform parent = null)
+    {
+        if (prefab.GetComponent<Poolable>() != null)
+            return Managers.Pool.Pop(prefab, parent).gameObject;
+
+        GameObject go = Object.Instantiate(prefab, parent);
+        go.name = prefab.name;
+        return go;
+    }
+
     public void Destory(GameObject go)
     {
         if (go == null)
