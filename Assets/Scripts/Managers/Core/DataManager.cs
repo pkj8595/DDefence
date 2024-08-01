@@ -15,6 +15,7 @@ public class DataManager : ManagerBase
 
     public override void Init()
     {
+        base.Init();
         TextAsset textAsset = Managers.Resource.Load<TextAsset>($"Data/DefenceTable");
         Data.TableGroupData tableGroupData = JsonUtility.FromJson<Data.TableGroupData>(textAsset.text);
 

@@ -6,15 +6,11 @@ using UnityEngine;
 public class GameManager 
 {
     //Dictionary<int, GameObject> _monster = new Dictionary<int, GameObject>();
-    //Dictionary<int, GameObject> _player = new Dictionary<int, GameObject>();
     //Dictionary<int, GameObject> _eventObj = new Dictionary<int, GameObject>(); // 상호작용 오브젝트
 
-    GameObject _player;
     HashSet<GameObject> _monster = new HashSet<GameObject>();
-    public CombatSystem _combatSystem = new CombatSystem();
 
     public Action<int> OnSpawnEvent;
-    public GameObject GetPlayer() { return _player; }
 
     public GameObject Spawn(Define.WorldObject type, string path, Transform parent = null)
     {
@@ -24,8 +20,7 @@ public class GameManager
         {
             case Define.WorldObject.Unknown:
                 break;
-            case Define.WorldObject.Player:
-                _player = go;
+            case Define.WorldObject.Playable:
                 break;
         }
         return go;
@@ -54,10 +49,8 @@ public class GameManager
                     }
                 }
                 break;
-            case Define.WorldObject.Player:
+            case Define.WorldObject.Playable:
                 {
-                    if (_player == go)
-                        _player = null;
                 }
                 break;
         }

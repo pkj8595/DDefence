@@ -24,10 +24,8 @@ public class Define
     public enum WorldObject
     {
         Unknown,
-        Player,
-        Summon,
+        Playable,
         NonePlayable,
-        Trap,
     }
 
     public enum Layer
@@ -38,17 +36,23 @@ public class Define
         Unit = 9,
     }
 
-    public enum PawnState
+    public enum EPawnAniState
     {
         Idle,
+        Ready,
         Moving,
-        Attack,
-        Skill,
-        Take_Damage,
         Die,
     }
 
-    public enum AttackType
+    public enum EPawnAniTriger
+    {
+        Attack,
+        Skill,
+        Hit,
+        Heal
+    }
+
+    public enum DamageType
     {
         MeleeAttack,
         RangeAttack
@@ -82,6 +86,10 @@ public class Define
         Click,
     }
 
+    public enum Tags
+    {
+        Pawn
+    }
     
 
     public static class Path
@@ -91,8 +99,11 @@ public class Define
         public const string Prefab_Trap = "Assets/Resources/Prefabs/Tiles/Traps/";
         public const string Sprite_Trap = "Assets/Resources/Sprites/Tiles/Traps/";
 
-        public const string Prefab_Bullet = "Assets/Resources/Prefabs/Bullets/";
-        public const string Sprite_Bullet = "Assets/Resources/Sprites/Bullets/";
+        public const string Prefab_Bullet = "Assets/Resources/Prefabs/Projectile/";
+        public const string Sprite_Bullet = "Assets/Resources/Sprites/Projectile/";
+
+        public const string UI = "Assets/Resources/UI/";
+
     }
 
 }

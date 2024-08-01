@@ -68,6 +68,7 @@ public class PoolManager : ManagerBase
 
     public override void Init()
     {
+        base.Init();
         if (_root == null)
         {
             _root = new GameObject { name = "@Pool_Root" }.transform;

@@ -4,11 +4,19 @@ using UnityEngine;
 
 public class UIManager : ManagerBase 
 {
+    private Transform _uiRoot;
     //List지만 stack처럼 활용한다.
-    public List<UIBase> uiStack = new List<UIBase>();
+    private List<UIBase> _uiStack = new List<UIBase>();
 
-    public int bestSortingOrder = 0;
-    public int changeSortingOrderValue = 100;
+    public int baseSortingOrder = 0;
+    public int sortingOrderAddValue = 100;
+
+    public void Init(GameObject root)
+    {
+        base.Init();
+        _uiRoot = new GameObject("@UIManager").transform;
+        _uiRoot.parent = root.transform;
+    }
 
     /// <summary>
     /// 팝업 생성 및 캐싱되어 있으면 반환
@@ -18,47 +26,69 @@ public class UIManager : ManagerBase
     {
         //캐싱된 UI 찾기
         UIBase ui = GetUI<T>();
-        if (ui != null)
-            return ui;
-
-        if (ui == null) 
+       
+        if (ui == null)
         {
-            
+            ui = Managers.Resource.LoadUI<T>();
+            ui.gameObject.transform.parent = _uiRoot;
+            _uiStack.Add(ui);
+            UpdateSortingOrder();
+        }
+
+        if (ui == null)
             return null;
-        } 
-        uiStack.Add(ui);
-        ui.SetUIBaseData(bestSortingOrder);
+        
+        ui.SetUIBaseData();
         ui.Init(uiData);
         ui.UpdateUI();
         return ui;
     }
 
-    public void RemoveUI<T>() where T : UIBase
+    /// <summary>
+    /// 현재 켜져있는 UI의 sortingorder 갱신
+    /// </summary>
+    public void UpdateSortingOrder()
+    {
+        for (int i = 0; i < _uiStack.Count; i++)
+        {
+            _uiStack[i].SetSortingOrder(baseSortingOrder + (i * sortingOrderAddValue));
+        }
+    }
+
+    public void ColseUI<T>() where T : UIBase
     {
         UIBase targetUI = GetUI<T>();
-        targetUI.Hide();
-        uiStack.Remove(targetUI);
+        targetUI.Close();
     }
 
     public UIBase GetUI(string uiName)
     {
-        for (int i = 0; i < uiStack.Count; i++)
+        for (int i = 0; i < _uiStack.Count; i++)
         {
-            if (uiStack[i].UIName == uiName)
-                return uiStack[i];
+            if (_uiStack[i].UIName == uiName)
+                return _uiStack[i];
         }
+
         return null;
     }
 
     public UIBase GetUI<T>() where T : UIBase
     {
-        for (int i = 0; i < uiStack.Count; i++)
+        for (int i = 0; i < _uiStack.Count; i++)
         {
-            if (uiStack[i] is T)
-                return uiStack[i];
+            if (_uiStack[i] is T)
+                return _uiStack[i];
         }
+
         return null;
     }
 
+    public UIBase GetTopUI()
+    {
+        if (0 < _uiStack.Count)
+            return _uiStack[_uiStack.Count - 1];
+        else
+            return null;
+    }
 
 }

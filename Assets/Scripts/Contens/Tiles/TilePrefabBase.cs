@@ -10,17 +10,13 @@ public class TilePrefabBase : MonoBehaviour, IWorldObject
 {
     public Vector2Int _tileSize;
     public Vector2Int _tilePosition;
-
+    
     public void Init(Vector2Int tileSize, Vector2Int tilePosition)
     {
         _tileSize = tileSize;
         _tilePosition = tilePosition;
     }
 
-    void Start()
-    {
-
-    }
 
     public void DoNoting()
     {

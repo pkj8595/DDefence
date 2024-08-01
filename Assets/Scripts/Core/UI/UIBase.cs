@@ -5,14 +5,21 @@ using UnityEngine.UI;
 
 public abstract class UIBase : MonoBehaviour
 {
-    Canvas canvas;
+    public Canvas canvas;
     private string uiName;
 
     public string UIName { get => uiName; set => uiName = value; }
 
-    public void SetUIBaseData(int sortingOrder)
+    public void SetUIBaseData()
     {
+        if (canvas == null)
+            canvas = GetComponent<Canvas>();
         uiName = this.GetType().Name;
+    }
+
+    public void SetSortingOrder(int sortingOrder)
+    {
+        canvas.sortingOrder = sortingOrder;
     }
 
     public virtual void Init(UIData uiData)
@@ -25,12 +32,12 @@ public abstract class UIBase : MonoBehaviour
 
     }
 
-    public virtual void Hide()
+    public virtual void SetActive(bool isActive)
     {
-        gameObject.SetActive(false);
+        gameObject.SetActive(isActive);
     }
     public virtual void Close()
     {
-
+        gameObject.SetActive(false);
     }
 }

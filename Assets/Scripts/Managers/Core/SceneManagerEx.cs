@@ -9,6 +9,7 @@ public class SceneManagerEx : ManagerBase
 
     public override void Init()
     {
+        base.Init();
         _currentScene = GameObject.FindObjectOfType<BaseScene>();
     }
 

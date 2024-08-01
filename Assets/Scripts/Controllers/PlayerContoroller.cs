@@ -13,7 +13,7 @@ public class PlayerContoroller : BaseController
 
     protected override void Init()
     {
-        WorldObjectType = Define.WorldObject.Player;
+        WorldObjectType = Define.WorldObject.Playable;
         _stat = gameObject.GetComponent<Stat>();
 
         //Managers.Input.KeyAction -= OnKeyboard;

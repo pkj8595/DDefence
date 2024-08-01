@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Managers : MonoBehaviour
 {
@@ -57,10 +58,14 @@ public class Managers : MonoBehaviour
 
             s_Instance._scene.Init();
             s_Instance._data.Init();
+            s_Instance._resource.Init();
             s_Instance._pool.Init();
             s_Instance._sound.Init();
             s_Instance._input.Init(go);
-            
+            s_Instance._ui.Init(go);
+
+            DOTween.Init(true, true, LogBehaviour.Default).SetCapacity(200,10);
+
         }
     }
 
@@ -72,4 +77,6 @@ public class Managers : MonoBehaviour
         UI.Clear();
         Pool.Clear();
     }
+
+    
 }

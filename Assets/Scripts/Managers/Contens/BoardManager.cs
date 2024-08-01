@@ -51,11 +51,27 @@ public class BoardManager : MonoSingleton<BoardManager>
         var nodes = _groundTilemap.GetComponentsInChildren<TilePrefabBase>();
         for (int i = 0; i < nodes.Length; i++)
         {
+
+            int nodeListIndex = _nodeList.FindIndex((x) => {
+                return nodes[i].gameObject.name.Contains(x.gameObject.name); 
+            });
+            
+            if (nodeListIndex != -1)
+            {
+                nodes[i].gameObject.name = _nodeList[nodeListIndex].name;
+            }
+            else
+            {
+                Debug.LogError($"bloadManager에 등록되지않은 NodeList입니다. :{nodes[i].name}");
+                return;
+            }
+
             Vector3Int coor = _groundTilemap.WorldToCell(nodes[i].transform.position);
-            Debug.Log("coor : " + coor);
             if (!_dirTiles.ContainsKey(coor))
             {
-                _dirTiles.Add(coor, nodes[i].GetComponent<TilePrefabBase>());
+                var node = nodes[i].GetComponent<TilePrefabBase>();
+                //todo name change
+                _dirTiles.Add(coor, node);
             }
 
         }
@@ -109,7 +125,7 @@ public class BoardManager : MonoSingleton<BoardManager>
         {
             TilePrefabBase node = _dirTiles[tileCoordination];
             _dirTiles.Remove(tileCoordination);
-            Managers.Resource.Destory(node.gameObject);
+            Managers.Resource.Destroy(node.gameObject);
             return;
         }
     }

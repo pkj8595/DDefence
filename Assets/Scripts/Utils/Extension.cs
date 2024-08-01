@@ -25,5 +25,15 @@ public static class Extension
     {
         return Convert.ToInt32(enumValue);
     }
+
+    private static readonly Dictionary<Enum, string> cacheEStr = new();
+    public static string ToString(this Enum value)
+    {
+        if (cacheEStr.ContainsKey(value))
+        {
+            cacheEStr.Add(value, value.ToString());
+        }
+        return cacheEStr[value];
+    }
     
 }

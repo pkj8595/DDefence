@@ -6,6 +6,7 @@ public class Stat : MonoBehaviour
 {
     private int _statDataBaseNum;
     private Data.StatData _statData;
+    private bool _isDead = false;
 
     //todo stat클래스 정리
     [SerializeField] protected int  _level;
@@ -52,6 +53,38 @@ public class Stat : MonoBehaviour
     public float Bellruns { get => _statData.bellruns; }
     public int TotalExp { get => _statData.totalExp; }
     public int DropExp { get => _statData.dropExp; }
+    public bool IsDead { get => _isDead; set => _isDead = value; }
+
+    public void Init(int statDataNum)
+    {
+        _statDataBaseNum = Utils.CalculateTableBaseNumber(statDataNum);
+        _level = 0;
+        _exp = 0;
+        SetStat(CalculateStatDataNum());
+    }
+
+    private void SetStat(int statDataNum)
+    {
+        SetStat(Managers.Data.StatDict[statDataNum]);
+    }
+
+    private void SetStat(Data.StatData statData)
+    {
+        _statData = statData;
+        Hp = statData.maxHp;
+        Mana = statData.maxMana;
+        _isDead = false;
+    }
+
+    //어택 데미지 산출
+    public virtual float OnAttack()
+    {
+        const float bellMaxValue = 1.0f;
+        const float bellMinValue = 0.01f;
+
+        float bell = Mathf.Clamp(Bellruns, bellMinValue, bellMaxValue);
+        return Random.Range(Attack * bell, Attack);
+    }
 
     //받는 데미지 계산
     public virtual void OnAttacked(Stat attacker)
@@ -65,51 +98,30 @@ public class Stat : MonoBehaviour
         }
     }
 
-    //어택 데미지 산출
-    public virtual float OnAttack()
-    {
-        const float bellMaxValue = 1.0f;
-        const float bellMinValue = 0.01f;
-
-        float bell = Mathf.Clamp(Bellruns, bellMinValue, bellMaxValue);
-        return Random.Range(Attack * bell, Attack);
-    }
-
     private void OnDead(Stat attacker)
     {
         if (attacker != null)
         {
             attacker.Exp += DropExp;
         }
-
+        _isDead = true;
         Managers.Game.Despawn(gameObject);
     }
 
-    public void Init(int statDataNum)
-    {
-        _statDataBaseNum = Utils.CalculateTableBaseNumber(statDataNum);
-        _level = 0;
-        _exp = 0;
-        SetStat(CalculateStatDataNum());
-        //todo init이랑 
-    }
-
-    private void SetStat(int statDataNum)
-    {
-        SetStat(Managers.Data.StatDict[statDataNum]);
-    }
-
-    private void SetStat(Data.StatData statData)
-    {
-        _statData = statData;
-        Hp = statData.maxHp;
-        Mana = statData.maxMana;
-
-    }
-
+   
     private int CalculateStatDataNum()
     {
         return _statDataBaseNum + _level;
+    }
+
+    /// <summary>
+    /// 피격시 실행되는 로직
+    /// </summary>
+    /// <param name="msg"></param>
+    public virtual void OnAttacked(DamageMessage msg)
+    {
+        //todo 
+        
     }
 
 }

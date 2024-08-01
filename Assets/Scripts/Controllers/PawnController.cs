@@ -31,11 +31,21 @@ public class PawnController : BaseController
     protected override void UpdateIdle()
     {
         base.UpdateIdle();
+        if (_lockTarget)
+        {
+
+        }
+        else
+        {
+
+        }
+
     }
 
     protected override void UpdateMove()
     {
         base.UpdateMove();
+
     }
 
     protected override void UpdateSkill()
@@ -52,7 +62,7 @@ public class PawnController : BaseController
     public void OnMove(Vector3 destPosition)
     {
         _destPos = destPosition;
-        State = Define.PawnState.Moving;
+        State = Define.EPawnAniState.Moving;
         _navAgent.SetDestination(_destPos);
 
     }
@@ -60,28 +70,17 @@ public class PawnController : BaseController
     public override void Update()
     {
         base.Update();
-        if (Input.GetMouseButtonDown(0))
-        {
-            Utils.GetMouseWorldPositionToRay((position) => {
-                if (BoardManager.Instance.GetMoveablePosition(position, out Vector3 moveablePosition))
-                {
-                    OnMove(moveablePosition);
-                }
-            });
-        }
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    Utils.GetMouseWorldPositionToRay((position) => {
+        //        if (BoardManager.Instance.GetMoveablePosition(position, out Vector3 moveablePosition))
+        //        {
+        //            OnMove(moveablePosition);
+        //        }
+        //    });
+        //}
 
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            State = Define.PawnState.Attack;
-            OnStop();
-
-        }
-
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            State = Define.PawnState.Idle;
-            OnStop();
-        }
+     
 
     }
 
@@ -95,6 +94,7 @@ public class PawnController : BaseController
         _navAgent.ResetPath();
         
     }
+
 
 
 }

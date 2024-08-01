@@ -6,12 +6,19 @@ using System;
 
 public class PawnAnimationController : MonoBehaviour
 {
-    public PixelHero.Character _pawn;
     public PixelHero.CharacterBuilder _pawnBuilder;
-    public Define.AttackType _attackType = Define.AttackType.MeleeAttack;
+    public Define.DamageType _attackType = Define.DamageType.MeleeAttack;
+    private BaseController _baseController;
+    public Animator _animator;
 
     //todo : particleManager 만들기
     //[SerializeField] private ParticleSystem _moveDust;
+
+    private void Awake()
+    {
+        if (_baseController == null)
+            _baseController = transform.parent.GetComponent<BaseController>();
+    }
 
     /// <summary>
     /// 캐릭터 생성시 테이블 데이터로 CharacterSprite와 attackType 셋팅
@@ -19,7 +26,7 @@ public class PawnAnimationController : MonoBehaviour
     /// <param name="data"></param>
     public void Init(Data.CharacterData data)
     {
-        _attackType = (Define.AttackType)data.attackType;
+        _attackType = (Define.DamageType)data.attackType;
 
         _pawnBuilder.Head = data.Head;
         _pawnBuilder.Ears = data.Ears;
@@ -44,42 +51,72 @@ public class PawnAnimationController : MonoBehaviour
     }
 
 
-    public void LateUpdate()
+    public void SetAniState(Define.EPawnAniState state)
     {
-       
+        if (Define.EPawnAniState.Moving == state)
+        {
+            _animator.Play("Running");
+
+            //if (_baseController._navAgent.speed < 3)
+            //    _animator.Play("Waking");
+            //else
+            //    _animator.Play("Running");
+            //return;
+        }
+
+        _animator.Play(state.ToString());
     }
 
-    public void SetAniState(Define.PawnState state)
+    public void SetAniTrigger(Define.EPawnAniTriger trigger)
     {
-        PixelHero.AnimationState pawnState = PixelHero.AnimationState.Idle;
-        switch (state)
+        switch (trigger)
         {
-            case Define.PawnState.Idle:
-                pawnState = PixelHero.AnimationState.Idle;
-                break;
-            case Define.PawnState.Moving:
-                pawnState = PixelHero.AnimationState.Walking;
-                break;
-            case Define.PawnState.Attack:
-                if(_attackType == Define.AttackType.MeleeAttack)
-                    _pawn.Animator.SetTrigger("Slash");
+            case Define.EPawnAniTriger.Attack:
+                if (_attackType == Define.DamageType.MeleeAttack)
+                    _animator.SetTrigger("Slash");
                 else
-                    _pawn.Animator.SetTrigger("Shot");
+                    _animator.SetTrigger("Shot");
                 return;
-            case Define.PawnState.Skill:
-                pawnState = PixelHero.AnimationState.Jumping;
-                break;
-            case Define.PawnState.Take_Damage:
-                pawnState = PixelHero.AnimationState.Blocking;
-                break;
-            case Define.PawnState.Die:
-                pawnState = PixelHero.AnimationState.Dead;
-                break;
-            default: throw new NotSupportedException();
-
+            case Define.EPawnAniTriger.Skill:
+                if (_attackType == Define.DamageType.MeleeAttack)
+                    _animator.SetTrigger("Slash");
+                else
+                    _animator.SetTrigger("Shot");
+                return;
         }
-        _pawn.SetState(pawnState);
 
+        _animator.SetTrigger(trigger.ToString());
+    }
+
+    public void OnHitEvent()
+    {
+        _baseController.ApplyAttack();
+    }
+
+    public void OnShotEvent()
+    {
+        _baseController.ApplyShot();
+    }
+
+    public SpriteRenderer Body;
+    private static Material DefaultMaterial;
+    private static Material BlinkMaterial;
+
+    public void Blink()
+    {
+        if (DefaultMaterial == null) DefaultMaterial = Body.sharedMaterial;
+        if (BlinkMaterial == null) BlinkMaterial = new Material(Shader.Find("GUI/Text Shader"));
+
+        StartCoroutine(BlinkCoroutine());
+    }
+
+    private IEnumerator BlinkCoroutine()
+    {
+        Body.material = BlinkMaterial;
+
+        yield return new WaitForSeconds(0.1f);
+
+        Body.material = DefaultMaterial;
     }
 
 }

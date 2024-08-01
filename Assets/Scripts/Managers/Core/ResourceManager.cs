@@ -4,22 +4,24 @@ using UnityEngine;
 
 public class ResourceManager : ManagerBase
 {
-
     public T Load<T>(string path) where T : Object
     {
         //1. original를 이미 들고 있으면 바로 사용
         if (typeof(T) == typeof(GameObject))
         {
-            string name = path;
-            int index = name.LastIndexOf("/");
-            if (index >= 0)
-                name = name.Substring(index + 1);
+            string name = GetObejctName(path);
 
             GameObject go = Managers.Pool.GetOriginal(name);
             if (go != null)
                 return go as T;
         }
 
+        return Resources.Load<T>(path);
+    }
+
+    public T LoadUI<T>() where T : UIBase
+    {
+        string path = Define.Path.UI + typeof(T).Name;
         return Resources.Load<T>(path);
     }
 
@@ -51,7 +53,7 @@ public class ResourceManager : ManagerBase
         return go;
     }
 
-    public void Destory(GameObject go)
+    public void Destroy(GameObject go)
     {
         if (go == null)
             return;
@@ -67,5 +69,12 @@ public class ResourceManager : ManagerBase
         Object.Destroy(go);
     }
 
-
+    private string GetObejctName(string path)
+    {
+        string name = path;
+        int index = name.LastIndexOf("/");
+        if (index >= 0)
+            name = name.Substring(index + 1);
+        return name;
+    }
 }

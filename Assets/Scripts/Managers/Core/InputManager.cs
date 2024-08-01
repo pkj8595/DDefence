@@ -14,6 +14,7 @@ public class InputManager : ManagerBase
     
     public void Init(GameObject managerObj)
     {
+        base.Init();
         if (!managerObj.TryGetComponent(out EventSystem eventSystem))
         {
             managerObj.AddComponent<EventSystem>();
