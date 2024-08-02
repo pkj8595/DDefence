@@ -111,8 +111,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fb980df617e7d349b434fb16751ff6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tileSize: {x: 0, y: 0}
-  _tilePosition: {x: 0, y: 0}
+  _tileSize: {x: 1, y: 1, z: 1}
+  _tilePosition: {x: 0, y: 0, z: 0}
+  aniDuration: 0.5
+  sValue: {x: 0, y: 0, z: 0}
 --- !u!114 &6807811801701005319
 MonoBehaviour:
   m_ObjectHideFlags: 0

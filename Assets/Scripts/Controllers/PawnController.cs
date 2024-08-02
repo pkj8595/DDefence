@@ -62,7 +62,7 @@ public class PawnController : BaseController
     public void OnMove(Vector3 destPosition)
     {
         _destPos = destPosition;
-        State = Define.EPawnAniState.Moving;
+        State = Define.EPawnAniState.Running;
         _navAgent.SetDestination(_destPos);
 
     }
@@ -80,8 +80,6 @@ public class PawnController : BaseController
         //    });
         //}
 
-     
-
     }
 
     /// <summary>
@@ -94,7 +92,5 @@ public class PawnController : BaseController
         _navAgent.ResetPath();
         
     }
-
-
 
 }

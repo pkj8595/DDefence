@@ -30,18 +30,21 @@ public class Define
 
     public enum Layer
     {
-        Ground = 6,
-        Wall = 7,
-        Building = 8,
-        Unit = 9,
+        Water       = 1 << 4,
+        UI          = 1 << 5,
+        Ground      = 1 << 6,
+        Wall        = 1 << 7,
+        Building    = 1 << 8,
+        Unit        = 1 << 9,
     }
 
     public enum EPawnAniState
     {
         Idle,
         Ready,
-        Moving,
-        Die,
+        Running,
+        Dead,
+        Casting
     }
 
     public enum EPawnAniTriger
@@ -49,7 +52,8 @@ public class Define
         Attack,
         Skill,
         Hit,
-        Heal
+        Heal,
+        Cool
     }
 
     public enum DamageType

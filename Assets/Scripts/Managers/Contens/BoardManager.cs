@@ -2,39 +2,63 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 using UnityEngine.AI;
-
+using Cysharp.Threading.Tasks;
 
 public class BoardManager : MonoSingleton<BoardManager>
 {
-    enum TILE_TYPE
-    {
-        GROUND,
-        WALL,
-        COUNT
-    }
+    private MeshFilter mergedMeshFilter;
+    private MeshRenderer mergedMeshRenderer;
+    private MeshCollider mergedMeshCollider;
+    [SerializeField] private GameObject combineMeshObject;
+    [SerializeField] private GameObject _nodeGroup;
+    [SerializeField] private NavMeshSurface navSurface;
 
     public List<GameObject> _nodeList;
-    public Tilemap _groundTilemap;
-    //tile 좌표
     public Dictionary<Vector3Int, TilePrefabBase> _dirTiles = new Dictionary<Vector3Int, TilePrefabBase>();
+    [SerializeField] private Vector3 tileSize = new Vector3(1, 1, 1); // 각 셀의 크기
+    [SerializeField] private Vector3 tileOffset = new Vector3(0, 0, 0); // 각 셀의 크기
+
+    private bool isNodeUpdateMode = true;
 
     private void Start()
     {
+        if (combineMeshObject == null)
+        {
+            combineMeshObject = GameObject.Find("CombineMesh");
+        } 
+
+        if (navSurface == null)
+        {
+            navSurface = GetComponentInChildren<NavMeshSurface>();
+        }
+
+        mergedMeshFilter = combineMeshObject.GetOrAddComponent<MeshFilter>();
+        mergedMeshRenderer = combineMeshObject.GetOrAddComponent<MeshRenderer>();
+        mergedMeshCollider = combineMeshObject.GetOrAddComponent<MeshCollider>();
+
         LoadBoard();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.C) && isNodeUpdateMode)
         {
             //CreateNode_Resource("BaseTile");
             CreateNode_List(1);
         }
-        else if (Input.GetKeyDown(KeyCode.E))
+        else if (Input.GetKeyDown(KeyCode.E) && isNodeUpdateMode)
         {
             RemoveTile();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            isNodeUpdateMode = !isNodeUpdateMode;
+            if (isNodeUpdateMode)
+                AsyncUnmergeMeshes().Forget(); 
+            else
+                AsyncMergeAllMeshes().Forget();
         }
 
     }
@@ -48,7 +72,7 @@ public class BoardManager : MonoSingleton<BoardManager>
 
     private void LoadBoard()
     {
-        var nodes = _groundTilemap.GetComponentsInChildren<TilePrefabBase>();
+        var nodes = _nodeGroup.GetComponentsInChildren<TilePrefabBase>();
         for (int i = 0; i < nodes.Length; i++)
         {
 
@@ -66,11 +90,11 @@ public class BoardManager : MonoSingleton<BoardManager>
                 return;
             }
 
-            Vector3Int coor = _groundTilemap.WorldToCell(nodes[i].transform.position);
+            Vector3Int coor = WorldToGrid(nodes[i].transform.position);
             if (!_dirTiles.ContainsKey(coor))
             {
                 var node = nodes[i].GetComponent<TilePrefabBase>();
-                //todo name change
+                node.Init(coor);
                 _dirTiles.Add(coor, node);
             }
 
@@ -96,13 +120,17 @@ public class BoardManager : MonoSingleton<BoardManager>
             return;
         }
 
-        GameObject node = Managers.Resource.Instantiate(_nodeList[index], _groundTilemap.transform);
-        node.transform.position = _groundTilemap.GetCellCenterWorld(nodeCoordination);
+        //node setting
+        TilePrefabBase node = Managers.Resource.Instantiate(_nodeList[index], _nodeGroup.transform).GetComponent<TilePrefabBase>();
+        node.transform.position = GridToWorld(nodeCoordination);
+        node.Init(nodeCoordination);
+        node.SetActive(true);
 
-        _dirTiles.Add(nodeCoordination, node.GetComponent<TilePrefabBase>());
+        //save
+        _dirTiles.Add(nodeCoordination, node);
     }
 
-    private void CreateNode_Resource(string nodePrefabName)
+    /*private void CreateNode_Resource(string nodePrefabName)
     {
         Vector3Int nodeCoordination = GetCellPositionToMouse();
 
@@ -112,40 +140,97 @@ public class BoardManager : MonoSingleton<BoardManager>
             return;
         }
 
-        GameObject node = Managers.Resource.Instantiate($"Tiles/{nodePrefabName}", _groundTilemap.transform);
-        node.transform.position = _groundTilemap.GetCellCenterWorld(nodeCoordination);
+        GameObject node = Managers.Resource.Instantiate($"Tiles/{nodePrefabName}", _grid.transform);
+        node.transform.position = _grid.GetCellCenterWorld(nodeCoordination);
 
         _dirTiles.Add(nodeCoordination, node.GetComponent<TilePrefabBase>());
-    }
+    }*/
+
     private void RemoveTile()
     {
-        Vector3Int tileCoordination = GetCellPositionToMouse();
+        TilePrefabBase node = GetNodeToMouse();
+        if (node == null)
+            return;
 
-        if (_dirTiles.ContainsKey(tileCoordination))
+        if (_dirTiles.ContainsKey(node.TilePosition))
         {
-            TilePrefabBase node = _dirTiles[tileCoordination];
-            _dirTiles.Remove(tileCoordination);
-            Managers.Resource.Destroy(node.gameObject);
+            _dirTiles.Remove(node.TilePosition);
+            node.SetActive(false);
             return;
         }
     }
     #endregion
 
-
+    private TilePrefabBase GetNodeToMouse()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        int layerMask = (int)Define.Layer.Ground;
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, 100f ,layerMask))
+        {
+            return raycastHit.collider.GetComponent<TilePrefabBase>();
+        }
+        return null;
+    }
 
     //현재 마우스 위치를 참조해 Grid의 좌표를 가져온다.
     private Vector3Int GetCellPositionToMouse()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit raycastHit))
+        int layerMask = (int)Define.Layer.Water | (int)Define.Layer.Ground;
+
+        if (Physics.Raycast(ray, out RaycastHit hit, 100f, layerMask))
         {
-            return _groundTilemap.WorldToCell(raycastHit.point);
+            if (1 << hit.transform.gameObject.layer == (int)Define.Layer.Water)
+            {
+                return WorldToGrid(hit.point);
+            }
+            else
+            {
+                return WorldToGrid(hit.transform.position + hit.normal);
+            }
         }
         Debug.LogWarning($"raycast 실패");
         return Vector3Int.zero;
     }
-    
 
+    /// <summary>
+    /// 그리드 좌표를 월드 좌표로 변환
+    /// </summary>
+    /// <param name="gridPosition"></param>
+    /// <returns></returns>
+    public Vector3 GridToWorld(Vector3Int gridPosition)
+    {
+        float x = gridPosition.x * tileSize.x + tileOffset.x;
+        float y = gridPosition.y * tileSize.y + tileOffset.z;
+        float z = gridPosition.z * tileSize.z + tileOffset.y;
+        return new Vector3(x, y, z);
+    }
+
+   
+
+    /// <summary>
+    /// 월드 좌표를 그리드 좌표로 변환
+    /// </summary>
+    /// <param name="point"></param>
+    /// <returns></returns>
+    public Vector3 SnapPosition(Vector3 point)
+    {
+        float snappedX = Mathf.Round(point.x / tileSize.x) * tileSize.x + tileOffset.x;
+        float snappedZ = Mathf.Round(point.z / tileSize.z) * tileSize.z + tileOffset.z;
+        float snappedY = Mathf.Round(point.y / tileSize.y) * tileSize.y + tileOffset.y;
+
+        return new Vector3(snappedX, snappedY, snappedZ);
+    }
+
+    public Vector3Int WorldToGrid(Vector3 poiint)
+    {
+        return Vector3Int.FloorToInt(poiint + (Vector3.one * 0.5f));
+    }
+
+    public int Round(float value)
+    {
+        return (int)(value + 0.5);
+    }
 
 
     /// <summary>
@@ -167,32 +252,64 @@ public class BoardManager : MonoSingleton<BoardManager>
     }
 
 
-    /* 맵 생성자
-     * 
-        public void MakeMap()
+    /// <summary>
+    /// Node 메쉬 병합
+    /// </summary>
+    async UniTaskVoid AsyncMergeAllMeshes()
+    {
+        await UniTask.NextFrame();
+
+        List<MeshFilter> meshFilters = new List<MeshFilter>();
+
+        foreach (var item in _dirTiles)
         {
-            //todo :: 이벤트 방 만들어서 랜덤 배치하기 
-            int x = 200;
-            int y = 140;
-            MapGenerator generator = new MapGenerator();
-            List<List<int>> wallMap = generator.MakeMap(x, y, null, true, 56);
-
-            _groundTilemap.ClearAllTiles();
-            _colliderTilemap.ClearAllTiles();
-
-            for (int i = 0; i < x; i++)
-            {
-                for (int j = 0; j < y; j++)
-                {
-                    _groundTilemap.SetTile(new Vector3Int(i, j, 0), _tileBaseList[TILE_TYPE.GROUND.ToInt()]);
-                    if (wallMap[j][i] == 1)
-                        _colliderTilemap.SetTile(new Vector3Int(i, j, 0), _tileBaseList[TILE_TYPE.WALL.ToInt()]);
-                }
-            }
-
-            //UpdateNavimeshSurface();
+            meshFilters.Add(item.Value.GetComponent<MeshFilter>());
         }
-    */
+
+        if (meshFilters.Count == 0) return;
+
+        CombineInstance[] combine = new CombineInstance[meshFilters.Count];
+        for (int i = 0; i < meshFilters.Count; i++)
+        {
+            combine[i].mesh = meshFilters[i].sharedMesh;
+            combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+        }
+
+        Mesh combinedMesh = new Mesh();
+        combinedMesh.CombineMeshes(combine, true);
+
+        mergedMeshFilter.mesh = combinedMesh;
+        mergedMeshCollider.sharedMesh = combinedMesh;
+
+
+        // 병합 후 개별 메쉬 오브젝트 비활성화
+        _nodeGroup.gameObject.SetActive(false);
+
+        // 병합된 메쉬의 재질 설정 (첫 번째 메쉬의 재질 사용)
+        if (meshFilters.Count > 0)
+        {
+            mergedMeshRenderer.sharedMaterial = meshFilters[0].GetComponent<MeshRenderer>().sharedMaterial;
+        }
+        navSurface.BuildNavMesh();
+    }
+
+    /// <summary>
+    /// 병합 해제
+    /// </summary>
+    async UniTaskVoid AsyncUnmergeMeshes()
+    {
+        await UniTask.NextFrame();
+        if (mergedMeshFilter.mesh != null)
+        {
+            Destroy(mergedMeshFilter.mesh);
+            mergedMeshFilter.mesh = null;
+            mergedMeshCollider.sharedMesh = null;
+        }
+
+        // nodeGroup 활성화
+        _nodeGroup.gameObject.SetActive(true);
+    }
+
 
 
 }

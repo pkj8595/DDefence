@@ -51,7 +51,6 @@ public class ArrowProjectile : ProjectileBase
 
     protected override void HandleImpact(Collider other)
     {
-        Debug.Log("HandleImpact");
         if (_effHit != null)
         {
             _effHit.gameObject.SetActive(true);

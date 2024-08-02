@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9115350138632155615}
   - component: {fileID: 9115350138632155610}
   - component: {fileID: 9115350138632155609}
-  - component: {fileID: 9115350138632155608}
+  - component: {fileID: 8283263}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -42,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9115350138632155614}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &9115350138632155609
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -85,20 +85,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &9115350138632155608
-CapsuleCollider:
+--- !u!65 &8283263
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9115350138632155614}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1.0000002, z: 1.0000002}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &9115350138891856119
 GameObject:
   m_ObjectHideFlags: 0
@@ -117,7 +116,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &9115350138891856114
 Transform:
   m_ObjectHideFlags: 0
@@ -164,6 +163,9 @@ MonoBehaviour:
   _target: {fileID: 0}
   _effHit: {fileID: 2319595218369508497}
   _offsetTarget: {x: 0, y: 0.8, z: 0}
+  height: 8
+  duration: 1
+  isStart: 0
 --- !u!54 &9115350138891856115
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -233,7 +235,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6823200998282874675, guid: 8f8fe12323625f5499b2853dd2ad3e58, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0.531
       objectReference: {fileID: 0}
     - target: {fileID: 6823200998282874675, guid: 8f8fe12323625f5499b2853dd2ad3e58, type: 3}
       propertyPath: m_LocalPosition.z

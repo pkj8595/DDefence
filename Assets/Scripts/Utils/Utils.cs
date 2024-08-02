@@ -72,34 +72,14 @@ public static class Utils
         return tableNum - (tableNum % 1000);
     }
 
-
-
-    public static int MakeFalg(params int[] flag)
-    {
-        int sum = 0;
-        for (int i = 0; i < flag.Length; i++)
-        {
-            if (flag[i] > 9)
-                break;
-
-            sum += 1 << flag[i];
-        }
-
-        return sum;
-    }
-
     /// <summary>
     /// 비트 연산자를 사용해 자리값이 1이 맞는지 확인한다.
-    /// </summary>
-    /// <param name="v">비교할 값</param>
-    /// <param name="flag">비교할 값</param>
-    /// <returns>
-    /// true : 두 비트의 자리수가 1이 맞을 경우
-    /// false : 두 비트의 자리수가 1이 아닐경우
+    /// <param name="x">비교할 값</param>
+    /// <param name="y">비교할 값</param>
     /// </returns>
-    public static bool CompareFlag(int v ,int flag)
+    public static bool HasFlag(int x ,int y)
     {
-        return (1 << v & 1 << flag) == 1;
+        return (x & y) != 0;
     }
 
     /// <summary>

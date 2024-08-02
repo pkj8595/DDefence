@@ -57,10 +57,10 @@ public abstract class BaseController : MonoBehaviour, IWorldObject, IDamageable
     {
         switch (State)
         {
-            case Define.EPawnAniState.Die:
+            case Define.EPawnAniState.Dead:
                 UpdateDie();
                 break;
-            case Define.EPawnAniState.Moving:
+            case Define.EPawnAniState.Running:
                 UpdateMove();
                 break;
             case Define.EPawnAniState.Idle:
@@ -167,7 +167,7 @@ public abstract class BaseController : MonoBehaviour, IWorldObject, IDamageable
 
     public virtual void StartAttack()
     {
-        State = Define.EPawnAniState.Ready;
+
     }
 
     /// <summary>

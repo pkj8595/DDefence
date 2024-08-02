@@ -53,7 +53,7 @@ public class PawnAnimationController : MonoBehaviour
 
     public void SetAniState(Define.EPawnAniState state)
     {
-        if (Define.EPawnAniState.Moving == state)
+        if (Define.EPawnAniState.Running == state)
         {
             _animator.Play("Running");
 

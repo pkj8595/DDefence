@@ -9,7 +9,7 @@ public class PlayerContoroller : BaseController
 {
     //float wait_run_retio = 0.0f;
 
-    int _mask = Utils.MakeFalg(Define.Layer.Ground.ToInt());
+    int _mask = Define.Layer.Ground.ToInt();
 
     protected override void Init()
     {

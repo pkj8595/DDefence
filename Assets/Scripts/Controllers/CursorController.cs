@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CursorController : MonoBehaviour
 {
-    int _mask = Utils.MakeFalg(Define.Layer.Ground.ToInt());
+    int _mask = Define.Layer.Ground.ToInt();
     Texture2D _attackIcon;
     Texture2D _handIcon;
     CursorType _cursorType = CursorType.None;
