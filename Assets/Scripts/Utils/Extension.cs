@@ -35,5 +35,10 @@ public static class Extension
         }
         return cacheEStr[value];
     }
+
+    public static void ResetTransform(this Transform transform)
+    {
+        transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+    }
     
 }

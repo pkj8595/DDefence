@@ -14,7 +14,7 @@ public abstract class BaseScene : MonoBehaviour
 
     protected virtual void Init()
     {
-        Managers.Init();
+        Managers.InitManagers();
     }
 
     public abstract void Clear();

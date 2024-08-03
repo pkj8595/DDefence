@@ -6,7 +6,7 @@ using DG.Tweening;
 public class Managers : MonoBehaviour
 {
     static Managers s_Instance;
-    static Managers Instance { get { Init(); return s_Instance; } }
+    static Managers Instance { get { InitManagers(); return s_Instance; } }
 
     #region Contens
     GameManager _game = new GameManager();
@@ -34,7 +34,8 @@ public class Managers : MonoBehaviour
 
     void Start()
     {
-        Init(); 
+        Application.targetFrameRate = 60;
+        InitManagers(); 
     }
 
     void Update()
@@ -42,7 +43,7 @@ public class Managers : MonoBehaviour
         _input.OnUpdate();
     }
 
-    public static void Init()
+    public static void InitManagers()
     {
         if(s_Instance == null)
         {
