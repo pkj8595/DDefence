@@ -15,11 +15,12 @@ public class InputManager : ManagerBase
     public void Init(GameObject managerObj)
     {
         base.Init();
-        if (!managerObj.TryGetComponent(out EventSystem eventSystem))
-        {
-            managerObj.AddComponent<EventSystem>();
-            managerObj.AddComponent<StandaloneInputModule>();
-        }
+        // todo : 나중에 풀기
+        //if (!managerObj.TryGetComponent(out EventSystem eventSystem))
+        //{
+        //    managerObj.AddComponent<EventSystem>();
+        //    managerObj.AddComponent<StandaloneInputModule>();
+        //}
     }
 
     public override void OnUpdate()

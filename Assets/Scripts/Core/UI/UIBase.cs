@@ -10,7 +10,7 @@ public abstract class UIBase : MonoBehaviour
 
     public string UIName { get => uiName; set => uiName = value; }
 
-    public void SetUIBaseData()
+    public virtual void SetUIBaseData()
     {
         if (canvas == null)
             canvas = GetComponent<Canvas>();

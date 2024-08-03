@@ -112,8 +112,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed8b1ae4e4e52b34ea557c1c11e076fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CategoryHash: 0.53407824
-  m_labelHash: 8.840178e-23
+  m_CategoryHash: 0.009161512
+  m_labelHash: 0.00000040954276
   m_SpriteKey: 1.3971405e-28
 --- !u!1 &6623756326569235200
 GameObject:
@@ -5129,7 +5129,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 46
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!136 &8088009069966384495
 CapsuleCollider:

@@ -12,9 +12,6 @@ public class SpawningPool : MonoBehaviour
     [SerializeField] float _spawnRadius = 15.0f;
     [SerializeField] float _spawnTime = 5.0f;
 
-    public void AddMonsterCount(int value) { _monsterCount += value; }
-    public void SetKeepMonsterCount(int count) { _keepMonsterCount = count; }
-
     void Start()
     {
         Managers.Game.OnSpawnEvent -= AddMonsterCount;
@@ -26,9 +23,11 @@ public class SpawningPool : MonoBehaviour
         
     }
 
+    public void AddMonsterCount(int value) { _monsterCount += value; }
+    public void SetKeepMonsterCount(int count) { _keepMonsterCount = count; }
+
     IEnumerator ReserveSpawn()
     {
-        //todo : 스폰시 사용
         _reserveCount++;
         yield return new WaitForSeconds(Random.Range(0, _spawnTime));
         GameObject obj = Managers.Game.Spawn(Define.WorldObject.NonePlayable, "Knight");

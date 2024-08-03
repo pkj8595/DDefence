@@ -19,7 +19,8 @@ public class BoardManager : MonoSingleton<BoardManager>
     [SerializeField] private Vector3 tileSize = new Vector3(1, 1, 1); // 각 셀의 크기
     [SerializeField] private Vector3 tileOffset = new Vector3(0, 0, 0); // 각 셀의 크기
 
-    private bool isNodeUpdateMode = true;
+    private bool _isNodeUpdateMode = false;
+    private int _selectedNodeIndex = 0;
 
     private void Start()
     {
@@ -42,20 +43,20 @@ public class BoardManager : MonoSingleton<BoardManager>
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C) && isNodeUpdateMode)
+        if (Input.GetKeyDown(KeyCode.C) && _isNodeUpdateMode)
         {
             //CreateNode_Resource("BaseTile");
-            CreateNode_List(1);
+            CreateNode_List(_selectedNodeIndex);
         }
-        else if (Input.GetKeyDown(KeyCode.E) && isNodeUpdateMode)
+        else if (Input.GetKeyDown(KeyCode.E) && _isNodeUpdateMode)
         {
             RemoveTile();
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            isNodeUpdateMode = !isNodeUpdateMode;
-            if (isNodeUpdateMode)
+            _isNodeUpdateMode = !_isNodeUpdateMode;
+            if (_isNodeUpdateMode)
                 AsyncUnmergeMeshes().Forget(); 
             else
                 AsyncMergeAllMeshes().Forget();
@@ -97,8 +98,9 @@ public class BoardManager : MonoSingleton<BoardManager>
                 node.Init(coor);
                 _dirTiles.Add(coor, node);
             }
-
         }
+        AsyncMergeAllMeshes().Forget();
+
     }
     #endregion
 
@@ -112,9 +114,9 @@ public class BoardManager : MonoSingleton<BoardManager>
             return;
         }
 
-        Vector3Int nodeCoordination = GetCellPositionToMouse();
+        (Vector3Int position, Vector3 normal) nodeCoordination = GetCellPositionToMouse();
 
-        if (_dirTiles.ContainsKey(nodeCoordination))
+        if (_dirTiles.ContainsKey(nodeCoordination.position))
         {
             Debug.Log($"좌표 {nodeCoordination}에 이미 저장된 값이 있음.");
             return;
@@ -122,12 +124,13 @@ public class BoardManager : MonoSingleton<BoardManager>
 
         //node setting
         TilePrefabBase node = Managers.Resource.Instantiate(_nodeList[index], _nodeGroup.transform).GetComponent<TilePrefabBase>();
-        node.transform.position = GridToWorld(nodeCoordination);
-        node.Init(nodeCoordination);
+        node.transform.position = GridToWorld(nodeCoordination.position);
+        node.Init(nodeCoordination.position);
+        if (nodeCoordination.normal != Vector3.zero)
+            node.transform.rotation = Quaternion.LookRotation(nodeCoordination.normal, Vector3.up);
         node.SetActive(true);
-
         //save
-        _dirTiles.Add(nodeCoordination, node);
+        _dirTiles.Add(nodeCoordination.position, node);
     }
 
     /*private void CreateNode_Resource(string nodePrefabName)
@@ -173,7 +176,7 @@ public class BoardManager : MonoSingleton<BoardManager>
     }
 
     //현재 마우스 위치를 참조해 Grid의 좌표를 가져온다.
-    private Vector3Int GetCellPositionToMouse()
+    private (Vector3Int, Vector3) GetCellPositionToMouse()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         int layerMask = (int)Define.Layer.Water | (int)Define.Layer.Ground;
@@ -182,15 +185,15 @@ public class BoardManager : MonoSingleton<BoardManager>
         {
             if (1 << hit.transform.gameObject.layer == (int)Define.Layer.Water)
             {
-                return WorldToGrid(hit.point);
+                return (WorldToGrid(hit.point), Vector3.zero);
             }
             else
             {
-                return WorldToGrid(hit.transform.position + hit.normal);
+                return (WorldToGrid(hit.transform.position + hit.normal), hit.normal);
             }
         }
         Debug.LogWarning($"raycast 실패");
-        return Vector3Int.zero;
+        return (Vector3Int.zero, Vector3.zero);
     }
 
     /// <summary>
@@ -310,6 +313,9 @@ public class BoardManager : MonoSingleton<BoardManager>
         _nodeGroup.gameObject.SetActive(true);
     }
 
-
+    public void SetNodeIndex(int index)
+    {
+        _selectedNodeIndex = index;
+    }
 
 }
