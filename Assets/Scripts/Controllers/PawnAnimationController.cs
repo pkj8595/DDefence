@@ -53,17 +53,6 @@ public class PawnAnimationController : MonoBehaviour
 
     public void SetAniState(Define.EPawnAniState state)
     {
-        if (Define.EPawnAniState.Running == state)
-        {
-            _animator.Play("Running");
-
-            //if (_baseController._navAgent.speed < 3)
-            //    _animator.Play("Waking");
-            //else
-            //    _animator.Play("Running");
-            //return;
-        }
-
         _animator.Play(state.ToString());
     }
 
