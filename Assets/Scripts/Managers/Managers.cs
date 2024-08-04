@@ -34,7 +34,7 @@ public class Managers : MonoBehaviour
 
     void Start()
     {
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = 30;
         InitManagers(); 
     }
 

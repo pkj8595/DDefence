@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager 
+public class GameManager
 {
     //Dictionary<int, GameObject> _monster = new Dictionary<int, GameObject>();
     //Dictionary<int, GameObject> _eventObj = new Dictionary<int, GameObject>(); // 상호작용 오브젝트
 
     HashSet<GameObject> _monster = new HashSet<GameObject>();
+    HashSet<GameObject> _pawn = new HashSet<GameObject>();
 
     public Action<int> OnSpawnEvent;
 

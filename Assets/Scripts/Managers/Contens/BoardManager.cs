@@ -28,6 +28,31 @@ public class BoardManager : MonoSingleton<BoardManager>
 
     private void Start()
     {
+        /*if (combineMeshObject == null)
+        {
+            combineMeshObject = GameObject.Find("CombineMesh");
+        }
+
+        if (navSurface == null)
+        {
+            navSurface = GetComponentInChildren<NavMeshSurface>();
+        }
+
+        mergedMeshFilter = combineMeshObject.GetOrAddComponent<MeshFilter>();
+        mergedMeshRenderer = combineMeshObject.GetOrAddComponent<MeshRenderer>();
+        mergedMeshCollider = combineMeshObject.GetOrAddComponent<MeshCollider>();
+
+        LoadBoard().Forget();
+
+        Managers.Input.KeyAction -= OnKeyAction;
+        Managers.Input.KeyAction += OnKeyAction;
+        Managers.Input.MouseAction -= OnMouseAction;
+        Managers.Input.MouseAction += OnMouseAction;*/
+    }
+    
+    public async UniTask AsyncInit()
+    {
+        await UniTask.NextFrame();
         if (combineMeshObject == null)
         {
             combineMeshObject = GameObject.Find("CombineMesh");
@@ -48,7 +73,9 @@ public class BoardManager : MonoSingleton<BoardManager>
         Managers.Input.KeyAction += OnKeyAction;
         Managers.Input.MouseAction -= OnMouseAction;
         Managers.Input.MouseAction += OnMouseAction;
+
     }
+
 
     void Update()
     {
@@ -111,6 +138,7 @@ public class BoardManager : MonoSingleton<BoardManager>
     async UniTask LoadBoard()
     {
         await UniTask.NextFrame();
+        _dirTiles.Clear();
         var nodes = _nodeGroup.GetComponentsInChildren<TilePrefabBase>();
         for (int i = 0; i < nodes.Length; i++)
         {
@@ -360,7 +388,6 @@ public class BoardManager : MonoSingleton<BoardManager>
         _selectedNodeIndex = index;
         _previewNode.mesh = _nodeList[_selectedNodeIndex].GetComponent<MeshFilter>().sharedMesh;
         _previewNode.gameObject.SetActive(true);
-
     }
 
 }

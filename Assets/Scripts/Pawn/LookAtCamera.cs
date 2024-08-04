@@ -6,6 +6,7 @@ public class LookAtCamera : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer _render;
     private Vector3 _preVec = Vector3.zero;
+    public Vector3 testvec;
 
     private void LateUpdate()
     {
@@ -15,6 +16,9 @@ public class LookAtCamera : MonoBehaviour
         //카메라 기준으로 캐릭터의 방향벡터를 계산하여 캐릭터가 움직이는 방향을 자연스럽게 한다.
         Vector3 thisVector = Camera.main.WorldToScreenPoint(transform.position);
         Vector3 dirVector = thisVector - _preVec;
+        if (Mathf.Abs(dirVector.x) < 0.01f)
+            return;
+        
         _render.flipX = dirVector.normalized.x < 0;
         _preVec = thisVector;
 
@@ -33,7 +37,7 @@ public class LookAtCamera : MonoBehaviour
     /// </summary>
     /// <param name="cameraAngle"></param>
     /// <returns></returns>
-    private static float GetScalePercent(Vector3 cameraAngle)
+    private float GetScalePercent(Vector3 cameraAngle)
     {
         return (float)((Mathf.Clamp(cameraAngle.x, 30f, 60f) - 30f) * 0.015);
     }

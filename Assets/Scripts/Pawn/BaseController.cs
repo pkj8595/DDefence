@@ -48,7 +48,7 @@ public abstract class BaseController : MonoBehaviour, IWorldObject, IDamageable
 
         _navAgent.updateRotation = false;
         _navAgent.updateUpAxis = false;
-
+        
         
     }
 

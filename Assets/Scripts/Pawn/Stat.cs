@@ -6,17 +6,15 @@ public class Stat : MonoBehaviour
 {
     private int _statDataBaseNum;
     private Data.StatData _statData;
-    private bool _isDead = false;
 
     //todo stat클래스 정리
-    [SerializeField] protected int  _level;
-    [SerializeField] protected int  _exp;
-    [SerializeField] protected int  _hp;
-    [SerializeField] protected int  _mana;
+    private int _exp;
+    [field : SerializeField] public int Hp { get; set; }
+    [field: SerializeField] public float CoolAtk { get; set; }
+    [field: SerializeField] public float CoolSkill { get; set; }
+    [field : SerializeField] public int Level { get; set; }
+    [field : SerializeField] public int Mana { get; set; }
 
-    public int Level { get => _level; set => _level = value; }
-    public int Hp { get => _hp; set => _hp = value; }
-    public int Mana { get => _mana; set => _mana = value; }
     //exp 를 
     public int Exp
     {
@@ -53,12 +51,12 @@ public class Stat : MonoBehaviour
     public float Bellruns { get => _statData.bellruns; }
     public int TotalExp { get => _statData.totalExp; }
     public int DropExp { get => _statData.dropExp; }
-    public bool IsDead { get => _isDead; set => _isDead = value; }
+    public bool IsDead { get; set; }
 
     public void Init(int statDataNum)
     {
         _statDataBaseNum = Utils.CalculateTableBaseNumber(statDataNum);
-        _level = 0;
+        Level = 0;
         _exp = 0;
         SetStat(CalculateStatDataNum());
     }
@@ -73,7 +71,7 @@ public class Stat : MonoBehaviour
         _statData = statData;
         Hp = statData.maxHp;
         Mana = statData.maxMana;
-        _isDead = false;
+        IsDead = false;
     }
 
     //어택 데미지 산출
@@ -104,14 +102,14 @@ public class Stat : MonoBehaviour
         {
             attacker.Exp += DropExp;
         }
-        _isDead = true;
+        IsDead = true;
         Managers.Game.Despawn(gameObject);
     }
 
    
     private int CalculateStatDataNum()
     {
-        return _statDataBaseNum + _level;
+        return _statDataBaseNum + Level;
     }
 
     /// <summary>
