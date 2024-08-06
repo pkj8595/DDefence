@@ -4,8 +4,8 @@ using UnityEngine;
 
 public abstract class Attack 
 {
-    public BaseController _attacker;
-    public List<BaseController> _targets = new List<BaseController>();
+    public PawnBase _attacker;
+    public List<PawnBase> _targets = new List<PawnBase>();
     public Vector3 _targetPosition;
 
     public virtual void Execute()
@@ -20,15 +20,15 @@ public abstract class Attack
         }
     }
 
-    public virtual void SetAttacker(BaseController attacker)
+    public virtual void SetAttacker(PawnBase attacker)
     {
         _attacker = attacker;
     }
 
-    public virtual void SetTarget(BaseController[] targets) 
+    public virtual void SetTarget(PawnBase[] targets) 
     {
         _targets.Clear();
-        foreach (BaseController b in targets)
+        foreach (PawnBase b in targets)
         {
             _targets.Add(b);
         }

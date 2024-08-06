@@ -88,11 +88,25 @@ public static class Utils
     /// <param name="action">Action<Vector3> </param>
     public static void GetMouseWorldPositionToRay(Action<Vector3> action)
     {
+        if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            return;
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
             action?.Invoke(hit.point);
         }
+    }
+
+
+    /// <summary>
+    /// 반올림
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public static int Round(float value)
+    {
+        return (int)(value + 0.5f);
     }
 
 }

@@ -11,7 +11,6 @@ public class InputManager : ManagerBase
     bool _pressed = false;
     float _pressedTime = 0;
 
-    
     public void Init(GameObject managerObj)
     {
         base.Init();
@@ -66,4 +65,7 @@ public class InputManager : ManagerBase
         MouseAction = null;
         _pressed = false;
     }
+
+   
 }
+

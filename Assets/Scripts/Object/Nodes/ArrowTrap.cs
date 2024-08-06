@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ArrowTrap : TilePrefabBase
+public class ArrowTrap : NodeBase
 {
     public SpriteRenderer _renderer;
     public GameObject _target;

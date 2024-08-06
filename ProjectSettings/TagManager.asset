@@ -15,8 +15,8 @@ TagManager:
   - Ground
   - Wall
   - Building
-  - Unit
-  - 
+  - Pawn
+  - PawnGroup
   - 
   - 
   - 

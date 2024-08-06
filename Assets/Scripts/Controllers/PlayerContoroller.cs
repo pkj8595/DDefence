@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 
-public class PlayerContoroller : BaseController
+public class PlayerContoroller : PawnBase
 {
     //float wait_run_retio = 0.0f;
 
@@ -14,7 +14,7 @@ public class PlayerContoroller : BaseController
     protected override void Init()
     {
         WorldObjectType = Define.WorldObject.Playable;
-        _stat = gameObject.GetComponent<Stat>();
+        _pawnStat = gameObject.GetComponent<PawnStat>();
 
         //Managers.Input.KeyAction -= OnKeyboard;
         //Managers.Input.KeyAction += OnKeyboard;

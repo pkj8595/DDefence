@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Cysharp.Threading.Tasks;
 
 public class GameScene : BaseScene
 {
-    [field: SerializeField] public GameObject PawnGroupObj { get; set; }
+    [field: SerializeField] public PawnGroup SelectdPawnGroup { get; set; }
 
     protected override void Init()
     {
@@ -16,7 +15,7 @@ public class GameScene : BaseScene
         SpawningPool pool = go.GetOrAddComponent<SpawningPool>();
         pool.SetKeepMonsterCount(5);
 
-        AsyncReady().Forget();
+
     }
 
     public override void Clear()
@@ -24,11 +23,10 @@ public class GameScene : BaseScene
         
     }
 
-    async UniTaskVoid AsyncReady()
+    private void Update()
     {
-        PawnGroupObj.SetActive(false);
-        await UniTask.WhenAll(BoardManager.Instance.AsyncInit());
-        PawnGroupObj.SetActive(true);
+        
     }
+
 
 }

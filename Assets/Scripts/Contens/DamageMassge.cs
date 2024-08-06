@@ -4,7 +4,7 @@ using UnityEngine;
 
 public struct DamageMessage
 {
-    public GameObject attacker;
+    public PawnStat attacker;
     public float damageAmount;
     public Vector3 hitPoint;
     public Vector3 hitNormal;

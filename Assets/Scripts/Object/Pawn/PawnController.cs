@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PawnController : BaseController
+public class PawnController : PawnBase
 {
     public int _testCharacterNum;
 
@@ -59,38 +59,13 @@ public class PawnController : BaseController
 
     }
 
-    public void OnMove(Vector3 destPosition)
-    {
-        _destPos = destPosition;
-        State = Define.EPawnAniState.Running;
-        _navAgent.SetDestination(_destPos);
-
-    }
+    
 
     public override void Update()
     {
         base.Update();
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    Utils.GetMouseWorldPositionToRay((position) => {
-        //        if (BoardManager.Instance.GetMoveablePosition(position, out Vector3 moveablePosition))
-        //        {
-        //            OnMove(moveablePosition);
-        //        }
-        //    });
-        //}
-
+     
     }
 
-    /// <summary>
-    /// 길찾기 종료
-    /// </summary>
-    public void OnStop()
-    {
-        _destPos = gameObject.transform.position;
-        _destPos.z = 0;
-        _navAgent.ResetPath();
-        
-    }
 
 }

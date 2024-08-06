@@ -57,7 +57,7 @@ public class ArrowProjectile : ProjectileBase
             _effHit.Play();
         }
 
-        if (other.gameObject.TryGetComponent<IDamageable>(out IDamageable damageable))
+        if (other.gameObject.TryGetComponent(out IDamageable damageable))
         {
             damageable.ApplyTakeDamege(_msg);
         }

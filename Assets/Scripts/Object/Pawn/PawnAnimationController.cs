@@ -8,7 +8,7 @@ public class PawnAnimationController : MonoBehaviour
 {
     public PixelHero.CharacterBuilder _pawnBuilder;
     public Define.DamageType _attackType = Define.DamageType.MeleeAttack;
-    private BaseController _baseController;
+    private PawnBase _baseController;
     public Animator _animator;
 
     //todo : particleManager 만들기
@@ -17,7 +17,7 @@ public class PawnAnimationController : MonoBehaviour
     private void Awake()
     {
         if (_baseController == null)
-            _baseController = transform.parent.GetComponent<BaseController>();
+            _baseController = transform.parent.GetComponent<PawnBase>();
     }
 
     /// <summary>

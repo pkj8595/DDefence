@@ -35,7 +35,8 @@ public class Define
         Ground      = 1 << 6,
         Wall        = 1 << 7,
         Building    = 1 << 8,
-        Unit        = 1 << 9,
+        Pawn        = 1 << 9,
+        PawnGroup   = 1 << 10,
     }
 
     public enum EPawnAniState

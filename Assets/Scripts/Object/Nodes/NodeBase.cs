@@ -6,7 +6,7 @@ using DG.Tweening;
 /// <summary>
 /// MonoBehaviour가 들어가는 타일을 제어하는 BASE 클래스
 /// </summary>
-public class TilePrefabBase : MonoBehaviour, IWorldObject
+public class NodeBase : MonoBehaviour
 {
     [SerializeField] private Vector3Int _tilePosition;
     [SerializeField] private Vector3Int _tileSize;
@@ -19,11 +19,6 @@ public class TilePrefabBase : MonoBehaviour, IWorldObject
     public void Init(Vector3Int tilePosition)
     {
         this._tilePosition = tilePosition;
-    }
-
-    public void DoNoting()
-    {
-        throw new System.NotImplementedException();
     }
 
     private void OnEnable()

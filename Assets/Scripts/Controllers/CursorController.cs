@@ -31,7 +31,7 @@ public class CursorController : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, 100.0f, _mask))
         {
-            if (hit.collider.gameObject.layer == (int)Define.Layer.Unit)
+            if (hit.collider.gameObject.layer == (int)Define.Layer.Pawn)
             {
                 if (_cursorType != CursorType.Attack)
                 {

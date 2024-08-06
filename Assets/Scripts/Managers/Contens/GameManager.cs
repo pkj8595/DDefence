@@ -9,7 +9,7 @@ public class GameManager
     //Dictionary<int, GameObject> _eventObj = new Dictionary<int, GameObject>(); // 상호작용 오브젝트
 
     HashSet<GameObject> _monster = new HashSet<GameObject>();
-    HashSet<GameObject> _pawn = new HashSet<GameObject>();
+    HashSet<PawnGroup> _pawnGroup = new HashSet<PawnGroup>();
 
     public Action<int> OnSpawnEvent;
 
@@ -29,7 +29,7 @@ public class GameManager
 
     public Define.WorldObject GetWorldObjectType(GameObject go)
     {
-        BaseController bc = go.GetComponent<BaseController>();
+        PawnBase bc = go.GetComponent<PawnBase>();
         if (bc == null)
             return Define.WorldObject.Unknown;
 

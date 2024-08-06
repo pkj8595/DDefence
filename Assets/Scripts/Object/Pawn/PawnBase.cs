@@ -4,22 +4,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public abstract class BaseController : MonoBehaviour, IWorldObject, IDamageable
+public abstract class PawnBase : MonoBehaviour, IWorldObject, IDamageable, ISelectedable
 {
     private Data.CharacterData _characterData;
 
-    [SerializeField] protected Vector3 _destPos;
-    [SerializeField] protected GameObject _lockTarget;
-    [SerializeField] protected Stat _stat;
+    [SerializeField] private Define.WorldObject worldObjectType = Define.WorldObject.Unknown;
+    [SerializeField] protected Define.EPawnAniState _state = Define.EPawnAniState.Idle;
     [SerializeField] protected PawnAnimationController _aniController;
     [SerializeField] public NavMeshAgent _navAgent;
-    [SerializeField] protected Define.EPawnAniState _state = Define.EPawnAniState.Idle;
-    [SerializeField] private Define.WorldObject worldObjectType = Define.WorldObject.Unknown;
-    [SerializeField] private Define.ERelationShip relationship = Define.ERelationShip.Friendly;
+
+    [SerializeField] protected Vector3 _destPos;
+    [SerializeField] protected GameObject _lockTarget;
+    [SerializeField] protected PawnStat _pawnStat;
+    [SerializeField] private bool _isSelected;
+
 
     public Action OnDeadAction;
 
-    public Define.ERelationShip Relationship { get => relationship; set => relationship = value; }
     public Define.WorldObject WorldObjectType { get => worldObjectType; set => worldObjectType = value; }
 
     public virtual Define.EPawnAniState State
@@ -43,12 +44,11 @@ public abstract class BaseController : MonoBehaviour, IWorldObject, IDamageable
         if (_aniController == null)
             _aniController = gameObject.GetOrAddComponent<PawnAnimationController>();
 
-        if (_stat == null)
-            _stat = gameObject.GetOrAddComponent<Stat>();
+        if (_pawnStat == null)
+            _pawnStat = gameObject.GetOrAddComponent<PawnStat>();
 
         _navAgent.updateRotation = false;
         _navAgent.updateUpAxis = false;
-        
         
     }
 
@@ -83,12 +83,12 @@ public abstract class BaseController : MonoBehaviour, IWorldObject, IDamageable
         //table data setting
         _characterData = Managers.Data.CharacterDict[characterNum];
         _aniController.Init(_characterData);
-        _stat.Init(_characterData.statDataNum);
+        _pawnStat.Init(_characterData.statDataNum);
 
         //component setting
 
         //_colliderAttackRange.radius = _stat.AttackRange;
-        _navAgent.speed = _stat.MoveSpeed;
+        _navAgent.speed = _pawnStat.MoveSpeed;
 
         Init();
     }
@@ -124,8 +124,6 @@ public abstract class BaseController : MonoBehaviour, IWorldObject, IDamageable
         //naviAgent가 이동을 마쳤을 경우 idle로 돌아감
         if (_navAgent.velocity == Vector3.zero && Vector3.Distance(_destPos, transform.position) < 0.1f)
             State = Define.EPawnAniState.Idle;
-        /*else
-            _pawnController.Turn(_navAgent.velocity.x);*/
 
 
         if (_navAgent.velocity.sqrMagnitude > 0.1f)
@@ -161,7 +159,7 @@ public abstract class BaseController : MonoBehaviour, IWorldObject, IDamageable
     {
         //todo : 스탯과 스킬데이터로 정보 갱신
         SetTriggerAni(Define.EPawnAniTriger.Hit);
-        _stat.OnAttacked(message);
+        _pawnStat.OnAttacked(message);
         return false;
     }
 
@@ -199,7 +197,47 @@ public abstract class BaseController : MonoBehaviour, IWorldObject, IDamageable
 
     public bool IsDead()
     {
-        return _stat.IsDead;
+        return _pawnStat.IsDead;
     }
 
+    public void SetDestination(Vector3 position)
+    {
+        if (BoardManager.Instance.GetMoveablePosition(position, out Vector3 moveablePosition))
+        {
+            OnMove(moveablePosition);
+        }
+    }
+
+    public virtual void OnMove(Vector3 destPosition)
+    {
+        _destPos = destPosition;
+        State = Define.EPawnAniState.Running;
+        _navAgent.SetDestination(_destPos);
+    }
+
+    /// <summary>
+    /// 길찾기 종료
+    /// </summary>
+    public void OnStop()
+    {
+        _destPos = gameObject.transform.position;
+        _destPos.z = 0;
+        _navAgent.ResetPath();
+
+    }
+
+    public virtual void OnSelect()
+    {
+        _isSelected = true;
+    }
+
+    public virtual void OnDeSelect()
+    {
+        _isSelected = false;
+    }
+
+    public virtual bool IsSelected()
+    {
+        return _isSelected;
+    }
 }
