@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class UIBoard : UIBase
 {
     [SerializeField] private List<Image> _imgList;
-
+    [SerializeField] private TMPro.TextMeshProUGUI _txtState;
+    private bool _isEditMode = false;
     public override void SetUIBaseData()
     {
         base.SetUIBaseData();
@@ -31,5 +32,16 @@ public class UIBoard : UIBase
     {
         BoardManager.Instance.SetNodeIndex(value);
         Debug.Log($"selected node index : {value}");
+        _isEditMode = true;
+        _txtState.text = "EditMode";
     }
+
+    public void OnClickCancel()
+    {
+        BoardManager.Instance.OnCancelSelectedNode();
+        _isEditMode = false;
+        _txtState.text = "Not EditMode";
+    }
+
+
 }

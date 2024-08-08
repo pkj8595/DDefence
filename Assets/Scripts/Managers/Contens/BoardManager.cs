@@ -9,23 +9,29 @@ public class BoardManager : MonoSingleton<BoardManager>
     private MeshCollider mergedMeshCollider;
     [SerializeField] private GameObject combineMeshObject;
     [SerializeField] private GameObject _nodeGroup;
+    [SerializeField] private GameObject _buildingGroup;
     [SerializeField] private NavMeshSurface navSurface;
 
     [SerializeField] private List<GameObject> _nodeList;
+    [SerializeField] private List<GameObject> _buildingList;
+
     [SerializeField] private Dictionary<Vector3Int, NodeBase> _dirNodes = new();
+    [SerializeField] private List<BuildingNode> _constructedBuildingList = new();
     [SerializeField] private Vector3 tileSize = new Vector3(1, 1, 1); // 각 셀의 크기
 
     private bool _isEditMode = false;
     private bool _isSelectNode = false;
-    private int _selectedNodeIndex = 0;
+    private int _selectedNodeIndex = -1;
 
-    [SerializeField] private MeshFilter _previewNode;
-    [SerializeField] private Material _previewMat;
+    [SerializeField] private NodeBase _previewNode;
+    [SerializeField] private Material _previewMaterial_Green;
+    [SerializeField] private Material _previewMaterial_Red;
+
+    private (Vector3Int position, Vector3 normal) _beforeMousePosition;
 
 
     private void Start()
     {
-       
         if (combineMeshObject == null)
         {
             combineMeshObject = GameObject.Find("CombineMesh");
@@ -54,17 +60,27 @@ public class BoardManager : MonoSingleton<BoardManager>
         {
             //프리뷰 노드 보여주기
             (Vector3Int position, Vector3 normal) nodeMouse = GetCellPositionToMouse();
-            _previewNode.gameObject.transform.position = GridToWorld(nodeMouse.position);
-            if (nodeMouse.normal != Vector3.zero)
-            {
-                _previewNode.gameObject.transform.rotation = Quaternion.LookRotation(nodeMouse.normal, Vector3.up);
-            }
+            if (Input.GetKeyDown(KeyCode.F))
+                Debug.Log(nodeMouse);
+            if (_beforeMousePosition.position == nodeMouse.position &&
+                _beforeMousePosition.normal == nodeMouse.normal)
+                return;
+            _beforeMousePosition = nodeMouse;
+
+
+
+            _previewNode.transform.position = ComputeNodeScalePosition(_previewNode, nodeMouse.position);
+            _previewNode.Position = nodeMouse.position;
+            _previewNode.SetNodeRotation(nodeMouse.normal);
+           
+
+            ChangeMaterialPreviewNode(CanPlaceBuilding(nodeMouse.position, _previewNode.NodeSize));
         }
     }
 
     private void OnKeyAction()
     {
-        if (Input.GetKeyDown(KeyCode.E) && _isEditMode )
+        if (Input.GetKeyDown(KeyCode.R) && _isEditMode )
             RemoveTile();
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -73,7 +89,7 @@ public class BoardManager : MonoSingleton<BoardManager>
 
     private void OnMouseAction(Define.MouseEvent evt)
     {
-        if (Define.MouseEvent.Press == evt && _isEditMode && _isSelectNode)
+        if (Define.MouseEvent.PointerDown == evt && _isEditMode && _isSelectNode)
         {
             CreateNode_List(_selectedNodeIndex);
         }
@@ -84,17 +100,12 @@ public class BoardManager : MonoSingleton<BoardManager>
         _isEditMode = !_isEditMode;
         if (_isEditMode)
         {
-            if (_previewNode == null)
-            {
-                _previewNode = new GameObject("previewNode").GetOrAddComponent<MeshFilter>();
-                _previewNode.gameObject.GetOrAddComponent<MeshRenderer>().material = _previewMat;
-            }
             UnmergeMeshes();
         }
         else
         {
             _isSelectNode = false;
-            _previewNode.gameObject.SetActive(false);
+            ClearPreviewNode();
             MergeAllMeshes();
         }
     }
@@ -128,7 +139,7 @@ public class BoardManager : MonoSingleton<BoardManager>
                 return;
             }
 
-            Vector3Int coor = WorldToGrid(nodes[i].transform.position);
+            Vector3Int coor = WorldToGrid(nodes[i].transform.position, Vector3.zero);
             if (!_dirNodes.ContainsKey(coor))
             {
                 var node = nodes[i].GetComponent<NodeBase>();
@@ -151,40 +162,9 @@ public class BoardManager : MonoSingleton<BoardManager>
             return;
         }
 
-        (Vector3Int position, Vector3 normal) nodeCoordination = GetCellPositionToMouse();
-
-        if (_dirNodes.ContainsKey(nodeCoordination.position))
-        {
-            Debug.Log($"좌표 {nodeCoordination}에 이미 저장된 값이 있음.");
-            return;
-        }
-
-        //node setting
-        NodeBase node = Managers.Resource.Instantiate(_nodeList[index], _nodeGroup.transform).GetComponent<NodeBase>();
-        node.transform.position = GridToWorld(nodeCoordination.position);
-        node.Init(nodeCoordination.position);
-        if (nodeCoordination.normal != Vector3.zero)
-            node.transform.rotation = Quaternion.LookRotation(nodeCoordination.normal, Vector3.up);
-        node.SetActive(true);
-        //save
-        _dirNodes.Add(nodeCoordination.position, node);
+        AddBuildingNode(_previewNode, _nodeList[index]);
     }
 
-    /*private void CreateNode_Resource(string nodePrefabName)
-    {
-        Vector3Int nodeCoordination = GetCellPositionToMouse();
-
-        if (_dirTiles.ContainsKey(nodeCoordination))
-        {
-            Debug.Log($"좌표 {nodeCoordination}에 이미 저장된 값이 있음.");
-            return;
-        }
-
-        GameObject node = Managers.Resource.Instantiate($"Tiles/{nodePrefabName}", _grid.transform);
-        node.transform.position = _grid.GetCellCenterWorld(nodeCoordination);
-
-        _dirTiles.Add(nodeCoordination, node.GetComponent<TilePrefabBase>());
-    }*/
 
     private void RemoveTile()
     {
@@ -192,22 +172,21 @@ public class BoardManager : MonoSingleton<BoardManager>
         if (node == null)
             return;
 
-        if (_dirNodes.ContainsKey(node.TilePosition))
-        {
-            _dirNodes.Remove(node.TilePosition);
-            node.SetActive(false);
-            return;
-        }
+        RemoveBuildingNode(node);
     }
     #endregion
 
     private NodeBase GetNodeToMouse()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        int layerMask = (int)Define.Layer.Ground;
+        int layerMask = (int)Define.Layer.Ground | (int)Define.Layer.Building;
         if (Physics.Raycast(ray, out RaycastHit raycastHit, 100f, layerMask))
         {
-            return raycastHit.collider.GetComponent<NodeBase>();
+            if(raycastHit.collider != null)
+                return raycastHit.collider.GetComponent<NodeBase>();
+            if (raycastHit.rigidbody != null)
+                return raycastHit.rigidbody.GetComponent<NodeBase>();
+            Debug.Log("collider,rigidbody 검출 실패");
         }
         return null;
     }
@@ -222,30 +201,115 @@ public class BoardManager : MonoSingleton<BoardManager>
         {
             if (1 << hit.transform.gameObject.layer == (int)Define.Layer.Water)
             {
-                return (WorldToGrid(hit.point), Vector3.zero);
+                return (WorldToGrid(hit.point, hit.normal), Vector3.zero);
             }
-            else
+            else /*if (1 << hit.transform.gameObject.layer == (int)Define.Layer.Ground)*/
             {
-                return (WorldToGrid(hit.transform.position + hit.normal), hit.normal);
+                return (WorldToGrid(hit.point, hit.normal), hit.normal);
             }
         }
         return (Vector3Int.zero, Vector3.zero);
     }
 
-    public bool CanPlaceBuilding(Vector3Int gridPosition, Vector2Int size)
+    private void AddBuildingNode(NodeBase previewNode, GameObject nodePrefab)
     {
-        for (int x = 0; x < size.x; x++)
+        NodeBase node = nodePrefab.GetComponent<NodeBase>();
+        if (node == null)
         {
-            for (int y = 0; y < size.y; y++)
+            Debug.Log($"{previewNode.name}이 없습니다.");
+            return;
+        }
+
+        Vector3Int gridPosition = previewNode.Position;
+        if (!CanPlaceBuilding(gridPosition, node.NodeSize))
+        {
+            Debug.Log("이미 설치된 위치입니다.");
+            return;
+        }
+
+        // 차지하는 공간을 nodes 딕셔너리에 추가
+        for (int y = 0; y < node.NodeSize.y; y++)
+        {
+            for (int x = 0; x < node.NodeSize.x; x++)
             {
-                Vector3Int nodePosition = new Vector3Int(gridPosition.x + x, gridPosition.y, gridPosition.z + y);
-                if (!_dirNodes.ContainsKey(nodePosition) || !(_dirNodes[nodePosition] is BlockNode))
+                for (int z = 0; z < node.NodeSize.z; z++)
                 {
-                    return false; // 블록 노드가 없는 위치에는 건물을 지을 수 없음
+                    Vector3Int nodePosition = new Vector3Int(gridPosition.x + x,
+                                                             gridPosition.y + y,
+                                                             gridPosition.z + z);
+                    _dirNodes.Add(nodePosition, node);
                 }
             }
         }
-        return true; // 모든 위치에 블록 노드가 있으면 건물을 지을 수 있음
+
+        // node 생성 및 초기화
+        NodeBase nodeObject = Managers.Resource.Instantiate(node.gameObject).GetComponent<NodeBase>();
+        nodeObject.Init(gridPosition);
+        nodeObject.SetActive(true);
+        nodeObject.transform.position = previewNode.transform.position;
+        if (nodeObject is BuildingNode)
+        {
+            nodeObject.transform.SetParent(_buildingGroup.transform);
+            _constructedBuildingList.Add(nodeObject as BuildingNode);
+        }
+        else
+        {
+            nodeObject.transform.SetParent(_nodeGroup.transform);
+            nodeObject.transform.rotation = previewNode.transform.rotation;
+        }
+
+    }
+
+    private static Vector3 ComputeNodeScalePosition(NodeBase node, Vector3Int gridPosition)
+    {
+        return gridPosition + new Vector3((node.NodeSize.x - 1) * 0.5f, 0, (node.NodeSize.z - 1) * 0.5f);
+    }
+
+    // 건물 노드 제거
+    private void RemoveBuildingNode(NodeBase node)
+    {
+        // building 일 경우 리스트에서 삭제
+        if( node is BuildingNode)
+        {
+            _constructedBuildingList.Remove(node as BuildingNode);
+        }
+
+        // 차지하는 공간을 nodes 딕셔너리에서 제거
+        for (int y = 0; y < node.NodeSize.y; y++)
+        {
+            for (int x = 0; x < node.NodeSize.x; x++)
+            {
+                for (int z = 0; z < node.NodeSize.z; z++)
+                {
+                    Vector3Int nodePosition = new Vector3Int(node.Position.x + x,
+                                                             node.Position.y + z,
+                                                             node.Position.z + z);
+                    _dirNodes.Remove(nodePosition);
+                }
+            }
+        }
+        Managers.Resource.Destroy(node.gameObject);
+    }
+
+
+    private bool CanPlaceBuilding(Vector3Int gridPosition, Vector3Int size)
+    {
+        for (int y = 0; y < size.y; y++)
+        {
+            for (int x = 0; x < size.x; x++)
+            {
+                for (int z = 0; z < size.z; z++)
+                {
+                    Vector3Int nodePosition = new Vector3Int(gridPosition.x + x, gridPosition.y + y, gridPosition.z + z);
+                    if (_dirNodes.ContainsKey(nodePosition))
+                    {
+                        //Debug.Log($"field : x{x},y{y},z{z} nodePosition : {nodePosition} ");
+                        return false; // 이미 노드가 있는 위치에는 건물을 지을 수 없음
+                    }
+                }
+            }
+        }
+        return true; // 모든 위치가 비어있으면 건물을 지을 수 있음
     }
 
     /// <summary>
@@ -280,9 +344,12 @@ public class BoardManager : MonoSingleton<BoardManager>
     /// </summary>
     /// <param name="point"></param>
     /// <returns></returns>
-    public Vector3Int WorldToGrid(Vector3 point)
+    public Vector3Int WorldToGrid(Vector3 point, Vector3 normal)
     {
-        return Vector3Int.FloorToInt(point + (Vector3.one * 0.5f));
+        if (normal == Vector3.zero || normal.x + normal.y + normal.z > 0)
+            return Vector3Int.FloorToInt(point + (Vector3.one * 0.5f));
+
+        return Vector3Int.FloorToInt(point + (Vector3.one * 0.5f)) + Vector3Int.FloorToInt(normal);
     }
 
     /// <summary>
@@ -309,17 +376,13 @@ public class BoardManager : MonoSingleton<BoardManager>
     /// </summary>
     private void MergeAllMeshes()
     {
-        List<MeshFilter> meshFilters = new List<MeshFilter>();
+        //_nodeGroup 하위 nodeBlock의 메쉬가져오기 
+        MeshFilter[] meshFilters = _nodeGroup.GetComponentsInChildren<MeshFilter>();
 
-        foreach (var item in _dirNodes)
-        {
-            meshFilters.Add(item.Value.GetComponent<MeshFilter>());
-        }
+        if (meshFilters.Length == 0) return;
 
-        if (meshFilters.Count == 0) return;
-
-        CombineInstance[] combine = new CombineInstance[meshFilters.Count];
-        for (int i = 0; i < meshFilters.Count; i++)
+        CombineInstance[] combine = new CombineInstance[meshFilters.Length];
+        for (int i = 0; i < meshFilters.Length; i++)
         {
             combine[i].mesh = meshFilters[i].sharedMesh;
             combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
@@ -331,12 +394,11 @@ public class BoardManager : MonoSingleton<BoardManager>
         mergedMeshFilter.mesh = combinedMesh;
         mergedMeshCollider.sharedMesh = combinedMesh;
 
-
         // 병합 후 개별 메쉬 오브젝트 비활성화
         _nodeGroup.gameObject.SetActive(false);
 
         // 병합된 메쉬의 재질 설정 (첫 번째 메쉬의 재질 사용)
-        if (meshFilters.Count > 0)
+        if (meshFilters.Length > 0)
         {
             mergedMeshRenderer.sharedMaterial = meshFilters[0].GetComponent<MeshRenderer>().sharedMaterial;
         }
@@ -364,11 +426,43 @@ public class BoardManager : MonoSingleton<BoardManager>
     {
         if (!_isEditMode)
             return;
+        if (_selectedNodeIndex == index)
+            return;
+
+        ClearPreviewNode();
+        _selectedNodeIndex = index;
+        _previewNode = Managers.Resource.Instantiate(_nodeList[_selectedNodeIndex], this.transform)
+                                        .GetComponent<NodeBase>();
+        _previewNode.gameObject.layer = 0;
+        _previewNode.gameObject.name = "PreviewNode";
+        ChangeMaterialPreviewNode(false);
+        _previewNode.SetActive(true);
 
         _isSelectNode = true;
-        _selectedNodeIndex = index;
-        _previewNode.mesh = _nodeList[_selectedNodeIndex].GetComponent<MeshFilter>().sharedMesh;
-        _previewNode.gameObject.SetActive(true);
+
     }
+
+    public void OnCancelSelectedNode()
+    {
+        ClearPreviewNode();
+        _isSelectNode = false;
+    }
+
+    private void ChangeMaterialPreviewNode(bool isCan)
+    {
+        MeshRenderer[] meshRender = _previewNode.GetComponentsInChildren<MeshRenderer>();
+        for (int i = 0; i < meshRender.Length; i++)
+        {
+            meshRender[i].material = isCan ? _previewMaterial_Green : _previewMaterial_Red;
+        }
+    }
+
+    private void ClearPreviewNode()
+    {
+        if (_previewNode != null)
+            Managers.Resource.Destroy(_previewNode.gameObject);
+        _previewNode = null;
+    }
+
 
 }
