@@ -9,6 +9,9 @@ public class PawnStat : MonoBehaviour
     public Data.StatData[] _equipmentStatList = new Data.StatData[3]; // todo
 
     private int _statDataBaseNum;
+    
+    [field: SerializeField] public int KillCount { get; set; }
+    [field: SerializeField] public int WaveCount { get; set; }
 
     //todo stat클래스 정리
     [field: SerializeField] public int Hp { get; set; }
@@ -122,5 +125,7 @@ public class PawnStat : MonoBehaviour
         IsDead = true;
         Managers.Game.Despawn(gameObject);
     }
+
+    
 
 }

@@ -16,6 +16,7 @@ public abstract class PawnBase : MonoBehaviour, IWorldObject, IDamageable, ISele
     [SerializeField] protected Vector3 _destPos;
     [SerializeField] protected GameObject _lockTarget;
     [SerializeField] protected PawnStat _pawnStat;
+    [SerializeField] protected Skill[] _skill = new Skill[3];
     [SerializeField] private bool _isSelected;
 
 

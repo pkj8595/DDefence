@@ -5,10 +5,11 @@ using UnityEngine;
 public struct DamageMessage
 {
     public PawnStat attacker;
-    public float damageAmount;
+    public float damageAmount;//
     public Vector3 hitPoint;
     public Vector3 hitNormal;
     public int targetLayer;
+    public SkillEffect skillAffect;
 }
 /*
 데미지 계산식
