@@ -5,12 +5,15 @@ using System;
 
 public class DataManager : ManagerBase
 {
-    public Dictionary<int, Data.CharacterData> CharacterDict { get; private set; } = new Dictionary<int, Data.CharacterData>();
-    public Dictionary<int, Data.StatData> StatDict { get; private set; } = new Dictionary<int, Data.StatData>();
-    public Dictionary<int, Data.TileBaseData> TileBaseDict { get; private set; } = new Dictionary<int, Data.TileBaseData>();
-    public Dictionary<int, Data.BuildingData> BuildingDict { get; private set; } = new Dictionary<int, Data.BuildingData>();
-    public Dictionary<int, Data.GoodsData> GoodsDict { get; private set; } = new Dictionary<int, Data.GoodsData>();
-    public Dictionary<int, Data.ItemData> ItemDict { get; private set; } = new Dictionary<int, Data.ItemData>();
+    public Dictionary<int, Data.CharacterData> CharacterDict { get; private set; } = new ();
+    public Dictionary<int, Data.StatData> StatDict { get; private set; } = new ();
+    public Dictionary<int, Data.StatConversionData> StatConversionDict { get; private set; } = new ();
+    public Dictionary<int, Data.TileBaseData> TileBaseDict { get; private set; } = new ();
+    public Dictionary<int, Data.BuildingData> BuildingDict { get; private set; } = new ();
+    public Dictionary<int, Data.GoodsData> GoodsDict { get; private set; } = new ();
+    public Dictionary<int, Data.RuneData> RuneDict { get; private set; } = new ();
+    public Dictionary<int, Data.SkillData> SkillDict { get; private set; } = new ();
+    public Dictionary<int, Data.SkillAffectData> SkillAffectDict { get; private set; } = new ();
 
 
     public override void Init()
@@ -21,10 +24,13 @@ public class DataManager : ManagerBase
 
         tableGroupData.MakeTableData(CharacterDict);
         tableGroupData.MakeTableData(StatDict);
+        tableGroupData.MakeTableData(StatConversionDict);
         tableGroupData.MakeTableData(TileBaseDict);
         tableGroupData.MakeTableData(BuildingDict);
         tableGroupData.MakeTableData(GoodsDict);
-        tableGroupData.MakeTableData(ItemDict);
+        tableGroupData.MakeTableData(RuneDict);
+        tableGroupData.MakeTableData(SkillDict);
+        tableGroupData.MakeTableData(SkillAffectDict);
 
     }
 
@@ -43,6 +49,11 @@ public class DataManager : ManagerBase
                 StatDict.TryGetValue(tableNum, out statTable);
                 ret = statTable;
                 break;
+            case Data.StatConversionData.Table:
+                Data.StatConversionData statConversionTable;
+                StatConversionDict.TryGetValue(tableNum, out statConversionTable);
+                ret = statConversionTable;
+                break;
             case Data.TileBaseData.Table:
                 Data.TileBaseData tileBaseTable;
                 TileBaseDict.TryGetValue(tableNum, out tileBaseTable);
@@ -58,10 +69,20 @@ public class DataManager : ManagerBase
                 GoodsDict.TryGetValue(tableNum, out goodsTable);
                 ret = goodsTable;
                 break;
-            case Data.ItemData.Table:
-                Data.ItemData itemTable;
-                ItemDict.TryGetValue(tableNum, out itemTable);
+            case Data.RuneData.Table:
+                Data.RuneData itemTable;
+                RuneDict.TryGetValue(tableNum, out itemTable);
                 ret = itemTable;
+                break;
+            case Data.SkillData.Table:
+                Data.SkillData skillTable;
+                SkillDict.TryGetValue(tableNum, out skillTable);
+                ret = skillTable;
+                break;
+            case Data.SkillAffectData.Table:
+                Data.SkillAffectData skillAffectTable;
+                SkillAffectDict.TryGetValue(tableNum, out skillAffectTable);
+                ret = skillAffectTable;
                 break;
         }
 

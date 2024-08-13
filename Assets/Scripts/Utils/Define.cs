@@ -4,28 +4,18 @@ using UnityEngine;
 
 public class Define
 {
-    /// <summary>
-    /// player의 소환수 및 NonePlayable 몬스터 간의 관계
-    /// summon && friendly == playable
-    /// summon && enemy == 적대 -> 제어는 가능하지만 플레이어를 때림(제어 x)
-    /// NonePlayable && friendly == 친밀관계 -> 제어할순없지만 적을 때림
-    /// NonePlayable && enemy == 적대 -> 제어할 수 없고 플레이어를 때림
-    /// </summary>
-    public enum ERelationShip
-    {
-        Friendly,
-        //Neutrality,
-        Enemy
-    }
-
+    public const int PawnRuneLimitCount = 3;
+    public const int runeCount = 3;
+    public const int traitCount = 10;
     /// <summary>
     /// worldObject 상태
     /// </summary>
     public enum WorldObject
     {
         Unknown,
-        Playable,
-        NonePlayable,
+        PlayerPawn,
+        Tower,
+        EnumyPawn,
     }
 
     public enum Layer
@@ -57,11 +47,7 @@ public class Define
         Cool
     }
 
-    public enum DamageType
-    {
-        MeleeAttack,
-        RangeAttack
-    }
+  
 
     public enum TrapState
     {
@@ -96,6 +82,37 @@ public class Define
         Pawn
     }
     
+    public enum EBaseStat
+    {
+        Vitality,       //체력
+        Strength,       //힘
+        Agility,        //민첩
+        Intelligence,   //지력
+        Willpower,      //정신력
+        Accuracy,       //정확성
+        Count
+    }
+
+    public enum ETargetType
+    {
+        Self,
+        Enemy,
+        Ally,
+    }
+    public enum EDamageType
+    {
+        Melee,
+        Range,
+        Magic,
+    }
+
+    public enum EAffectType
+    {
+        Damage,
+        Heal,
+        Debuff,
+        Buff,
+    }
 
     public static class Path
     {
@@ -104,7 +121,7 @@ public class Define
         public const string Prefab_Trap = "Assets/Resources/Prefabs/Tiles/Traps/";
         public const string Sprite_Trap = "Assets/Resources/Sprites/Tiles/Traps/";
 
-        public const string Prefab_Bullet = "Assets/Resources/Prefabs/Projectile/";
+        public const string Prefab_Bullet = "Projectile/";
         public const string Sprite_Bullet = "Assets/Resources/Sprites/Projectile/";
 
         public const string UI = "Assets/Resources/UI/";

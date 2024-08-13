@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public abstract class PawnBase : MonoBehaviour, IWorldObject, IDamageable, ISelectedable
+public abstract class PawnBase : MonoBehaviour, IDamageable, ISelectedable
 {
     private Data.CharacterData _characterData;
 
@@ -16,9 +16,10 @@ public abstract class PawnBase : MonoBehaviour, IWorldObject, IDamageable, ISele
     [SerializeField] protected Vector3 _destPos;
     [SerializeField] protected GameObject _lockTarget;
     [SerializeField] protected PawnStat _pawnStat;
-    [SerializeField] protected Skill[] _skill = new Skill[3];
     [SerializeField] private bool _isSelected;
 
+    [SerializeField] protected List<Data.RuneData> _runeList = new(Define.PawnRuneLimitCount);
+    [SerializeField] protected List<Skill> _skill = new(Define.PawnRuneLimitCount);
 
     public Action OnDeadAction;
 
@@ -99,7 +100,7 @@ public abstract class PawnBase : MonoBehaviour, IWorldObject, IDamageable, ISele
     #region update
     protected virtual void UpdateDie() 
     {
-        OnDeadAction?.Invoke();
+        //OnDeadAction?.Invoke();
     }
 
     protected virtual void UpdateMove() 
@@ -124,7 +125,9 @@ public abstract class PawnBase : MonoBehaviour, IWorldObject, IDamageable, ISele
 
         //naviAgent가 이동을 마쳤을 경우 idle로 돌아감
         if (_navAgent.velocity == Vector3.zero && Vector3.Distance(_destPos, transform.position) < 0.1f)
-            State = Define.EPawnAniState.Idle;
+        {
+            State = _lockTarget == null ? Define.EPawnAniState.Idle : Define.EPawnAniState.Ready;
+        }
 
 
         if (_navAgent.velocity.sqrMagnitude > 0.1f)
@@ -172,11 +175,18 @@ public abstract class PawnBase : MonoBehaviour, IWorldObject, IDamageable, ISele
     /// <summary>
     /// 타격타이밍에 실행 -> animation에서 OnHitEvent 호출시 
     /// </summary>
-    public virtual void ApplyAttack()
+    public virtual void BegineAttack()
     {
         
     }
 
+    /// <summary>
+    /// shot Animation Event 함수 실행시
+    /// </summary>
+    public virtual void EndAttack()
+    {
+        //projectile 발사
+    }
 
     public virtual void ReadyShop()
     {
@@ -184,17 +194,8 @@ public abstract class PawnBase : MonoBehaviour, IWorldObject, IDamageable, ISele
         //shot포인트에 캐릭터에 맞는 projectile 스폰
         //target, skill정보, damageMessage 생성
     }
-    /// <summary>
-    /// shot Animation Event 함수 실행시
-    /// </summary>
-    public virtual void ApplyShot()
-    {
-        //projectile 발사
-    }
-
+    
     #endregion
-
-    public void DoNoting() { }
 
     public bool IsDead()
     {
@@ -209,7 +210,7 @@ public abstract class PawnBase : MonoBehaviour, IWorldObject, IDamageable, ISele
         }
     }
 
-    public virtual void OnMove(Vector3 destPosition)
+    protected virtual void OnMove(Vector3 destPosition)
     {
         _destPos = destPosition;
         State = Define.EPawnAniState.Running;

@@ -7,8 +7,8 @@ using System;
 public class PawnAnimationController : MonoBehaviour
 {
     public PixelHero.CharacterBuilder _pawnBuilder;
-    public Define.DamageType _attackType = Define.DamageType.MeleeAttack;
-    private PawnBase _baseController;
+    public Define.EDamageType _attackType = Define.EDamageType.Melee;
+    private PawnBase _pawnBase;
     public Animator _animator;
 
     //todo : particleManager 만들기
@@ -16,8 +16,8 @@ public class PawnAnimationController : MonoBehaviour
 
     private void Awake()
     {
-        if (_baseController == null)
-            _baseController = transform.parent.GetComponent<PawnBase>();
+        if (_pawnBase == null)
+            _pawnBase = transform.parent.GetComponent<PawnBase>();
     }
 
     /// <summary>
@@ -26,8 +26,6 @@ public class PawnAnimationController : MonoBehaviour
     /// <param name="data"></param>
     public void Init(Data.CharacterData data)
     {
-        _attackType = (Define.DamageType)data.attackType;
-
         _pawnBuilder.Head = data.Head;
         _pawnBuilder.Ears = data.Ears;
         _pawnBuilder.Eyes = data.Eyes;
@@ -61,13 +59,13 @@ public class PawnAnimationController : MonoBehaviour
         switch (trigger)
         {
             case Define.EPawnAniTriger.Attack:
-                if (_attackType == Define.DamageType.MeleeAttack)
+                if (_attackType == Define.EDamageType.Melee)
                     _animator.SetTrigger("Slash");
                 else
                     _animator.SetTrigger("Shot");
                 return;
             case Define.EPawnAniTriger.Skill:
-                if (_attackType == Define.DamageType.MeleeAttack)
+                if (_attackType == Define.EDamageType.Melee)
                     _animator.SetTrigger("Slash");
                 else
                     _animator.SetTrigger("Shot");
@@ -77,14 +75,14 @@ public class PawnAnimationController : MonoBehaviour
         _animator.SetTrigger(trigger.ToString());
     }
 
-    public void OnHitEvent()
+    public void OnBeginAttack()
     {
-        _baseController.ApplyAttack();
+        _pawnBase.BegineAttack();
     }
 
-    public void OnShotEvent()
+    public void OnEndAttack()
     {
-        _baseController.ApplyShot();
+        _pawnBase.EndAttack();
     }
 
     public SpriteRenderer Body;

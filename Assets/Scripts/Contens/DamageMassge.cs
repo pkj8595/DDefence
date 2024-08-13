@@ -9,7 +9,7 @@ public struct DamageMessage
     public Vector3 hitPoint;
     public Vector3 hitNormal;
     public int targetLayer;
-    public SkillEffect skillAffect;
+    public IAffect skillAffect;
 }
 /*
 데미지 계산식

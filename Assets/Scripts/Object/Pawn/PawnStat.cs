@@ -4,84 +4,100 @@ using UnityEngine;
 
 public class PawnStat : MonoBehaviour
 {
-    public Data.StatData _curruntStat;
-    public Data.StatData _baseStat;
-    public Data.StatData[] _equipmentStatList = new Data.StatData[3]; // todo
+    /// <summary>
+    /// 전투 스탯
+    /// </summary>
+    [SerializeField]
+    private CombatStat _combatStat;
+    /// <summary>
+    /// 캐릭터 스탯 
+    /// </summary>
+    [SerializeField]
+    private BaseStat _currentBaseStat;
 
-    private int _statDataBaseNum;
-    
+    private Data.StatData _baseStat;
+    private List<Data.StatData> _runeStatList = new List<Data.StatData>(Define.runeCount);
+    private List<Data.StatData> _traitStatList = new List<Data.StatData>(Define.traitCount);
+
     [field: SerializeField] public int KillCount { get; set; }
     [field: SerializeField] public int WaveCount { get; set; }
-
-    //todo stat클래스 정리
-    [field: SerializeField] public int Hp { get; set; }
-    [field: SerializeField] public int Mana { get; set; }
-    [field: SerializeField] public int Level { get; set; }
-
-    private int _exp;
+    [field: SerializeField] public float Hp { get; set; }
+    [field: SerializeField] public float Mana { get; set; }
+    public int EXP { get { return KillCount + (WaveCount * 10); }}
     public bool IsDead { get; set; }
 
-    public int MaxHp { get => _curruntStat.maxHp; }
-    public int MaxMana { get => _curruntStat.maxMana; }
-    public int Attack { get => _curruntStat.attack; }
-    public int Defense { get => _curruntStat.defense; }
-    public float MoveSpeed { get => _curruntStat.moveSpeed; }
-    public float AttackSpeed { get => _curruntStat.attackSpeed; }
-    public float AttackRange { get => _curruntStat.attackRange; }
-    public float Bellruns { get => _curruntStat.bellruns; }
-    public int TotalExp { get => _curruntStat.totalExp; }
-    public int DropExp { get => _curruntStat.dropExp; }
+    public float MoveSpeed { get { return _combatStat.movementSpeed; } }
 
-    //exp 를 
-    public int Exp
-    {
-        get => _exp;
-        private set
-        {
-            _exp = value;
-            int level = Level;
-            while (true)
-            {
-                if (Managers.Data.StatDict.TryGetValue(CalculateStatDataNum(), out Data.StatData stat) == false)
-                    break;
-                if (_exp < stat.totalExp)
-                    break;
-                level++;
-            }
-            if (level != Level)
-            {
-                Debug.Log($"Level Up {Level}");
-                Level = level;
-                SetStat(CalculateStatDataNum());
-            }
-        }
-    }
+    public CombatStat CombatStat { get => _combatStat; set => _combatStat = value; }
 
     public void Init(int statDataNum)
     {
-        _statDataBaseNum = Utils.CalculateTableBaseNumber(statDataNum);
-        Level = 0;
-        _exp = 0;
-        SetStat(CalculateStatDataNum());
+        SetBaseStat(Managers.Data.StatDict[statDataNum]);
+        CalculateCombatStat();
+        Hp = _combatStat.maxHp;
+        Mana = _combatStat.maxMana;
+
     }
 
-    private void SetStat(Data.StatData statData)
+    #region ChangeStat
+    
+    private void SetBaseStat(Data.StatData statData)
     {
-        _curruntStat = statData;
-        Hp = statData.maxHp;
-        Mana = statData.maxMana;
-        IsDead = false;
+        _baseStat = statData;
+        CalculateCombatStat();
     }
 
-    private void SetStat(int statDataNum)
+    public void AddRuneStat(Data.StatData statData)
     {
-        SetStat(Managers.Data.StatDict[statDataNum]);
+        if (_runeStatList.Count <= Define.runeCount)
+        {
+            _runeStatList.Add(statData);
+            CalculateCombatStat();
+        }
     }
 
-    private int CalculateStatDataNum()
+    public void RemoveRuneStat(Data.StatData statData)
     {
-        return _statDataBaseNum + Level;
+        if (_runeStatList.Remove(statData))
+        {
+            CalculateCombatStat();
+        }
     }
+
+    public void AddTraitStat(Data.StatData statData)
+    {
+        if (_traitStatList.Count <= Define.traitCount)
+        {
+            _traitStatList.Add(statData);
+            CalculateCombatStat();
+        }
+    }
+
+    public void RemoveTraitStat(Data.StatData statData)
+    {
+        if (_traitStatList.Remove(statData))
+        {
+            CalculateCombatStat();
+        }
+    }
+
+    private void CalculateCombatStat()
+    {
+        _currentBaseStat.Reset();
+        _currentBaseStat += _baseStat;
+        for (int i = 0; i < _runeStatList.Count; i++)
+        {
+            if (_runeStatList[i] != null)
+                _currentBaseStat += _runeStatList[i];
+        }
+        for (int i = 0; i < _traitStatList.Count; i++)
+        {
+            if (_traitStatList[i] != null)
+                _currentBaseStat += _traitStatList[i];
+        }
+        _combatStat = CombatStat.ConvertStat(_currentBaseStat);
+    }
+    #endregion
 
     /// <summary>
     /// 피격시 실행되는 로직
@@ -97,7 +113,7 @@ public class PawnStat : MonoBehaviour
         }
 
         //todo 
-        int damage = (int)Mathf.Max(0, msg.damageAmount - Defense);
+        int damage = (int)Mathf.Max(0, msg.damageAmount - _combatStat.protection);
         Hp -= damage;
         if (Hp < 0)
         {
@@ -106,26 +122,25 @@ public class PawnStat : MonoBehaviour
         }
     }
 
-    //벨런스 어택 데미지 산출
-    public virtual float GetAttackValue()
+    public virtual void OnAttacked(float damage)
     {
-        const float bellMaxValue = 1.0f;
-        const float bellMinValue = 0.01f;
-
-        float bell = Mathf.Clamp(Bellruns, bellMinValue, bellMaxValue);
-        return Random.Range(Attack * bell, Attack);
+        
     }
 
     private void OnDead(PawnStat attacker)
     {
         if (attacker != null)
         {
-            attacker.Exp += DropExp;
+            attacker.KillCount++;
         }
         IsDead = true;
-        Managers.Game.Despawn(gameObject);
+        //Managers.Game.Despawn(gameObject);
     }
 
+    public void ApplyAffect(IAffect affect)
+    {
+        affect.ApplyAffect(this);
+    }
     
-
+  
 }

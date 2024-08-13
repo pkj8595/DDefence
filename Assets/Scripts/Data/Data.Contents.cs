@@ -17,10 +17,13 @@ namespace Data
     {
         public CharacterData[] CharacterTable;
         public StatData[] StatTable;
+        public StatConversionData[] StatConversionTable;
         public TileBaseData[] TileBaseTable;
         public BuildingData[] BuildingTable;
         public GoodsData[] GoodsTable;
-        public ItemData[] ItemTable;
+        public RuneData[] RuneTable;
+        public SkillData[] SkillTable;
+        public SkillAffectData[] SkillAffectTable;
 
 
         public void MakeTableData(Dictionary<int, CharacterData> tableData)
@@ -36,6 +39,14 @@ namespace Data
             for (int i = 0; i < StatTable.Length; i++)
             {
                 tableData.Add(StatTable[i].tableNum, StatTable[i]);
+            }
+        }
+
+        public void MakeTableData(Dictionary<int, StatConversionData> tableData)
+        {
+            for (int i = 0; i < StatConversionTable.Length; i++)
+            {
+                tableData.Add(StatConversionTable[i].tableNum, StatConversionTable[i]);
             }
         }
 
@@ -63,11 +74,27 @@ namespace Data
             }
         }
 
-        public void MakeTableData(Dictionary<int, ItemData> tableData)
+        public void MakeTableData(Dictionary<int, RuneData> tableData)
         {
-            for (int i = 0; i < ItemTable.Length; i++)
+            for (int i = 0; i < RuneTable.Length; i++)
             {
-                tableData.Add(ItemTable[i].tableNum, ItemTable[i]);
+                tableData.Add(RuneTable[i].tableNum, RuneTable[i]);
+            }
+        }
+
+        public void MakeTableData(Dictionary<int, SkillData> tableData)
+        {
+            for (int i = 0; i < SkillTable.Length; i++)
+            {
+                tableData.Add(SkillTable[i].tableNum, SkillTable[i]);
+            }
+        }
+
+        public void MakeTableData(Dictionary<int, SkillAffectData> tableData)
+        {
+            for (int i = 0; i < SkillAffectTable.Length; i++)
+            {
+                tableData.Add(SkillAffectTable[i].tableNum, SkillAffectTable[i]);
             }
         }
 
@@ -83,7 +110,10 @@ namespace Data
         public string name;
         public string desc;
         public int statDataNum;
-        public int attackType;
+        public int upgradeChar;
+        public int ignoreAffect;
+        public int basicSkill;
+
         public string Head;
         public string Ears;
         public string Eyes;
@@ -106,17 +136,96 @@ namespace Data
     {
         public const int Table = 102;
 
-        public int level;
-        public int maxHp;
-        public int maxMana;
-        public int attack;
-        public int defense;
-        public float moveSpeed;
-        public float attackSpeed;
-        public float attackRange;
-        public float bellruns;
-        public int totalExp;
-        public int dropExp;
+        /// <summary>
+        /// 건강
+        /// </summary>
+        public int vitality;
+
+        /// <summary>
+        /// 힘
+        /// </summary>
+        public int strength;    
+
+        /// <summary>
+        /// 민첩
+        /// </summary>
+        public int agility;     
+
+        /// <summary>
+        /// 지력
+        /// </summary>
+        public int intelligence;
+
+        /// <summary>
+        /// 정신력
+        /// </summary>
+        public int willpower;   
+
+        /// <summary>
+        /// 정확
+        /// </summary>
+        public int accuracy;    
+
+        public static BaseStat operator +(StatData a, StatData b)
+        {
+            BaseStat ret = new BaseStat();
+            ret.vitality = a.vitality + b.vitality;
+            ret.strength = a.strength + b.strength;
+            ret.agility = a.agility + b.agility;
+            ret.intelligence = a.intelligence + b.intelligence;
+            ret.willpower = a.willpower + b.willpower;
+            ret.accuracy = a.accuracy + b.accuracy;
+            return ret;
+        }
+       
+    }
+
+    [Serializable]
+    public class StatConversionData : TableBase
+    {
+        public const int Table = 103;
+
+        public int type;
+        public float maxHp;
+        public float maxMana;
+        public float meleeDamage;
+        public float rangedDamage;
+        public float magicDamage;
+        public float protection;
+        public float cooldownReduction;
+        public float movementSpeed;
+        public float criticalHitChance;
+        public float dodgepChance;
+        public float dodgepEnetration;
+        public float magicDuration;
+        public float statusEffectResistance;
+        public float balance;
+        public float hpRegeneration;
+        public float manaRegeneration;
+
+        public static CombatStat operator *(float a, StatConversionData b)
+        {
+            CombatStat ret = new CombatStat();
+            ret.maxHp                   = a * b.maxHp;
+            ret.maxMana                 = a * b.maxMana;
+            ret.meleeDamage             = a * b.meleeDamage;
+            ret.rangedDamage            = a * b.rangedDamage;
+            ret.magicDamage             = a * b.magicDamage;
+            ret.protection              = a * b.protection;
+            ret.cooldownReduction       = a * b.cooldownReduction;
+            ret.movementSpeed           = a * b.movementSpeed;
+            ret.criticalHitChance       = a * b.criticalHitChance;
+            ret.dodgepChance            = a * b.dodgepChance;
+            ret.dodgepEnetration        = a * b.dodgepEnetration;
+            ret.magicDuration           = a * b.magicDuration;
+            ret.statusEffectResistance  = a * b.statusEffectResistance;
+            ret.balance                 = a * b.balance;
+            ret.hpRegeneration          = a * b.hpRegeneration;
+            ret.manaRegeneration        = a * b.manaRegeneration;
+
+            return ret;
+        }
+
     }
     #endregion
 
@@ -129,8 +238,8 @@ namespace Data
         public int tileType;
         public string name;
         public string desc;
-        public int layer;
-        public int isTrigger;
+        public int goods;
+        public int amount;
     }
     #endregion
 
@@ -140,11 +249,18 @@ namespace Data
     {
         public const int Table = 202;
 
-        public int tileType;
         public string name;
         public string desc;
-        public int layer;
-        public int isTrigger;
+        public int installableLayer;
+        public string prefab;
+        public string sprite;
+        public int tier;
+        public int range;
+        public int damage;
+        public int attackSpeed;
+        public int goods;
+        public int goods_amount;
+        public string projectile;
     }
     #endregion
 
@@ -162,37 +278,53 @@ namespace Data
 
     #region 302
     [Serializable]
-    public class ItemData : TableBase
+    public class RuneData : TableBase
     {
         public const int Table = 302;
 
         public string name;
         public string desc;
         public string imageStr;
+        public int statTableNum;
+        public int skillTableNum;
+        public int releaseGoods;
+        public int releaseAmount;
     }
     #endregion
 
     [Serializable]
     public class SkillData : TableBase
     {
-        public const int Table = 401;
+        public const int Table = 400;
 
         public string name;
         public string desc;
+        public string icon;
+        public int skillType;
+        public Define.ETargetType targetType;
+        public int manaAmount;
+        public int minRange;
+        public int maxRange;
+        public int splashRange;
+        public int coolTime;
         public string effectStr;
-        public string iconStr;
-        public int tire;
-        public float damagePer;
-        public float skillRange;
-        public float splashRange;
-        public float costAmount;
-        public int costNumber;
-        public bool isRangedSkill;
-        public bool isSplash;
-        public int targetType; // 0.player 1.gameobject 2.position
-        public int buffType; // 0. none 1. buff 2.debuff
-        public int splashType; // 0. none, 1.circle 2.rect 
-        public int buffStatDataNum;
-        
+        public string motionAni;
+        public int motionDuration;
+        public string projectile;
+        public int[] arr_affect = new int[3];
+    }
+
+    [Serializable]
+    public class SkillAffectData : TableBase
+    {
+        public const int Table = 401;
+
+        public Define.EAffectType affectType;
+        public Define.EDamageType damageType;
+        public Define.ETargetType targetType;
+        /*public int affectType;
+        public int damageType;
+        public int targetType;*/
+        public int value;
     }
 }

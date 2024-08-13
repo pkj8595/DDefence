@@ -13,7 +13,7 @@ public class PlayerContoroller : PawnBase
 
     protected override void Init()
     {
-        WorldObjectType = Define.WorldObject.Playable;
+        WorldObjectType = Define.WorldObject.PlayerPawn;
         _pawnStat = gameObject.GetComponent<PawnStat>();
 
         //Managers.Input.KeyAction -= OnKeyboard;
