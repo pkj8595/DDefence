@@ -21,7 +21,7 @@ public class GameManager
         {
             case Define.WorldObject.Unknown:
                 break;
-            case Define.WorldObject.PlayerPawn:
+            case Define.WorldObject.Pawn:
                 break;
         }
         return go;
@@ -50,7 +50,7 @@ public class GameManager
                     }
                 }
                 break;
-            case Define.WorldObject.PlayerPawn:
+            case Define.WorldObject.Pawn:
                 {
                 }
                 break;

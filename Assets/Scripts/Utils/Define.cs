@@ -4,19 +4,20 @@ using UnityEngine;
 
 public class Define
 {
-    public const int PawnRuneLimitCount = 3;
-    public const int runeCount = 3;
-    public const int traitCount = 10;
+    public const int Pawn_Rune_Limit_Count = 3;
+    public const int Rune_Count = 3;
+    public const int Trait_Count = 10;
+    public const int Affect_Count = 3;
     /// <summary>
     /// worldObject 상태
     /// </summary>
     public enum WorldObject
     {
         Unknown,
-        PlayerPawn,
+        Pawn,
         Tower,
-        EnumyPawn,
     }
+    
 
     public enum Layer
     {
@@ -40,19 +41,25 @@ public class Define
 
     public enum EPawnAniTriger
     {
-        Attack,
+        Slash,
+        Shot,
         Skill,
         Hit,
         Heal,
         Cool
     }
-
   
 
     public enum TrapState
     {
         Idle,
         Attack,
+    }
+
+    public enum EParentObj
+    {
+        Pawn,
+        Projectile,
     }
 
     public enum Scene
@@ -99,6 +106,13 @@ public class Define
         Enemy,
         Ally,
     }
+
+    public enum ETeam
+    {
+        Playable,
+        Enumy,
+    }
+
     public enum EDamageType
     {
         Melee,
@@ -112,6 +126,19 @@ public class Define
         Heal,
         Debuff,
         Buff,
+    }
+
+    public enum ESkillType
+    {
+        one,
+        Area,
+    }
+
+    public enum ESkillDistanceType
+    {
+        LessMin,
+        Excuteable,
+        MoreMax,
     }
 
     public static class Path

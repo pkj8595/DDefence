@@ -5,11 +5,17 @@ using UnityEngine;
 public struct DamageMessage
 {
     public PawnStat attacker;
-    public float damageAmount;//
     public Vector3 hitPoint;
     public Vector3 hitNormal;
-    public int targetLayer;
-    public IAffect skillAffect;
+    public IAffect[] skillAffectList;
+
+    public DamageMessage(PawnStat attacker, Vector3 hitPoint, Vector3 hitNormal, IAffect[] skillAffectList)
+    {
+        this.attacker = attacker;
+        this.hitPoint = hitPoint;
+        this.hitNormal = hitNormal;
+        this.skillAffectList = skillAffectList;
+    }
 }
 /*
 데미지 계산식

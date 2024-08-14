@@ -23,10 +23,11 @@ public static class AffectFactory
         }
     }
 }
+
 public interface IAffect
 {
-    void ApplyAffect(PawnStat target);
-    void Remove(PawnStat target);
+    void ApplyAffect(PawnStat attecker, PawnStat taker);
+    void Remove();
     bool IsExpired();
 }
 
@@ -41,9 +42,9 @@ public abstract class TimedAffect : IAffect
         this.startTime = Time.time;
     }
 
-    public abstract void ApplyAffect(PawnStat target);
+    public abstract void ApplyAffect(PawnStat attecker, PawnStat taker);
 
-    public virtual void Remove(PawnStat target)
+    public virtual void Remove()
     {
     }
 
@@ -64,22 +65,22 @@ public class DamageAffect : IAffect
         DamageValue = damageValue;
     }
 
-    public void ApplyAffect(PawnStat target)
+    public void ApplyAffect(PawnStat attacker, PawnStat taker)
     {
         // 예시: target의 체력을 줄이는 로직
-        var healthComponent = target.GetComponent<PawnStat>();
+        var healthComponent = taker.GetComponent<PawnStat>();
         if (healthComponent != null)
         {
-            healthComponent.OnAttacked(DamageValue);
+            healthComponent.OnAttacked(DamageValue * attacker.CombatStat.meleeDamage, attacker);
         }
     }
 
     public bool IsExpired()
     {
-        return false;
+        return true;
     }
 
-    public void Remove(PawnStat target)
+    public void Remove()
     {
     }
 }
@@ -94,31 +95,31 @@ public class MeleeDamageBuffAffect : TimedAffect
         BuffValue = buffValue;
     }
 
-    public override void ApplyAffect(PawnStat target)
+    public override void ApplyAffect(PawnStat attecker, PawnStat taker)
     {
-        var stat = target.CombatStat;
+        _target = taker;
+        var stat = taker.CombatStat;
         stat.meleeDamage += BuffValue;
-        target.CombatStat = stat;
-        _target = target;
-        target.StartCoroutine(RemoveCoroutine());
+        taker.CombatStat = stat;
+        taker.SetAffectEvent(UpdateAction);
     }
 
-    public override void Remove(PawnStat target)
+    public override void Remove()
     {
-        base.Remove(target);
-        var stat = target.CombatStat;
+        base.Remove();
+        var stat = _target.CombatStat;
         stat.meleeDamage -= BuffValue;
-        target.CombatStat = stat;
+        _target.CombatStat = stat;
+        _target.RemoveAffectEvent(UpdateAction);
     }
 
-    private IEnumerator RemoveCoroutine()
+    private void UpdateAction()
     {
         while (true)
         {
-            yield return YieldCache.WaitForSeconds(1);
             if (IsExpired())
             {
-                Remove(_target);
+                Remove();
                 break;
             }
         }

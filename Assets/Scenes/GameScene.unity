@@ -664,6 +664,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SelectdPawnGroup>k__BackingField: {fileID: 907509525}
+  <PawnObj>k__BackingField: {fileID: 1818433189}
+  <ProjectileObj>k__BackingField: {fileID: 51678193}
 --- !u!1001 &187728554
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1894,7 +1896,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &581777690
 Transform:
   m_ObjectHideFlags: 0
@@ -4810,11 +4812,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6162374489451764274, guid: 443ee60ee0f508d4b93a5951c4d4671b, type: 3}
   m_PrefabInstance: {fileID: 1478714208}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1523865620 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6834267158829301281, guid: 7657a8781fe88e34ea518eb20f7f1020, type: 3}
-  m_PrefabInstance: {fileID: 6834267157149723047}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1542333082
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6395,14 +6392,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 907509524}
     m_Modifications:
-    - target: {fileID: 6623756325375741244, guid: 7657a8781fe88e34ea518eb20f7f1020, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 4723107735738678597, guid: 21ad0db33ce445678f46ff78cff9260f, type: 3}
-    - target: {fileID: 6623756325375741246, guid: 7657a8781fe88e34ea518eb20f7f1020, type: 3}
-      propertyPath: m_SpriteKey
-      value: 8.685169e-20
-      objectReference: {fileID: 0}
     - target: {fileID: 6834267158829301280, guid: 7657a8781fe88e34ea518eb20f7f1020, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -6462,61 +6451,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6834267158829301280, guid: 7657a8781fe88e34ea518eb20f7f1020, type: 3}
   m_PrefabInstance: {fileID: 2117910452}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2117910454 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6834267158829301281, guid: 7657a8781fe88e34ea518eb20f7f1020, type: 3}
-  m_PrefabInstance: {fileID: 2117910452}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2117910455
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2117910454}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9fb9ee8eaab90ac42be9e7d98bd1b9c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _curruntStat:
-    tableNum: 0
-    level: 0
-    maxHp: 0
-    maxMana: 0
-    attack: 0
-    defense: 0
-    moveSpeed: 0
-    attackSpeed: 0
-    attackRange: 0
-    bellruns: 0
-    totalExp: 0
-    dropExp: 0
-  _baseStat:
-    tableNum: 0
-    level: 0
-    maxHp: 0
-    maxMana: 0
-    attack: 0
-    defense: 0
-    moveSpeed: 0
-    attackSpeed: 0
-    attackRange: 0
-    bellruns: 0
-    totalExp: 0
-    dropExp: 0
-  _equipmentStatList: []
-  <KillCount>k__BackingField: 0
-  <WaveCount>k__BackingField: 0
-  <Hp>k__BackingField: 0
-  <Mana>k__BackingField: 0
-  <Level>k__BackingField: 0
 --- !u!114 &2117910460 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9092994966572238061, guid: 7657a8781fe88e34ea518eb20f7f1020, type: 3}
   m_PrefabInstance: {fileID: 2117910452}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2117910454}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 35acb7c626772a543a24d33c7814416e, type: 3}
@@ -6752,14 +6692,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 907509524}
     m_Modifications:
-    - target: {fileID: 6623756325375741244, guid: 7657a8781fe88e34ea518eb20f7f1020, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 4723107735738678597, guid: 21ad0db33ce445678f46ff78cff9260f, type: 3}
-    - target: {fileID: 6623756325375741246, guid: 7657a8781fe88e34ea518eb20f7f1020, type: 3}
-      propertyPath: m_SpriteKey
-      value: 6.041163e-14
-      objectReference: {fileID: 0}
     - target: {fileID: 6834267158829301280, guid: 7657a8781fe88e34ea518eb20f7f1020, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -6820,56 +6752,12 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9092994966572238061, guid: 7657a8781fe88e34ea518eb20f7f1020, type: 3}
   m_PrefabInstance: {fileID: 6834267157149723047}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1523865620}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 35acb7c626772a543a24d33c7814416e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6834267157149723053
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1523865620}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9fb9ee8eaab90ac42be9e7d98bd1b9c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _curruntStat:
-    tableNum: 0
-    level: 0
-    maxHp: 0
-    maxMana: 0
-    attack: 0
-    defense: 0
-    moveSpeed: 0
-    attackSpeed: 0
-    attackRange: 0
-    bellruns: 0
-    totalExp: 0
-    dropExp: 0
-  _baseStat:
-    tableNum: 0
-    level: 0
-    maxHp: 0
-    maxMana: 0
-    attack: 0
-    defense: 0
-    moveSpeed: 0
-    attackSpeed: 0
-    attackRange: 0
-    bellruns: 0
-    totalExp: 0
-    dropExp: 0
-  _equipmentStatList: []
-  <KillCount>k__BackingField: 0
-  <WaveCount>k__BackingField: 0
-  <Hp>k__BackingField: 0
-  <Mana>k__BackingField: 0
-  <Level>k__BackingField: 0
 --- !u!1001 &9115350138624431524
 PrefabInstance:
   m_ObjectHideFlags: 0

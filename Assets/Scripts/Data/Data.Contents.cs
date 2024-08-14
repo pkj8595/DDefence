@@ -300,7 +300,7 @@ namespace Data
         public string name;
         public string desc;
         public string icon;
-        public int skillType;
+        public Define.ESkillType skillType;
         public Define.ETargetType targetType;
         public int manaAmount;
         public int minRange;
@@ -308,7 +308,8 @@ namespace Data
         public int splashRange;
         public int coolTime;
         public string effectStr;
-        public string motionAni;
+        public Define.EPawnAniTriger aniTriger;
+        public Define.EPawnAniState motionAni;
         public int motionDuration;
         public string projectile;
         public int[] arr_affect = new int[3];

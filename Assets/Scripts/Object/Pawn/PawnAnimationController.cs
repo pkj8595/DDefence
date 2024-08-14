@@ -56,33 +56,17 @@ public class PawnAnimationController : MonoBehaviour
 
     public void SetAniTrigger(Define.EPawnAniTriger trigger)
     {
-        switch (trigger)
-        {
-            case Define.EPawnAniTriger.Attack:
-                if (_attackType == Define.EDamageType.Melee)
-                    _animator.SetTrigger("Slash");
-                else
-                    _animator.SetTrigger("Shot");
-                return;
-            case Define.EPawnAniTriger.Skill:
-                if (_attackType == Define.EDamageType.Melee)
-                    _animator.SetTrigger("Slash");
-                else
-                    _animator.SetTrigger("Shot");
-                return;
-        }
-
         _animator.SetTrigger(trigger.ToString());
     }
 
     public void OnBeginAttack()
     {
-        _pawnBase.BegineAttack();
+        _pawnBase.BegineAniAttack();
     }
 
     public void OnEndAttack()
     {
-        _pawnBase.EndAttack();
+        _pawnBase.EndAniAttack();
     }
 
     public SpriteRenderer Body;
@@ -101,7 +85,7 @@ public class PawnAnimationController : MonoBehaviour
     {
         Body.material = BlinkMaterial;
 
-        yield return new WaitForSeconds(0.1f);
+        yield return YieldCache.WaitForSeconds(0.1f);
 
         Body.material = DefaultMaterial;
     }

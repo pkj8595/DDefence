@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IDamageable 
 {
-    public bool ApplyTakeDamege(DamageMessage message);
+    public abstract bool ApplyTakeDamege(DamageMessage message);
 }

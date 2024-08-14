@@ -111,7 +111,7 @@ public class BoardManager : MonoSingleton<BoardManager>
     }
 
     #region save & load
-    //todo
+    //todo : saveload
     private void SaveBoard()
     {
 

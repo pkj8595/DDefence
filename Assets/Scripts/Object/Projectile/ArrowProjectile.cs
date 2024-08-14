@@ -5,17 +5,15 @@ using DG.Tweening;
 
 public class ArrowProjectile : ProjectileBase
 {
-    [SerializeField] private Transform _target;
     public ParticleSystem _effHit;
     public Vector3 _offsetTarget;
     public float height = 8f;
     public float duration = 1f;
-    public bool isStart = false;
 
-    public void Init(Transform target, DamageMessage msg)
+    public override void Init(Transform target, float splashRange, in DamageMessage msg)
     {
-        _target = target;
-        _msg = msg;
+        base.Init(target, splashRange, msg);
+        
         Shot();
     }
 
@@ -49,7 +47,7 @@ public class ArrowProjectile : ProjectileBase
         Managers.Resource.Destroy(gameObject);
     }
 
-    protected override void HandleImpact(Collider other)
+    protected override void HandleImpact(Collider[] others)
     {
         if (_effHit != null)
         {
@@ -57,9 +55,12 @@ public class ArrowProjectile : ProjectileBase
             _effHit.Play();
         }
 
-        if (other.gameObject.TryGetComponent(out IDamageable damageable))
+        foreach(Collider coll in others)
         {
-            damageable.ApplyTakeDamege(_msg);
+            if (coll.gameObject.TryGetComponent(out IDamageable damageable))
+            {
+                damageable.ApplyTakeDamege(_msg);
+            }
         }
 
         Invoke(nameof(Destroy), 3f);
