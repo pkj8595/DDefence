@@ -6,81 +6,78 @@ using UnityEngine;
 
 public static class AffectFactory
 {
-    public static IAffect CreateAffect(Define.EAffectType affectType, float value)
+    public static AffectBase CreateAffect(Data.SkillAffectData affectData)
     {
-        switch (affectType)
+        return affectData.affectType switch
         {
-            case Define.EAffectType.Damage: // DamageAffect
-                return new DamageAffect(value);
-            case Define.EAffectType.Heal: // BuffAffect
-                return null;
-            case Define.EAffectType.Buff:
-                return new MeleeDamageBuffAffect(value,1000);
-            case Define.EAffectType.Debuff:
-                return null;
-            default:
-                return null;
-        }
+            Define.EAffectType.Damage => new DamageAffect(affectData),
+            Define.EAffectType.Heal => null,
+            Define.EAffectType.Buff => new MeleeDamageBuffAffect(affectData),
+            Define.EAffectType.Debuff => null,
+            _ => null,
+        };
     }
 }
 
-public interface IAffect
+public abstract class AffectBase
 {
-    void ApplyAffect(PawnStat attecker, PawnStat taker);
-    void Remove();
-    bool IsExpired();
+    protected Data.SkillAffectData _data;
+    public AffectBase(Data.SkillAffectData data)
+    {
+        _data = data;
+    }
+    public abstract void ApplyAffect(PawnStat attecker, PawnStat taker);
+    public abstract void Remove();
+    public abstract bool IsExpired();
 }
 
-public abstract class TimedAffect : IAffect
+public abstract class TimedAffect : AffectBase
 {
-    protected float duration;
     protected float startTime;
 
-    public TimedAffect(float duration)
-    {
-        this.duration = duration;
-        this.startTime = Time.time;
-    }
-
-    public abstract void ApplyAffect(PawnStat attecker, PawnStat taker);
-
-    public virtual void Remove()
+    protected TimedAffect(Data.SkillAffectData data) : base(data)
     {
     }
 
-    public bool IsExpired()
+    public override void ApplyAffect(PawnStat attecker, PawnStat taker) { }
+
+    public override void Remove()
     {
-        return Time.time >= startTime + duration;
+    }
+
+    public override bool IsExpired()
+    {
+        return Time.time >= startTime + _data.value;
     }
 
     
 }
 
-public class DamageAffect : IAffect
+public class DamageAffect : AffectBase
 {
     public float DamageValue { get; private set; }
 
-    public DamageAffect(float damageValue)
+    public DamageAffect(Data.SkillAffectData data) :base (data)
     {
-        DamageValue = damageValue;
+        DamageValue = data.value;
     }
 
-    public void ApplyAffect(PawnStat attacker, PawnStat taker)
+    public override void ApplyAffect(PawnStat attacker, PawnStat taker)
     {
         // 예시: target의 체력을 줄이는 로직
         var healthComponent = taker.GetComponent<PawnStat>();
         if (healthComponent != null)
         {
-            healthComponent.OnAttacked(DamageValue * attacker.CombatStat.meleeDamage, attacker);
+            healthComponent.OnAttacked(DamageValue * attacker.GetAttackValue(_data.damageType), attacker);
         }
     }
 
-    public bool IsExpired()
+    public override bool IsExpired()
     {
         return true;
     }
 
-    public void Remove()
+    public override void Remove()
     {
     }
 }
@@ -90,9 +87,9 @@ public class MeleeDamageBuffAffect : TimedAffect
     public float BuffValue { get; private set; }
     private PawnStat _target;
 
-    public MeleeDamageBuffAffect(float buffValue, float duration) : base(duration)
+    public MeleeDamageBuffAffect(Data.SkillAffectData data) : base(data)
     {
-        BuffValue = buffValue;
+        BuffValue = data.value;
     }
 
     public override void ApplyAffect(PawnStat attecker, PawnStat taker)
@@ -115,13 +112,9 @@ public class MeleeDamageBuffAffect : TimedAffect
 
     private void UpdateAction()
     {
-        while (true)
+        if (IsExpired())
         {
-            if (IsExpired())
-            {
-                Remove();
-                break;
-            }
+            Remove();
         }
     }
 

@@ -24,15 +24,23 @@ public abstract class Unit : MonoBehaviour, IDamageable
             return Define.ETargetType.Enemy;
     }
 
-    public virtual Unit SearchTarget(float searchRange)
+    /// <summary>
+    /// 적 
+    /// </summary>
+    /// <param name="searchRange"></param>
+    /// <returns></returns>
+    public virtual Unit SearchTarget(float searchRange, Define.ETargetType targetType)
     {
+        if (Define.ETargetType.Self == targetType)
+            return this;
+
         int layerTarget = (int)Define.Layer.Pawn | (int)Define.Layer.Building;
         Collider[] colliders = Physics.OverlapSphere(transform.position, searchRange, layerTarget);
 
         foreach (var collider in colliders)
         {
             Unit unit = collider.GetComponent<Unit>();
-            if (unit != null && !unit.IsDead() && unit.GetTargetType(this.Team) == Define.ETargetType.Enemy)
+            if (unit != null && !unit.IsDead() && unit.GetTargetType(this.Team) == targetType)
             {
                 return unit;
             }

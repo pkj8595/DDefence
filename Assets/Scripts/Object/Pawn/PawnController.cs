@@ -22,45 +22,6 @@ public class PawnController : PawnBase
         base.Init();
     }
 
-
-    protected override void UpdateDie()
-    {
-        base.UpdateDie();
-    }
-
-    protected override void UpdateIdle()
-    {
-        base.UpdateIdle();
-        if (_lockTarget)
-        {
-
-        }
-        else
-        {
-
-        }
-
-    }
-
-    protected override void UpdateMove()
-    {
-        base.UpdateMove();
-
-    }
-
-    protected override void UpdateSkill()
-    {
-        base.UpdateSkill();
-    }
-
-    protected override void OnLateUpdate()
-    {
-        base.OnLateUpdate();
-
-    }
-
-    
-
     public override void Update()
     {
         base.Update();

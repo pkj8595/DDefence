@@ -9,103 +9,68 @@ public abstract class PawnBase : Unit, ISelectedable
     private Data.CharacterData _characterData;
 
     [SerializeField] protected Define.EPawnAniState _state = Define.EPawnAniState.Idle;
-    [SerializeField] protected PawnAnimationController _aniController;
     [SerializeField] public NavMeshAgent _navAgent;
 
     [SerializeField] protected Vector3 _destPos;
-    [SerializeField] protected Unit _lockTarget;
-    [SerializeField] protected PawnStat _pawnStat;
+    [field : SerializeField] public PawnAnimationController AniController { get; private set; }
+    [SerializeField] public Unit LockTarget { get; set; }
+    [SerializeField] public PawnStat PawnStat { get; protected set; }
     [SerializeField] private bool _isSelected;
-    [SerializeField] protected UnitSkill _unitSkill = new UnitSkill();
+    [SerializeField] public UnitSkill PawnSkills { get; } = new UnitSkill();
 
     [SerializeField] protected List<Data.RuneData> _runeList = new(Define.Pawn_Rune_Limit_Count);
+
+    private UnitAI _ai = new UnitAI();
 
     public Action OnDeadAction { get; set; }
     public Define.WorldObject WorldObjectType { get; set; } = Define.WorldObject.Unknown;
     public float SearchRange { get; set; } = 10f;
-    public bool HasTarget => _lockTarget != null && !_lockTarget.IsDead();
+    public bool HasTarget => LockTarget != null && !LockTarget.IsDead();
+    public float LastCombatTime { get; set; } = 0f;
 
     public virtual Define.EPawnAniState State
     {
         get { return _state; }
         set
         {
+            if (value == Define.EPawnAniState.Ready || value == Define.EPawnAniState.Idle)
+            {
+                if (LastCombatTime < LastCombatTime + 5f)
+                    value = Define.EPawnAniState.Ready;
+                else
+                    value = Define.EPawnAniState.Idle;
+            }
             _state = value;
-            _aniController.SetAniState(_state);
+            AniController.SetAniState(_state);
         }
     }
 
     public virtual void SetTriggerAni(Define.EPawnAniTriger trigger)
     {
-        _aniController.SetAniTrigger(trigger);
+        AniController.SetAniTrigger(trigger);
     }
 
 
     private void Awake()
     {
-        if (_aniController == null)
-            _aniController = gameObject.GetOrAddComponent<PawnAnimationController>();
+        if (AniController == null)
+            AniController = gameObject.GetComponentInChildren<PawnAnimationController>();
 
-        if (_pawnStat == null)
-            _pawnStat = gameObject.GetOrAddComponent<PawnStat>();
+        if (PawnStat == null)
+            PawnStat = gameObject.GetOrAddComponent<PawnStat>();
 
         _navAgent.updateRotation = false;
         _navAgent.updateUpAxis = false;
-        
+
     }
 
 
     public virtual void Update()
     {
-        switch (State)
-        {
-            case Define.EPawnAniState.Dead:
-                UpdateDie();
-                break;
-            case Define.EPawnAniState.Running:
-                UpdateMove();
-                break;
-            case Define.EPawnAniState.Idle:
-                UpdateIdle();
-                break;
-            case Define.EPawnAniState.Ready:
-                UpdateReady();
-                break;
-        }
-
+        _ai.OnUpdate();
     }
 
-    public void LateUpdate()
-    {
-        OnLateUpdate();
-    }
-
-    public virtual void Init(int characterNum)
-    {
-        //table data setting
-        _characterData = Managers.Data.CharacterDict[characterNum];
-        _aniController.Init(_characterData);
-        _pawnStat.Init(_characterData.statDataNum, OnDead);
-
-        //component setting
-
-        //_colliderAttackRange.radius = _stat.AttackRange;
-        _navAgent.speed = _pawnStat.MoveSpeed;
-        _unitSkill.Init(_pawnStat.Mana);
-        _unitSkill.SetBaseSkill(new Skill(_characterData.basicSkill));
-
-        Init();
-    }
-
-    protected virtual void Init() { }
-
-    #region update
-    protected virtual void UpdateDie() 
-    {
-        //OnDeadAction?.Invoke();
-    }
-
-    protected virtual void UpdateMove() 
+    public void UpdateMove()
     {
         switch (_navAgent.pathStatus)
         {
@@ -128,22 +93,37 @@ public abstract class PawnBase : Unit, ISelectedable
         //naviAgent가 이동을 마쳤을 경우 idle로 돌아감
         if (_navAgent.velocity == Vector3.zero && Vector3.Distance(_destPos, transform.position) < 0.1f)
         {
-            State = _lockTarget == null ? Define.EPawnAniState.Idle : Define.EPawnAniState.Ready;
+            //State = _lockTarget == null ? Define.EPawnAniState.Idle : Define.EPawnAniState.Ready;
+            _ai.SetState(_ai.GetIdleState());
         }
 
 
         if (_navAgent.velocity.sqrMagnitude > 0.1f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(_navAgent.velocity.normalized);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 1);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 1f);
         }
     }
 
-    protected virtual void OnLateUpdate() { }
-    protected virtual void UpdateIdle() { }
-    protected virtual void UpdateSkill() { }
-    protected virtual void UpdateReady() { }
-    #endregion
+    public virtual void Init(int characterNum)
+    {
+        //table data setting
+        _characterData = Managers.Data.CharacterDict[characterNum];
+        AniController.Init(_characterData);
+        PawnStat.Init(_characterData.statDataNum, OnDead);
+
+        //component setting
+
+        //_colliderAttackRange.radius = _stat.AttackRange;
+        _navAgent.speed = PawnStat.MoveSpeed;
+        PawnSkills.Init(PawnStat.Mana);
+        PawnSkills.SetBaseSkill(new Skill(_characterData.basicSkill));
+        _ai.Init(this);
+
+        Init();
+    }
+
+    protected virtual void Init() { }
 
 
 #if UNITY_EDITOR
@@ -165,53 +145,40 @@ public abstract class PawnBase : Unit, ISelectedable
     {
         //todo : 스탯과 스킬데이터로 정보 갱신
         SetTriggerAni(Define.EPawnAniTriger.Hit);
-        _pawnStat.ApplyDamageMessage(ref message);
+        PawnStat.ApplyDamageMessage(ref message);
+        LastCombatTime = Time.time;
         return false;
     }
 
-    //todo 코루틴을 쓰든 update를 쓰든 바꾸기
-    IEnumerator UpdatePath()
+
+    /// <summary>
+    /// 추척 대상이 있을때
+    /// </summary>
+    public void TrackingTarget()
     {
-        while (!this.IsDead())
+        Define.ESkillDistanceType distanceType = PawnSkills.GetCurrentSkill().
+            IsExecuteableRange(Vector3.Distance(transform.position, LockTarget.transform.position));
+
+        switch (distanceType)
         {
-            if (!_unitSkill.IsRunning)
-            {
-                if (HasTarget)
+            case Define.ESkillDistanceType.LessMin:
+                //방향 벡터를 구해서 target의 반대 방향으로 이동한다.
+                Vector3 fleeDirection = transform.position - LockTarget.transform.position;
+                SetDestination(fleeDirection.normalized * 2);
+                break;
+
+            case Define.ESkillDistanceType.Excuteable:
+                //스킬이 실행 가능한지 체크 및 자원 소모
+                _ai.SetState(_ai.GetIdleState());
+                if (PawnSkills.ReadyCurrentSkill(PawnStat))
                 {
-                    if (State == Define.EPawnAniState.Idle || State == Define.EPawnAniState.Ready)
-                    {
-                        //트랙킹애니메이션으로 
-                    }
-
-                    Define.ESkillDistanceType distanceType = _unitSkill.GetCurrentSkill().
-                        IsExcuteableRange(Vector3.Distance(transform.position, _lockTarget.transform.position));
-
-                    switch (distanceType)
-                    {
-                        case Define.ESkillDistanceType.LessMin:
-                            Vector3 fleeDirection = _lockTarget.transform.position - transform.position;
-                            fleeDirection = -fleeDirection.normalized * 2;
-                            SetDestination(fleeDirection);
-                            break;
-                        case Define.ESkillDistanceType.Excuteable:
-                            //스킬이 실행 가능한지 체크 및 자원 소모
-                            if (_unitSkill.ReadyCurrentSkill(_pawnStat))
-                            {
-                                StartCoroutine(ExecuteSkill(_unitSkill.GetRunnigSkill()));
-                            }
-                            break;
-                        case Define.ESkillDistanceType.MoreMax:
-                            SetDestination(_lockTarget.transform.position);
-                            break;
-                    }
+                    StartCoroutine(ExecuteSkill(PawnSkills.GetRunnigSkill()));
                 }
-                else
-                {
-                    _lockTarget = SearchTarget(SearchRange);
-                }
-            }
+                break;
 
-            yield return YieldCache.WaitForSeconds(0.5f);
+            case Define.ESkillDistanceType.MoreMax:
+                SetDestination(LockTarget.transform.position);
+                break;
         }
     }
 
@@ -223,7 +190,7 @@ public abstract class PawnBase : Unit, ISelectedable
             yield return YieldCache.WaitForSeconds(skill.MotionDuration);
         }
 
-        _aniController.SetAniTrigger(skill.AniTriger);
+        AniController.SetAniTrigger(skill.AniTriger);
     }
 
     /// <summary>
@@ -231,22 +198,13 @@ public abstract class PawnBase : Unit, ISelectedable
     /// </summary>
     public virtual void BegineAniAttack()
     {
-        
-    }
-
-    /// <summary>
-    ///  Animation Event 함수 실행시
-    /// </summary>
-    public virtual void EndAniAttack()
-    {
         //projectile 발사
-        Skill skill = _unitSkill.GetRunnigSkill();
-        DamageMessage msg = new DamageMessage(_pawnStat,
+        Skill skill = PawnSkills.GetRunnigSkill();
+        DamageMessage msg = new DamageMessage(PawnStat,
                                            Vector3.zero,
                                            Vector3.zero,
                                            skill.AffectList.ToArray());
-        List<Unit> unitList;
-        if (skill.DetectTargetInSkillRange(this, out unitList))
+        if (skill.DetectTargetInSkillRange(this, out List<Unit> unitList))
         {
             ProjectileBase projectile = skill.MakeProjectile(
                 Managers.Scene.CurrentScene.GetParentObj(Define.EParentObj.Projectile).transform
@@ -264,30 +222,33 @@ public abstract class PawnBase : Unit, ISelectedable
                 projectile.Init(unitList[0].transform, skill.SplashRange, msg);
             }
         }
-        _unitSkill.ClearCurrentSkill();
     }
 
-    public virtual void ReadyShot()
+    /// <summary>
+    ///  Animation Event 함수 실행시
+    /// </summary>
+    public virtual void EndAniAttack()
     {
-        //적 감지후 거리거리 내에 있을때
-        //shot포인트에 캐릭터에 맞는 projectile 스폰
-        //target, skill정보, damageMessage 생성
+        PawnSkills.ClearCurrentSkill();
+        LastCombatTime = Time.time;
+        PawnStat.IncreadMana();
     }
-    
+
+
     #endregion
 
     /// <summary>
-    /// pawn이 죽었을 때 실행하는 함수
+    /// pawn이 죽었을 때 실행되는 함수
     /// </summary>
     public void OnDead()
     {
         OnDeadAction?.Invoke();
-        State = Define.EPawnAniState.Dead;
+        _ai.SetState(_ai.GetDeadState());
     }
 
     public override bool IsDead()
     {
-        return _pawnStat.IsDead;
+        return PawnStat.IsDead;
     }
 
     public void SetDestination(Vector3 position)
@@ -301,14 +262,14 @@ public abstract class PawnBase : Unit, ISelectedable
     protected virtual void OnMove(Vector3 destPosition)
     {
         _destPos = destPosition;
-        State = Define.EPawnAniState.Running;
         _navAgent.SetDestination(_destPos);
+        _ai.SetState(_ai.GetMoveState());
     }
 
     /// <summary>
     /// 길찾기 종료
     /// </summary>
-    public void OnStop()
+    public void OnMoveStop()
     {
         _destPos = gameObject.transform.position;
         _destPos.z = 0;

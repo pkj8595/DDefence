@@ -21,7 +21,7 @@ public class Skill
     public string EffectStr { get => data.effectStr; }
     public string ProjectileStr { get => data.projectile; }
 
-    public List<IAffect> AffectList { get; } = new List<IAffect>(Define.Affect_Count);
+    public List<AffectBase> AffectList { get; } = new List<AffectBase>(Define.Affect_Count);
     public float LastRunTime { get; set; }
     private PawnStat _attacker;
 
@@ -29,7 +29,15 @@ public class Skill
     {
         data = Managers.Data.SkillDict[skillTableNum];
         LastRunTime = 0f;
-        //todo Iaffect init
+
+        for (int i = 0; i < data.arr_affect.Length; i++)
+        {
+            if (data.arr_affect[i] != 0)
+            {
+                Data.SkillAffectData affectData = Managers.Data.SkillAffectDict[data.arr_affect[i]];
+                AffectList.Add(AffectFactory.CreateAffect(affectData));
+            }
+        }
     }
 
     /// <summary>
@@ -105,7 +113,7 @@ public class Skill
         return mana >= ManaAmount; 
     }
 
-    public Define.ESkillDistanceType IsExcuteableRange(float distance)
+    public Define.ESkillDistanceType IsExecuteableRange(float distance)
     {
         if (distance < MinRange)
             return Define.ESkillDistanceType.LessMin;

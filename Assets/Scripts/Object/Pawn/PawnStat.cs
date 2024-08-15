@@ -31,7 +31,7 @@ public class PawnStat : MonoBehaviour
     private System.Action _OnDeadEvent;
 
     private System.Action _OnAffectEvent;
-    private List<IAffect> _affectList = new List<IAffect>();
+    private List<AffectBase> _affectList = new List<AffectBase>();
 
     public void Init(int statDataNum, System.Action onDead)
     {
@@ -118,7 +118,7 @@ public class PawnStat : MonoBehaviour
     {
         while (!IsDead)
         {
-            for (int i = _affectList.Count; i >= 0; i--)
+            for (int i = _affectList.Count - 1; i >= 0; i--)
             {
                 if (_affectList[i].IsExpired())
                 {
@@ -141,7 +141,7 @@ public class PawnStat : MonoBehaviour
         ApplyAffect(msg.skillAffectList, msg.attacker);
     }
 
-    private void ApplyAffect(IAffect[] affects, PawnStat attacker)
+    private void ApplyAffect(AffectBase[] affects, PawnStat attacker)
     {
         for (int i = 0; i < affects.Length; i++)
         {
@@ -149,10 +149,39 @@ public class PawnStat : MonoBehaviour
         }
     }
 
+    
+    public float GetAttackValue(Define.EDamageType damageType)
+    {
+        // ((Attack * 밸런스) * skill value) )  * (randomValue > 80) ? 1f : 1.5f
+        float damageTypeValue = 0f;
+        switch (damageType)
+        {
+            case Define.EDamageType.Melee:
+                damageTypeValue = CombatStat.meleeDamage;
+                break;
+            case Define.EDamageType.Ranged:
+                damageTypeValue = CombatStat.rangedDamage;
+                break;
+            case Define.EDamageType.Magic:
+                damageTypeValue = CombatStat.magicDamage;
+                break;
+            default:
+                Debug.LogError($"EDamageType.{damageType}이 케이스에 없습니다.");
+                break;
+        }
+        float baseBalance = 50f;
+        float balanceValue = Random.Range(baseBalance + (CombatStat.balance * 0.5f), 100f) * 0.01f;
+        float ret = damageTypeValue * 
+                    balanceValue * 
+                    (Random.Range(0, 100) < CombatStat.criticalHitChance ? 1f : 1.5f);
+
+        return ret;
+    }
+
     public virtual void OnAttacked(float damageAmount, PawnStat attacker)
     {
         // 회피스탯 적용
-        if (Random.Range(0, 1000) > 200 + (_combatStat.dodgepChance - attacker.CombatStat.dodgepEnetration))
+        if (Random.Range(0, 1000) < 200 + (_combatStat.dodgepChance - attacker.CombatStat.dodgepEnetration))
         {
             Debug.Log("회피");
             //todo effectManager text
@@ -177,6 +206,11 @@ public class PawnStat : MonoBehaviour
         }
         IsDead = true;
         _OnDeadEvent?.Invoke();
+    }
+
+    public void IncreadMana()
+    {
+        Mana += _combatStat.manaRegeneration;
     }
 
 }

@@ -323,9 +323,6 @@ namespace Data
         public Define.EAffectType affectType;
         public Define.EDamageType damageType;
         public Define.ETargetType targetType;
-        /*public int affectType;
-        public int damageType;
-        public int targetType;*/
         public int value;
     }
 }

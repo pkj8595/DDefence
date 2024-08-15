@@ -116,7 +116,7 @@ public class Define
     public enum EDamageType
     {
         Melee,
-        Range,
+        Ranged,
         Magic,
     }
 
@@ -148,8 +148,8 @@ public class Define
         public const string Prefab_Trap = "Assets/Resources/Prefabs/Tiles/Traps/";
         public const string Sprite_Trap = "Assets/Resources/Sprites/Tiles/Traps/";
 
-        public const string Prefab_Bullet = "Projectile/";
-        public const string Sprite_Bullet = "Assets/Resources/Sprites/Projectile/";
+        public const string Prefab_Bullet = "Projectiles/";
+        public const string Sprite_Bullet = "Assets/Resources/Sprites/Projectiles/";
 
         public const string UI = "Assets/Resources/UI/";
 

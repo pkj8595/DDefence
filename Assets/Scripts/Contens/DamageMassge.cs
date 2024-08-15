@@ -7,9 +7,9 @@ public struct DamageMessage
     public PawnStat attacker;
     public Vector3 hitPoint;
     public Vector3 hitNormal;
-    public IAffect[] skillAffectList;
+    public AffectBase[] skillAffectList;
 
-    public DamageMessage(PawnStat attacker, Vector3 hitPoint, Vector3 hitNormal, IAffect[] skillAffectList)
+    public DamageMessage(PawnStat attacker, Vector3 hitPoint, Vector3 hitNormal, AffectBase[] skillAffectList)
     {
         this.attacker = attacker;
         this.hitPoint = hitPoint;
