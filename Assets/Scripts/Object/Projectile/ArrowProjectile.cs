@@ -7,12 +7,12 @@ public class ArrowProjectile : ProjectileBase
 {
     public ParticleSystem _effHit;
     public Vector3 _offsetTarget;
-    public float height = 8f;
+    public float height = 4f;
     public float duration = 1f;
 
-    public override void Init(Transform target, float splashRange, in DamageMessage msg)
+    public override void Init(Transform startTrans, Transform target, float splashRange, in DamageMessage msg)
     {
-        base.Init(target, splashRange, msg);
+        base.Init(startTrans, target, splashRange, msg);
         
         Shot();
     }
@@ -21,7 +21,7 @@ public class ArrowProjectile : ProjectileBase
     {
         if (_target == null) return;
 
-        Vector3 startPosition = transform.position;
+        Vector3 startPosition = _startTrans.position;
         Vector3 targetPosition = _target.position + _offsetTarget;
         //Vector3 dirVector = _target.transform.forward
 
@@ -35,11 +35,6 @@ public class ArrowProjectile : ProjectileBase
         transform.DOPath(path, duration, PathType.CatmullRom)
             .SetEase(Ease.Linear)
             .SetLookAt(0.01f);
-    }
-
-    private void OnEnable()
-    {
-        Shot();
     }
 
     protected override void Destroy()

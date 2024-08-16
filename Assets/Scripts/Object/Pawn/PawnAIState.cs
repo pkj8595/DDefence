@@ -9,13 +9,18 @@ public interface IUnitState
     void UpdateState();
     void AdjustUpdate();
     void ExitState();
+
+    string GetNames();
 }
 
 public class IdleState : IUnitState
 {
     UnitAI _unitAI;
     PawnBase _pawn;
-
+    public string GetNames()
+    {
+        return "IdleState";
+    }
     public IdleState(UnitAI unitAI)
     {
         _unitAI = unitAI;
@@ -26,16 +31,10 @@ public class IdleState : IUnitState
     {
         _unitAI.Pawn.State = Define.EPawnAniState.Idle;
     }
+
     public void UpdateState()
     {
-        if (_pawn.HasTarget)
-        {
-            Skill skill = _pawn.PawnSkills.GetCurrentSkill();
-            if (skill.IsReady(_pawn.PawnStat.Mana))
-            {
-                _pawn.TrackingTarget();
-            }
-        }
+        _unitAI.TryExecuteSkill();
     }
 
     public void AdjustUpdate()
@@ -45,14 +44,13 @@ public class IdleState : IUnitState
             _pawn.LockTarget = _pawn.SearchTarget(_pawn.SearchRange, _pawn.PawnSkills.GetCurrentSkill().TargetType);
             //적을 발견 했을 경우 상태 전환
             if (_pawn.LockTarget != null)
-                _unitAI.SetState(_unitAI.GetMoveState());
+                _pawn.SetDestination(_pawn.LockTarget.transform.position);
         }
         else
         {
             //타겟이 있을경우
-            _unitAI.CheckDistenceLockTarget();
+            _unitAI.CheckOutRangeTarget();
         }
-        
     }
 
     public void ExitState()
@@ -65,7 +63,8 @@ public class MoveState : IUnitState
 {
     private UnitAI _unitAI;
     PawnBase _pawn;
-
+    public string GetNames() => "MoveState";
+    
 
     public MoveState(UnitAI unitAI)
     {
@@ -81,29 +80,35 @@ public class MoveState : IUnitState
 
     public void UpdateState()
     {
+        //이동 체크
         _unitAI.Pawn.UpdateMove();
-        _unitAI.CheckDistenceLockTarget();
+
+        //타겟이 있다면 범위 체크 밖에 나갔다면 
+        if (_pawn.HasTarget)
+        {
+            
+            if (!_unitAI.CheckOutRangeTarget()) 
+                _pawn.TrackingAndAttackTarget();
+        }
     }
 
     public void AdjustUpdate()
     {
-        if (_pawn.HasTarget)
-        {
-            _pawn.TrackingTarget();
-        }
+        
     }
 
     public void ExitState()
     {
         _unitAI.Pawn.OnMoveStop();
     }
-
+   
 }
 
 
 public class DeadState : IUnitState
 {
     private UnitAI _unitAI;
+    public string GetNames() => "DeadState";
 
     public DeadState(UnitAI unitAI)
     {
@@ -128,4 +133,96 @@ public class DeadState : IUnitState
     }
 
    
+}
+
+
+public class ReturnToBaseState : IUnitState
+{
+    private UnitAI _unitAI;
+    PawnBase _pawn;
+    public string GetNames() => "ReturnToBaseState";
+
+    public ReturnToBaseState(UnitAI unitAI)
+    {
+        _unitAI = unitAI;
+        _pawn = unitAI.Pawn;
+    }
+
+    public void EnterState()
+    {
+    }
+
+    public void UpdateState()
+    {
+
+    }
+    public void AdjustUpdate()
+    {
+    }
+
+    public void ExitState()
+    {
+    }
+
+
+}
+
+
+public class ChaseState : IUnitState
+{
+    private UnitAI _unitAI;
+    PawnBase _pawn;
+    public string GetNames() => "ChaseState";
+
+    public ChaseState(UnitAI unitAI)
+    {
+        _unitAI = unitAI;
+        _pawn = unitAI.Pawn;
+    }
+
+    public void EnterState()
+    {
+    }
+
+    public void UpdateState()
+    {
+
+    }
+    public void AdjustUpdate()
+    {
+    }
+
+    public void ExitState()
+    {
+    }
+}
+
+public class SkillState : IUnitState
+{
+    private UnitAI _unitAI;
+    PawnBase _pawn;
+    public string GetNames() => "SkillState";
+
+    public SkillState(UnitAI unitAI)
+    {
+        _unitAI = unitAI;
+        _pawn = unitAI.Pawn;
+    }
+
+    public void EnterState()
+    {
+        _unitAI.Pawn.State = Define.EPawnAniState.Idle;
+    }
+
+    public void UpdateState()
+    {
+
+    }
+    public void AdjustUpdate()
+    {
+    }
+
+    public void ExitState()
+    {
+    }
 }

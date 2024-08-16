@@ -8,14 +8,17 @@ public abstract class ProjectileBase : MonoBehaviour
     [SerializeField] protected float _rotationSpeed = 10f;
     protected DamageMessage _msg;
     protected Transform _target;
+    protected Transform _startTrans;
     protected float _splashRange;
     /// <summary>
     /// 타격 사운드
     /// </summary>
     public const string effectSoundName = "";
 
-    public virtual void Init(Transform target, float splashRange, in DamageMessage msg)
+    public virtual void Init(Transform startPosition, Transform target, float splashRange, in DamageMessage msg)
     {
+        this.transform.SetPositionAndRotation(startPosition.position, startPosition.rotation);
+        _startTrans = startPosition;
         _target = target;
         _splashRange = splashRange;
         _msg = msg; 

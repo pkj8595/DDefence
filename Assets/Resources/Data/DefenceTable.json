@@ -130,7 +130,7 @@
       "magicDamage": 0,
       "protection": 1,
       "cooldownReduction": 0.3,
-      "movementSpeed": 0.4,
+      "movementSpeed": 0.1,
       "criticalHitChance": 0,
       "dodgepChance": 0,
       "dodgepEnetration": 0,
@@ -170,7 +170,7 @@
       "magicDamage": 0,
       "protection": 0,
       "cooldownReduction": 1,
-      "movementSpeed": 1,
+      "movementSpeed": 0.2,
       "criticalHitChance": 0.5,
       "dodgepChance": 0.5,
       "dodgepEnetration": 0,
@@ -367,11 +367,12 @@
       "targetType": 1,
       "manaAmount": 5,
       "minRange": 0,
-      "maxRange": 1,
+      "maxRange": 1.3,
       "splashRange": 0,
       "coolTime": 1,
       "effectStr": "",
-      "motionAni": "Slash",
+      "aniTriger": 0,
+      "motionAni": "",
       "motionDuration": 0,
       "projectile": "",
       "arr_affect": [
@@ -393,7 +394,8 @@
       "splashRange": 0,
       "coolTime": 2,
       "effectStr": "",
-      "motionAni": "Shot",
+      "aniTriger": 1,
+      "motionAni": "",
       "motionDuration": 0,
       "projectile": "ArrowProjectile",
       "arr_affect": [
@@ -407,7 +409,7 @@
       "name": "화살 잘 던지기",
       "desc": "조금 더 잘던지게 되었다!",
       "icon": "testIcon",
-      "skillType": 1,
+      "skillType": 0,
       "targetType": 1,
       "manaAmount": 20,
       "minRange": 5,
@@ -415,7 +417,8 @@
       "splashRange": 0,
       "coolTime": 30,
       "effectStr": "",
-      "motionAni": "Shot",
+      "aniTriger": 1,
+      "motionAni": "",
       "motionDuration": 0,
       "projectile": "ArrowProjectile",
       "arr_affect": [
@@ -429,7 +432,7 @@
       "name": "마법: 미사일!",
       "desc": "위대한 마법의 힘으로!",
       "icon": "testIcon",
-      "skillType": 2,
+      "skillType": 0,
       "targetType": 1,
       "manaAmount": 10,
       "minRange": 3,
@@ -437,7 +440,8 @@
       "splashRange": 2,
       "coolTime": 10,
       "effectStr": "",
-      "motionAni": "Casting",
+      "aniTriger": 0,
+      "motionAni": 4,
       "motionDuration": 4,
       "projectile": "ArrowProjectile",
       "arr_affect": [
@@ -451,7 +455,7 @@
       "name": "마법: 중독",
       "desc": "이 독에 너가 살아날 수 있을까?",
       "icon": "testIcon",
-      "skillType": 2,
+      "skillType": 0,
       "targetType": 1,
       "manaAmount": 30,
       "minRange": 3,
@@ -459,9 +463,10 @@
       "splashRange": 0,
       "coolTime": 20,
       "effectStr": "",
-      "motionAni": "Casting",
+      "aniTriger": 0,
+      "motionAni": 4,
       "motionDuration": 4,
-      "projectile": "ArrowProjectile",
+      "projectile": "",
       "arr_affect": [
         401005000,
         null,
@@ -475,63 +480,90 @@
       "affectType": 0,
       "damageType": 0,
       "targetType": 1,
-      "value": 30
+      "value": 30,
+      "duration": "",
+      "combatStetType": "",
+      "isPercent": ""
     },
     {
       "tableNum": 401001001,
       "affectType": 0,
       "damageType": 0,
       "targetType": 1,
-      "value": 60
+      "value": 60,
+      "duration": "",
+      "combatStetType": "",
+      "isPercent": ""
     },
     {
       "tableNum": 401001100,
       "affectType": 0,
       "damageType": 1,
       "targetType": 1,
-      "value": 30
+      "value": 30,
+      "duration": "",
+      "combatStetType": "",
+      "isPercent": ""
     },
     {
       "tableNum": 401001101,
       "affectType": 0,
       "damageType": 1,
       "targetType": 1,
-      "value": 60
+      "value": 60,
+      "duration": "",
+      "combatStetType": "",
+      "isPercent": ""
     },
     {
       "tableNum": 401001200,
       "affectType": 0,
       "damageType": 2,
       "targetType": 1,
-      "value": 25
+      "value": 25,
+      "duration": "",
+      "combatStetType": "",
+      "isPercent": ""
     },
     {
       "tableNum": 401002000,
       "affectType": 1,
       "damageType": 2,
       "targetType": 0,
-      "value": 10
+      "value": 10,
+      "duration": "",
+      "combatStetType": "",
+      "isPercent": ""
     },
     {
       "tableNum": 401003000,
       "affectType": 2,
       "damageType": 2,
       "targetType": 2,
-      "value": 25
+      "value": 25,
+      "duration": "",
+      "combatStetType": "",
+      "isPercent": ""
     },
     {
       "tableNum": 401004000,
       "affectType": 3,
       "damageType": 2,
       "targetType": 1,
-      "value": 25
+      "value": 25,
+      "duration": "",
+      "combatStetType": "",
+      "isPercent": ""
     },
     {
       "tableNum": 401005000,
       "affectType": 4,
       "damageType": 2,
       "targetType": 1,
-      "value": 10
+      "value": 10,
+      "duration": "",
+      "combatStetType": "",
+      "isPercent": ""
     }
   ]
 }

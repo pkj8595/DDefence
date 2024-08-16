@@ -43,7 +43,6 @@ public class Define
     {
         Slash,
         Shot,
-        Skill,
         Hit,
         Heal,
         Cool

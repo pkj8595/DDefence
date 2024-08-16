@@ -10,43 +10,52 @@ public class UnitAI
     private IdleState _idleState;
     private MoveState _moveState;
     private DeadState _deadState;
+    private SkillState _skillState;
 
-    public PawnBase Pawn { get ; private set; }
-
+    public PawnBase Pawn { get; private set; }
     public bool HasTarget => Pawn.HasTarget;
     public float SearchRange => Pawn.SearchRange;
 
-    private float _cooltime = 0.15f;
+    private float _cooltime = 0.0f;
     public void Init(PawnBase pawn)
     {
         Pawn = pawn;
         _idleState = new IdleState(this);
         _moveState = new MoveState(this);
         _deadState = new DeadState(this);
+        _skillState = new SkillState(this);
 
         SetState(_idleState);
     }
 
     public void OnUpdate()
     {
-        if (!Pawn.PawnSkills.IsRunning)
+        _cooltime -= Time.deltaTime;
+        if (_cooltime < 0)
+        {
+            _currentState.AdjustUpdate();
+            _cooltime += 0.2f;
+        }
+        else
         {
             _currentState.UpdateState();
-
-            _cooltime -= Time.deltaTime;
-            if (_cooltime < 0)
-            {
-                _currentState.AdjustUpdate();
-                _cooltime = 0.15f;
-            }
         }
     }
 
     public void SetState(IUnitState newState)
     {
-        _currentState?.ExitState();
-        _currentState = newState;
+        if (_currentState != newState)
+        {
+            Pawn.AIStateStr = newState.GetNames();
+            _currentState?.ExitState();
+            _currentState = newState;
+        }
         _currentState.EnterState();
+    }
+
+    public void SetState(Define.EPawnAniState state)
+    {
+
     }
 
 
@@ -54,15 +63,36 @@ public class UnitAI
     public IdleState GetIdleState() => _idleState;
     public MoveState GetMoveState() => _moveState;
     public DeadState GetDeadState() => _deadState;
+    public SkillState GetSkillState() => _skillState;
+
+    //public IUnitState GetNextState()
+    //{
+
+    //}
 
 
-    public void CheckDistenceLockTarget() 
+    /// <summary>
+    /// 타겟이 범위 밖으로 나갔다면 target추적 중지 및 재 탐색
+    /// </summary>
+    public bool CheckOutRangeTarget() 
     {
-        if (HasTarget)
+        if (SearchRange < Vector3.Distance(Pawn.LockTarget.transform.position, Pawn.transform.position))
         {
-            if (Vector3.Distance(Pawn.LockTarget.transform.position, Pawn.transform.position) > SearchRange)
+            Pawn.LockTarget = Pawn.SearchTarget(SearchRange, Pawn.PawnSkills.GetCurrentSkill().TargetType);
+            SetState(GetIdleState());
+            return true;
+        }
+        return false;
+    }
+
+    public void TryExecuteSkill()
+    {
+        if (Pawn.HasTarget)
+        {
+            Skill skill = Pawn.PawnSkills.GetCurrentSkill();
+            if (skill.IsReady(Pawn.PawnStat.Mana))
             {
-                Pawn.LockTarget = null;
+                Pawn.TrackingAndAttackTarget();
             }
         }
     }

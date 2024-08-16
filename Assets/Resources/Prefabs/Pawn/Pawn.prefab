@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &437829553243119984
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4429359987017351780}
+  m_Layer: 9
+  m_Name: ProjectilePosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4429359987017351780
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 437829553243119984}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.28, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6834267158829301280}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6623756325375741184
 GameObject:
   m_ObjectHideFlags: 0
@@ -5076,6 +5107,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6623756326569235263}
+  - {fileID: 4429359987017351780}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5091,14 +5123,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35acb7c626772a543a24d33c7814416e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _destPos: {x: 0, y: 0, z: 0}
-  _lockTarget: {fileID: 0}
-  _stat: {fileID: 0}
-  _aniController: {fileID: 141670392}
-  _navAgent: {fileID: 1792929913}
+  <Team>k__BackingField: 0
   _state: 0
-  worldObjectType: 1
-  relationship: 0
+  _navAgent: {fileID: 1792929913}
+  _destPos: {x: 0, y: 0, z: 0}
+  _projectileTrans: {fileID: 4429359987017351780}
+  <AniController>k__BackingField: {fileID: 141670392}
+  <LockTarget>k__BackingField: {fileID: 0}
+  _runeList: []
   _isSelected: 0
   _testCharacterNum: 101001001
 --- !u!114 &705035529133047113
@@ -5113,24 +5145,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fb9ee8eaab90ac42be9e7d98bd1b9c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _curruntStat:
-    tableNum: 0
-    level: 0
+  _combatStat:
     maxHp: 0
     maxMana: 0
-    attack: 0
-    defense: 0
-    moveSpeed: 0
-    attackSpeed: 0
-    attackRange: 0
-    bellruns: 0
-    totalExp: 0
-    dropExp: 0
-  _statList: []
+    meleeDamage: 0
+    rangedDamage: 0
+    magicDamage: 0
+    protection: 0
+    cooldownReduction: 0
+    movementSpeed: 0
+    criticalHitChance: 0
+    dodgepChance: 0
+    dodgepEnetration: 0
+    magicDuration: 0
+    statusEffectResistance: 0
+    balance: 0
+    hpRegeneration: 0
+    manaRegeneration: 0
+  _currentBaseStat:
+    vitality: 0
+    strength: 0
+    agility: 0
+    intelligence: 0
+    willpower: 0
+    accuracy: 0
+  <KillCount>k__BackingField: 0
+  <WaveCount>k__BackingField: 0
   <Hp>k__BackingField: 0
-  <CoolAtk>k__BackingField: 0
-  <CoolSkill>k__BackingField: 0
-  <Level>k__BackingField: 0
   <Mana>k__BackingField: 0
 --- !u!195 &1792929913
 NavMeshAgent:

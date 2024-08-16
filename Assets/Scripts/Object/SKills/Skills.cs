@@ -28,7 +28,7 @@ public class Skill
     public Skill(int skillTableNum)
     {
         data = Managers.Data.SkillDict[skillTableNum];
-        LastRunTime = 0f;
+        LastRunTime = -1000f;
 
         for (int i = 0; i < data.arr_affect.Length; i++)
         {
@@ -67,7 +67,7 @@ public class Skill
             foreach (Collider coll in colliders)
             {
                 //minRange보다 작으면 공격 범위에서 벗어남
-                if (Vector3.Distance(obj.transform.position, coll.transform.position) <= MinRange)
+                if (Vector3.Distance(obj.transform.position, coll.transform.position) < MinRange)
                     continue;
 
                 Unit unit =  coll.GetComponent<Unit>();

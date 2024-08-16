@@ -116,7 +116,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &9115350138891856114
 Transform:
   m_ObjectHideFlags: 0
@@ -160,12 +160,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 25
   _rotationSpeed: 10
-  _target: {fileID: 0}
   _effHit: {fileID: 2319595218369508497}
   _offsetTarget: {x: 0, y: 0.8, z: 0}
-  height: 8
+  height: 4
   duration: 1
-  isStart: 0
 --- !u!54 &9115350138891856115
 Rigidbody:
   m_ObjectHideFlags: 0

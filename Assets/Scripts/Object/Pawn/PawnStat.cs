@@ -29,17 +29,19 @@ public class PawnStat : MonoBehaviour
     public CombatStat CombatStat { get => _combatStat; set => _combatStat = value; }
 
     private System.Action _OnDeadEvent;
+    private System.Action _OnDeadTargetEvent;
 
     private System.Action _OnAffectEvent;
     private List<AffectBase> _affectList = new List<AffectBase>();
 
-    public void Init(int statDataNum, System.Action onDead)
+    public void Init(int statDataNum, System.Action onDead, System.Action onDeadTarget)
     {
         SetBaseStat(Managers.Data.StatDict[statDataNum]);
         CalculateCombatStat();
         Hp = _combatStat.maxHp;
         Mana = _combatStat.maxMana;
         _OnDeadEvent = onDead;
+        _OnDeadTargetEvent = onDeadTarget;
 
         StartCoroutine(UpdateAffect());
     }
@@ -189,7 +191,7 @@ public class PawnStat : MonoBehaviour
         }
 
         //todo effectManager damageNum
-        int damage = (int)Mathf.Max(0, damageAmount - _combatStat.protection);
+        float damage = Mathf.Max(0, damageAmount - _combatStat.protection);
         Hp -= damage;
         if (Hp < 0)
         {
@@ -203,9 +205,15 @@ public class PawnStat : MonoBehaviour
         if (attacker != null)
         {
             attacker.KillCount++;
+            attacker.OnDeadTarget();
         }
         IsDead = true;
         _OnDeadEvent?.Invoke();
+    }
+
+    public void OnDeadTarget()
+    {
+        _OnDeadTargetEvent.Invoke();
     }
 
     public void IncreadMana()

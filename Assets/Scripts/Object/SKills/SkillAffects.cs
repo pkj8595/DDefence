@@ -68,7 +68,7 @@ public class DamageAffect : AffectBase
         var healthComponent = taker.GetComponent<PawnStat>();
         if (healthComponent != null)
         {
-            healthComponent.OnAttacked(DamageValue * attacker.GetAttackValue(_data.damageType), attacker);
+            healthComponent.OnAttacked((DamageValue * 0.01f) * attacker.GetAttackValue(_data.damageType), attacker);
         }
     }
 

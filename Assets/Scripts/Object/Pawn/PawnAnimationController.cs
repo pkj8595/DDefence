@@ -48,10 +48,11 @@ public class PawnAnimationController : MonoBehaviour
         Init(Managers.Data.CharacterDict[characterDataNum]);
     }
 
-
+    Define.EPawnAniState _state = Define.EPawnAniState.Idle;
     public void SetAniState(Define.EPawnAniState state)
     {
-        _animator.Play(state.ToString());
+        if (_state != state)
+            _animator.Play(state.ToString());
     }
 
     public void SetAniTrigger(Define.EPawnAniTriger trigger)
