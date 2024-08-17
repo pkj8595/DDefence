@@ -76,7 +76,7 @@ public class UnitAI
     /// </summary>
     public bool CheckOutRangeTarget() 
     {
-        if (SearchRange < Vector3.Distance(Pawn.LockTarget.transform.position, Pawn.transform.position))
+        if (SearchRange < Vector3.Distance(Pawn.LockTarget.GetTransform().position, Pawn.transform.position))
         {
             Pawn.LockTarget = Pawn.SearchTarget(SearchRange, Pawn.PawnSkills.GetCurrentSkill().TargetType);
             SetState(GetIdleState());

@@ -40,5 +40,42 @@ public static class Extension
     {
         transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
     }
-    
+
+    /// <summary>
+    /// 팀이 다를경우 타겟 타입을 Enemy로 반환
+    /// </summary>
+    /// <param name="pawnTeam"></param>
+    /// <returns></returns>
+    public static Define.ETargetType GetTargetType(this IDamageable unit, Define.ETeam pawnTeam)
+    {
+        if (unit.Team == pawnTeam)
+            return Define.ETargetType.Ally;
+        else
+            return Define.ETargetType.Enemy;
+    }
+
+    /// <summary>
+    /// 적 
+    /// </summary>
+    /// <param name="searchRange"></param>
+    /// <returns></returns>
+    public static IDamageable SearchTarget(this IDamageable transform, float searchRange, Define.ETargetType targetType)
+    {
+        if (Define.ETargetType.Self == targetType)
+            return transform;
+
+        int layerTarget = (int)Define.Layer.Pawn | (int)Define.Layer.Building;
+        Collider[] colliders = Physics.OverlapSphere(transform.GetTransform().position, searchRange, layerTarget);
+
+        foreach (var collider in colliders)
+        {
+            IDamageable unit = collider.GetComponent<IDamageable>();
+            if (unit != null && !unit.IsDead() && unit.GetTargetType(transform.Team) == targetType)
+            {
+                return unit;
+            }
+        }
+        return null;
+    }
+
 }

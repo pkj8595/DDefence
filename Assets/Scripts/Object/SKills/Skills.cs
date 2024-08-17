@@ -57,20 +57,20 @@ public class Skill
         return false;
     }
 
-    public bool DetectTargetInSkillRange(Unit obj, out List<Unit> units)
+    public bool DetectTargetInSkillRange(IDamageable obj, out List<IDamageable> units)
     {
         if (SkillType == Define.ESkillType.one)
         {
-            units = new List<Unit>(1);
+            units = new List<IDamageable>(1);
             int layer = (int)Define.Layer.Building | (int)Define.Layer.Pawn;
-            var colliders = Physics.OverlapSphere(obj.transform.position, MaxRange, layer);
+            var colliders = Physics.OverlapSphere(obj.GetTransform().position, MaxRange, layer);
             foreach (Collider coll in colliders)
             {
                 //minRange보다 작으면 공격 범위에서 벗어남
-                if (Vector3.Distance(obj.transform.position, coll.transform.position) < MinRange)
+                if (Vector3.Distance(obj.GetTransform().position, coll.transform.position) < MinRange)
                     continue;
 
-                Unit unit =  coll.GetComponent<Unit>();
+                IDamageable unit =  coll.GetComponent<IDamageable>();
                 if (unit.GetTargetType(obj.Team) == TargetType)
                 {
                     units.Add(unit);
@@ -80,12 +80,12 @@ public class Skill
         }
         else /*if (SkillType == Define.ESkillType.Range)*/
         {
-            units = new List<Unit>(10);
+            units = new List<IDamageable>(10);
             int layer = (int)Define.Layer.Building | (int)Define.Layer.Pawn;
-            var colliders = Physics.OverlapSphere(obj.transform.position, MaxRange, layer);
+            var colliders = Physics.OverlapSphere(obj.GetTransform().position, MaxRange, layer);
             foreach (Collider coll in colliders)
             {
-                Unit unit = coll.GetComponent<Unit>();
+                IDamageable unit = coll.GetComponent<IDamageable>();
                 if (unit.GetTargetType(obj.Team) == TargetType)
                 {
                     units.Add(unit);

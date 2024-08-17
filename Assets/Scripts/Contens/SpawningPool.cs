@@ -30,8 +30,8 @@ public class SpawningPool : MonoBehaviour
     {
         _reserveCount++;
         yield return new WaitForSeconds(Random.Range(0, _spawnTime));
-        GameObject obj = Managers.Game.Spawn(Define.WorldObject.Pawn, "Knight");
-        NavMeshAgent nma = obj.GetOrAddComponent<NavMeshAgent>();
+        PawnBase obj = Managers.Game.SpawnPawn(101001001,Define.ETeam.Enumy);
+        NavMeshAgent nma = obj._navAgent;
 
         Vector3 randPos;
 
@@ -43,6 +43,7 @@ public class SpawningPool : MonoBehaviour
             randPos = _spawnPos + randDir;
 
             NavMeshPath path = new NavMeshPath();
+            // Agent 위치로부터 randPos까지 최단 경로를 계산한후 path.corners 에 저장
             if (nma.CalculatePath(randPos, path))
                 break;
         }

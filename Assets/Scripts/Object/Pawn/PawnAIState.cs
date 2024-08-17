@@ -44,7 +44,7 @@ public class IdleState : IUnitState
             _pawn.LockTarget = _pawn.SearchTarget(_pawn.SearchRange, _pawn.PawnSkills.GetCurrentSkill().TargetType);
             //적을 발견 했을 경우 상태 전환
             if (_pawn.LockTarget != null)
-                _pawn.SetDestination(_pawn.LockTarget.transform.position);
+                _pawn.SetDestination(_pawn.LockTarget.GetTransform().position);
         }
         else
         {

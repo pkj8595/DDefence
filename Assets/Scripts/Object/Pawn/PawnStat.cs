@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PawnStat : MonoBehaviour
+public class PawnStat : MonoBehaviour, Stat
 {
     /// <summary>
     /// 전투 스탯
@@ -23,6 +23,8 @@ public class PawnStat : MonoBehaviour
     [field: SerializeField] public int WaveCount { get; set; }
     [field: SerializeField] public float Hp { get; set; }
     [field: SerializeField] public float Mana { get; set; }
+    public float MaxHp { get => _combatStat.maxHp; }
+    public float MaxMana { get => _combatStat.maxMana; }
     public int EXP { get { return KillCount + (WaveCount * 10); }}
     public bool IsDead { get; set; }
     public float MoveSpeed { get { return _combatStat.movementSpeed; } }

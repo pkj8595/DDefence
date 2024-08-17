@@ -21,10 +21,6 @@ public abstract class NodeBase : MonoBehaviour
         this._tilePosition = tilePosition;
     }
 
-    private void OnEnable()
-    {
-    }
-
     public void SetActive(bool isActive)
     {
         if (isActive)

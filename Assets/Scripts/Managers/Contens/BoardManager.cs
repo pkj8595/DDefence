@@ -16,7 +16,7 @@ public class BoardManager : MonoSingleton<BoardManager>
     [SerializeField] private List<GameObject> _buildingList;
 
     [SerializeField] private Dictionary<Vector3Int, NodeBase> _dirNodes = new();
-    [SerializeField] private List<BuildingNode> _constructedBuildingList = new();
+    [field : SerializeField] public HashSet<BuildingNode> _constructedBuildingList { get; } = new();
     [SerializeField] private Vector3 tileSize = new Vector3(1, 1, 1); // 각 셀의 크기
 
     private bool _isEditMode = false;
@@ -282,7 +282,7 @@ public class BoardManager : MonoSingleton<BoardManager>
                 for (int z = 0; z < node.NodeSize.z; z++)
                 {
                     Vector3Int nodePosition = new Vector3Int(node.Position.x + x,
-                                                             node.Position.y + z,
+                                                             node.Position.y + y,
                                                              node.Position.z + z);
                     _dirNodes.Remove(nodePosition);
                 }

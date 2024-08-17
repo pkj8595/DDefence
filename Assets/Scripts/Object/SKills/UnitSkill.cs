@@ -52,7 +52,6 @@ public class UnitSkill
         return _currentSkill;
     }
 
-
     public bool ReadyCurrentSkill(PawnStat _pawnStat)
     {
         bool isReady = GetCurrentSkill().ReadySkill(_pawnStat);

@@ -15,7 +15,7 @@ public class Define
     {
         Unknown,
         Pawn,
-        Tower,
+        Building,
     }
     
 

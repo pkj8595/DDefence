@@ -109,4 +109,15 @@ public static class Utils
         return (int)(value + 0.5f);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="current"></param>
+    /// <param name="max"></param>
+    /// <returns>float 범위 0f ~ 1f </returns>
+    public static float Percent(float current, float max)
+    {
+        return (current != 0 && max != 0) ? current / max : 0;
+    }
+
 }

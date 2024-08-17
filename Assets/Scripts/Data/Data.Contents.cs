@@ -251,7 +251,6 @@ namespace Data
 
         public string name;
         public string desc;
-        public int installableLayer;
         public string prefab;
         public string sprite;
         public int tier;

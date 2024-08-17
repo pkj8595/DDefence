@@ -5,51 +5,10 @@ using UnityEngine;
 /// <summary>
 /// 체력바가 있는 모든 오브젝트에 사용
 /// </summary>
-public abstract class Unit : MonoBehaviour, IDamageable
+public interface Stat
 {
-    [field: SerializeField] public Define.ETeam Team { get; set; } = Define.ETeam.Playable;
-
-    public abstract bool IsDead();
-
-    /// <summary>
-    /// 팀이 다를경우 타겟 타입을 Enemy로 반환
-    /// </summary>
-    /// <param name="pawnTeam"></param>
-    /// <returns></returns>
-    public Define.ETargetType GetTargetType(Define.ETeam pawnTeam)
-    {
-        if (Team == pawnTeam)
-            return Define.ETargetType.Ally;
-        else
-            return Define.ETargetType.Enemy;
-    }
-
-    /// <summary>
-    /// 적 
-    /// </summary>
-    /// <param name="searchRange"></param>
-    /// <returns></returns>
-    public virtual Unit SearchTarget(float searchRange, Define.ETargetType targetType)
-    {
-        if (Define.ETargetType.Self == targetType)
-            return this;
-
-        int layerTarget = (int)Define.Layer.Pawn | (int)Define.Layer.Building;
-        Collider[] colliders = Physics.OverlapSphere(transform.position, searchRange, layerTarget);
-
-        foreach (var collider in colliders)
-        {
-            Unit unit = collider.GetComponent<Unit>();
-            if (unit != null && !unit.IsDead() && unit.GetTargetType(this.Team) == targetType)
-            {
-                return unit;
-            }
-        }
-        return null;
-    }
-
-    public virtual bool ApplyTakeDamege(DamageMessage message)
-    {
-        return false;
-    }
+    public float Hp { get; set; }
+    public float Mana { get; set; }
+    public float MaxHp { get;}
+    public float MaxMana { get;}
 }

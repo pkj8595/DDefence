@@ -3,33 +3,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Cysharp.Threading.Tasks;
 
-public abstract class PawnBase : Unit, ISelectedable
+public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable
 {
     private Data.CharacterData _characterData;
 
+    [field: SerializeField] public Define.ETeam Team { get; set; } = Define.ETeam.Playable;
+    public Define.WorldObject WorldObjectType { get; set; } = Define.WorldObject.Pawn;
     [SerializeField] protected Define.EPawnAniState _state = Define.EPawnAniState.Idle;
-    [HideInInspector] public NavMeshAgent _navAgent;
     [SerializeField] protected Vector3 _destPos;
     [SerializeField] protected Transform _projectileTrans;
 
-    [field : SerializeField] public Unit LockTarget { get; set; }
-
-    [SerializeField] protected List<Data.RuneData> _runeList = new(Define.Pawn_Rune_Limit_Count);
-    [SerializeField] private bool _isSelected;
 
     ///pawn 기능
+    [HideInInspector] public NavMeshAgent _navAgent;
     [field : SerializeField] public PawnAnimationController AniController { get; private set; }
     public PawnStat PawnStat { get; protected set; }
     public UnitSkill PawnSkills { get; } = new UnitSkill();
-    private UnitAI _ai = new UnitAI();
+    public UnitAI AI { get; } = new UnitAI();
 
+    //룬 && 기벽
+    [SerializeField] protected List<Data.RuneData> _runeList = new(Define.Pawn_Rune_Limit_Count);
+    [SerializeField] private bool _isSelected;
 
-    public Action OnDeadAction { get; set; }
-    public Define.WorldObject WorldObjectType { get; set; } = Define.WorldObject.Unknown;
     public float SearchRange { get; set; } = 10f;
-    public bool HasTarget => LockTarget != null && !LockTarget.IsDead();
     public float LastCombatTime { get; set; } = 0f;
+    public Action OnDeadAction { get; set; }
+
+    [field : SerializeField] public IDamageable LockTarget { get; set; }
+    public bool HasTarget => LockTarget != null && !LockTarget.IsDead();
+
     [field: SerializeField] public string AIStateStr { get; set; }
 
     public virtual Define.EPawnAniState State
@@ -37,17 +41,20 @@ public abstract class PawnBase : Unit, ISelectedable
         get { return _state; }
         set
         {
-            if (value == Define.EPawnAniState.Ready || value == Define.EPawnAniState.Idle)
+            _state = value;
+            if (_state == Define.EPawnAniState.Ready || _state == Define.EPawnAniState.Idle)
             {
                 if (Time.time < LastCombatTime + 5f)
-                    value = Define.EPawnAniState.Ready;
+                    _state = Define.EPawnAniState.Ready;
                 else
-                    value = Define.EPawnAniState.Idle;
+                    _state = Define.EPawnAniState.Idle;
             }
-            _state = value;
+            
             AniController.SetAniState(_state);
         }
     }
+
+    public Vector3 StateBarOffset => Vector3.up;
 
     public virtual void SetTriggerAni(Define.EPawnAniTriger trigger)
     {
@@ -73,7 +80,7 @@ public abstract class PawnBase : Unit, ISelectedable
 
     public virtual void Update()
     {
-        _ai.OnUpdate();
+        AI.OnUpdate();
     }
 
     public void UpdateMove()
@@ -100,7 +107,7 @@ public abstract class PawnBase : Unit, ISelectedable
         if (_navAgent.velocity == Vector3.zero && Vector3.Distance(_destPos, transform.position) < 0.2f)
         {
             //State = _lockTarget == null ? Define.EPawnAniState.Idle : Define.EPawnAniState.Ready;
-            _ai.SetState(_ai.GetIdleState());
+            AI.SetState(AI.GetIdleState());
         }
 
 
@@ -124,9 +131,15 @@ public abstract class PawnBase : Unit, ISelectedable
         _navAgent.speed = PawnStat.MoveSpeed;
         PawnSkills.Init(PawnStat.Mana);
         PawnSkills.SetBaseSkill(new Skill(_characterData.basicSkill));
-        _ai.Init(this);
+        AI.Init(this);
 
         Init();
+    }
+
+    public void Init(int tableNum, Define.ETeam team)
+    {
+        Init(tableNum);
+        Team = team;
     }
 
     protected virtual void Init() { }
@@ -147,9 +160,8 @@ public abstract class PawnBase : Unit, ISelectedable
     /// </summary>
     /// <param name="message"></param>
     /// <returns></returns>
-    public override bool ApplyTakeDamege(DamageMessage message)
+    public  bool ApplyTakeDamege(DamageMessage message)
     {
-        //todo : 스탯과 스킬데이터로 정보 갱신
         SetTriggerAni(Define.EPawnAniTriger.Hit);
         PawnStat.ApplyDamageMessage(ref message);
         LastCombatTime = Time.time;
@@ -163,14 +175,13 @@ public abstract class PawnBase : Unit, ISelectedable
     public void TrackingAndAttackTarget()
     {
         Define.ESkillDistanceType distanceType = PawnSkills.GetCurrentSkill().
-            IsExecuteableRange(Vector3.Distance(transform.position, LockTarget.transform.position));
-
+            IsExecuteableRange(Vector3.Distance(transform.position, LockTarget.GetTransform().position));
        
         switch (distanceType)
         {
             case Define.ESkillDistanceType.LessMin:
                 //방향 벡터를 구해서 target의 반대 방향으로 이동한다.
-                Vector3 fleeDirection = transform.position - LockTarget.transform.position;
+                Vector3 fleeDirection = transform.position - LockTarget.GetTransform().position;
                 SetDestination(fleeDirection.normalized * 
                     (PawnSkills.GetCurrentSkill().MinRange + PawnSkills.GetCurrentSkill().MinRange) * 0.5f);
                 break;
@@ -179,12 +190,13 @@ public abstract class PawnBase : Unit, ISelectedable
                 //스킬이 실행 가능한지 체크 및 자원 소모
                 if (PawnSkills.ReadyCurrentSkill(PawnStat))
                 {
-                    _ai.SetState(_ai.GetSkillState());
-                    transform.LookAt(LockTarget.transform);
+                    AI.SetState(AI.GetSkillState());
+                    transform.LookAt(LockTarget.GetTransform());
                     Skill skill = PawnSkills.GetRunnigSkill();
                     if (skill.MotionDuration > 0)
                     {
-                        StartCoroutine(ExecuteSkill(skill));
+                        //StartCoroutine(ExecuteSkill(skill));
+                        TaskExecuteSkill(skill).Forget();
                     }
                     else
                     {
@@ -194,9 +206,17 @@ public abstract class PawnBase : Unit, ISelectedable
                 break;
 
             case Define.ESkillDistanceType.MoreMax:
-                SetDestination(LockTarget.transform.position);
+                SetDestination(LockTarget.GetTransform().position);
                 break;
         }
+    }
+
+    private async UniTaskVoid TaskExecuteSkill(Skill skill)
+    {
+        State = skill.MotionAni;
+        await UniTask.Delay((int)(skill.MotionDuration * 1000));
+        if (!IsDead())
+            AniController.SetAniTrigger(skill.AniTriger);
     }
 
     IEnumerator ExecuteSkill(Skill skill)
@@ -217,7 +237,7 @@ public abstract class PawnBase : Unit, ISelectedable
                                            Vector3.zero,
                                            Vector3.zero,
                                            skill.AffectList.ToArray());
-        if (skill.DetectTargetInSkillRange(this, out List<Unit> unitList))
+        if (skill.DetectTargetInSkillRange(this, out List<IDamageable> unitList))
         {
             ProjectileBase projectile = skill.MakeProjectile(
                 Managers.Scene.CurrentScene.GetParentObj(Define.EParentObj.Projectile).transform
@@ -232,7 +252,7 @@ public abstract class PawnBase : Unit, ISelectedable
             }
             else
             {
-                projectile.Init(_projectileTrans, unitList[0].transform, skill.SplashRange, msg);
+                projectile.Init(_projectileTrans, unitList[0].GetTransform(), skill.SplashRange, msg);
             }
         }
     }
@@ -245,7 +265,7 @@ public abstract class PawnBase : Unit, ISelectedable
         PawnSkills.ClearCurrentSkill();
         LastCombatTime = Time.time;
         PawnStat.IncreadMana();
-        _ai.SetState(_ai.GetIdleState());
+        AI.SetState(AI.GetIdleState());
     }
 
 
@@ -257,22 +277,19 @@ public abstract class PawnBase : Unit, ISelectedable
     private void OnDead()
     {
         OnDeadAction?.Invoke();
-        _ai.SetState(_ai.GetDeadState());
+        AI.SetState(AI.GetDeadState());
     }
 
     private void OnDeadTarget()
     {
-        LockTarget = SearchTarget(SearchRange, PawnSkills.GetCurrentSkill().TargetType);
+        LockTarget = this.SearchTarget(SearchRange, PawnSkills.GetCurrentSkill().TargetType);
         if (LockTarget == null)
         {
             //_ai.SetState(_ai.GetReturnState());
         }
     }
 
-    public override bool IsDead()
-    {
-        return PawnStat.IsDead;
-    }
+   
 
     public void SetDestination(Vector3 position)
     {
@@ -290,7 +307,7 @@ public abstract class PawnBase : Unit, ISelectedable
             return;
         _destPos = destPosition;
         _navAgent.SetDestination(_destPos);
-        _ai.SetState(_ai.GetMoveState());
+        AI.SetState(AI.GetMoveState());
     }
 
     /// <summary>
@@ -318,5 +335,18 @@ public abstract class PawnBase : Unit, ISelectedable
         return _isSelected;
     }
 
+    public Transform GetTransform()
+    {
+        return transform;
+    }
 
+    public bool IsDead()
+    {
+        return PawnStat.IsDead;
+    }
+
+    public Stat GetStat()
+    {
+        return PawnStat;
+    }
 }
