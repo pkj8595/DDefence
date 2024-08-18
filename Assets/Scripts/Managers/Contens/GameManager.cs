@@ -11,8 +11,15 @@ public class GameManager
     HashSet<IDamageable> _enumyPawnGroup = new HashSet<IDamageable>();
     HashSet<IDamageable> _pawnGroup = new HashSet<IDamageable>();
     //HashSet<IDamageable> _buildingGroup { get => BoardManager.Instance._constructedBuildingList; }
+    UIStateBarGroup _uiStatebarGroup;
 
     public Action<int> OnSpawnEvent;
+
+    public void Init()
+    {
+        //_uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
+
+    }
 
 
     public PawnBase SpawnPawn(int tableNum, Define.ETeam team)
@@ -85,5 +92,10 @@ public class GameManager
         }
     }
 
+    public void SetPawnInScene(PawnController pawn)
+    {
+        pawn.Init(pawn._testCharacterNum);
+        _pawnGroup.Add(pawn);
+    }
 
 }

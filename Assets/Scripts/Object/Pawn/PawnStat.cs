@@ -19,10 +19,21 @@ public class PawnStat : MonoBehaviour, Stat
     private readonly List<Data.StatData> _runeStatList = new List<Data.StatData>(Define.Rune_Count);
     private readonly List<Data.StatData> _traitStatList = new List<Data.StatData>(Define.Trait_Count);
 
+    [SerializeField] private float _hp;
+    [SerializeField] private float _mana;
+    public float Hp { get => _hp; set 
+        {
+            _hp = value < _combatStat.maxHp ? value : _combatStat.maxHp;
+        }
+    }
+    public float Mana { get => _mana; set 
+        { 
+            _mana = value < _combatStat.maxMana ? value : _combatStat.maxMana;
+        }
+    }
+
     [field: SerializeField] public int KillCount { get; set; }
     [field: SerializeField] public int WaveCount { get; set; }
-    [field: SerializeField] public float Hp { get; set; }
-    [field: SerializeField] public float Mana { get; set; }
     public float MaxHp { get => _combatStat.maxHp; }
     public float MaxMana { get => _combatStat.maxMana; }
     public int EXP { get { return KillCount + (WaveCount * 10); }}

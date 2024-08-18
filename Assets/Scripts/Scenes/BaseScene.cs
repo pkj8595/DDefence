@@ -9,12 +9,13 @@ public abstract class BaseScene : MonoBehaviour
 
     void Awake()
     {
+        Managers.InitManagers();
         Init();
     }
 
     protected virtual void Init()
     {
-        Managers.InitManagers();
+       
     }
 
     public abstract void Clear();

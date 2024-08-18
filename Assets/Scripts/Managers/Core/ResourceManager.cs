@@ -19,10 +19,13 @@ public class ResourceManager : ManagerBase
         return Resources.Load<T>(path);
     }
 
-    public T LoadUI<T>() where T : UIBase
+    public T LoadUI<T>(Transform parent = null) where T : UIBase
     {
         string path = Define.Path.UI + typeof(T).Name;
-        return Resources.Load<T>(path);
+        GameObject prefab = Resources.Load<GameObject>(path);
+        GameObject gameObj = GameObject.Instantiate(prefab, parent);
+        gameObj.name = prefab.name;
+        return gameObj.GetComponent<T>();
     }
 
     public GameObject Instantiate(string path, Transform parent = null)

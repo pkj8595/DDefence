@@ -27,12 +27,14 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable
     [SerializeField] protected List<Data.RuneData> _runeList = new(Define.Pawn_Rune_Limit_Count);
     [SerializeField] private bool _isSelected;
 
+    //option
+    [field : SerializeField] public IDamageable LockTarget { get; set; }
+    public bool HasTarget => LockTarget != null && !LockTarget.IsDead();
     public float SearchRange { get; set; } = 10f;
     public float LastCombatTime { get; set; } = 0f;
     public Action OnDeadAction { get; set; }
+    public Vector3 StateBarOffset => Vector3.up * 1.2f;
 
-    [field : SerializeField] public IDamageable LockTarget { get; set; }
-    public bool HasTarget => LockTarget != null && !LockTarget.IsDead();
 
     [field: SerializeField] public string AIStateStr { get; set; }
 
@@ -54,7 +56,6 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable
         }
     }
 
-    public Vector3 StateBarOffset => Vector3.up;
 
     public virtual void SetTriggerAni(Define.EPawnAniTriger trigger)
     {
@@ -64,6 +65,19 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable
 
     private void Awake()
     {
+        
+    }
+
+
+    public virtual void Update()
+    {
+        AI?.OnUpdate();
+    }
+
+   
+    public virtual void Init(int characterNum)
+    {
+        //component setting
         if (AniController == null)
             AniController = gameObject.GetComponentInChildren<PawnAnimationController>();
 
@@ -71,17 +85,38 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable
             PawnStat = gameObject.GetOrAddComponent<PawnStat>();
 
         if (_navAgent == null)
+        {
             _navAgent.GetComponent<NavMeshAgent>();
-        _navAgent.updateRotation = false;
-        _navAgent.updateUpAxis = false;
+            _navAgent.updateRotation = false;
+            _navAgent.updateUpAxis = false;
+        }
 
+        //table data setting
+        _characterData = Managers.Data.CharacterDict[characterNum];
+        AniController.Init(_characterData);
+        PawnStat.Init(_characterData.statDataNum, OnDead, OnDeadTarget);
+        AI.Init(this);
+
+        //_colliderAttackRange.radius = _stat.AttackRange;
+        _navAgent.speed = PawnStat.MoveSpeed;
+        PawnSkills.Init(PawnStat.Mana);
+        PawnSkills.SetBaseSkill(new Skill(_characterData.basicSkill));
+        
+
+        //stateBar setting
+        UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
+        uiStatebarGroup.AddUnit(this);
+
+        Init();
     }
 
-
-    public virtual void Update()
+    public void Init(int tableNum, Define.ETeam team)
     {
-        AI.OnUpdate();
+        Init(tableNum);
+        Team = team;
     }
+
+    protected virtual void Init() { }
 
     public void UpdateMove()
     {
@@ -117,32 +152,6 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 1f);
         }
     }
-
-    public virtual void Init(int characterNum)
-    {
-        //table data setting
-        _characterData = Managers.Data.CharacterDict[characterNum];
-        AniController.Init(_characterData);
-        PawnStat.Init(_characterData.statDataNum, OnDead, OnDeadTarget);
-
-        //component setting
-
-        //_colliderAttackRange.radius = _stat.AttackRange;
-        _navAgent.speed = PawnStat.MoveSpeed;
-        PawnSkills.Init(PawnStat.Mana);
-        PawnSkills.SetBaseSkill(new Skill(_characterData.basicSkill));
-        AI.Init(this);
-
-        Init();
-    }
-
-    public void Init(int tableNum, Define.ETeam team)
-    {
-        Init(tableNum);
-        Team = team;
-    }
-
-    protected virtual void Init() { }
 
 
 #if UNITY_EDITOR
@@ -278,6 +287,8 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable
     {
         OnDeadAction?.Invoke();
         AI.SetState(AI.GetDeadState());
+        UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
+        uiStatebarGroup.SetActive(this, false);
     }
 
     private void OnDeadTarget()

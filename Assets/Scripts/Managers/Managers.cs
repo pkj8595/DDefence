@@ -32,10 +32,14 @@ public class Managers : MonoBehaviour
     public static UIManager UI { get { return Instance._ui; } }
     #endregion
 
+    private void Awake()
+    {
+        
+    }
+
     void Start()
     {
-        Application.targetFrameRate = 30;
-        InitManagers(); 
+
     }
 
     void Update()
@@ -64,9 +68,10 @@ public class Managers : MonoBehaviour
             s_Instance._sound.Init();
             s_Instance._input.Init(go);
             s_Instance._ui.Init(go);
+            s_Instance._game.Init();
 
             DOTween.Init(true, true, LogBehaviour.Default).SetCapacity(200,10);
-
+            Application.targetFrameRate = 30;
         }
     }
 

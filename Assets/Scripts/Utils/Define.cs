@@ -142,15 +142,15 @@ public class Define
 
     public static class Path
     {
-        public const string Sprite = "Assets/Resources/Sprites/";
+        public const string Sprite = "Sprites/";
 
-        public const string Prefab_Trap = "Assets/Resources/Prefabs/Tiles/Traps/";
-        public const string Sprite_Trap = "Assets/Resources/Sprites/Tiles/Traps/";
+        public const string Prefab_Trap = "Prefabs/Tiles/Traps/";
+        public const string Sprite_Trap = "Sprites/Tiles/Traps/";
 
         public const string Prefab_Bullet = "Projectiles/";
-        public const string Sprite_Bullet = "Assets/Resources/Sprites/Projectiles/";
+        public const string Sprite_Bullet = "Sprites/Projectiles/";
 
-        public const string UI = "Assets/Resources/UI/";
+        public const string UI = "UI/UIBase/";
 
     }
 

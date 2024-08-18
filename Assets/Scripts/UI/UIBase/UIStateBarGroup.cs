@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIStatebarGroup : UIBase
+public class UIStateBarGroup : UIBase
 {
 
     public Dictionary<IDamageable, UI_HPbar> _dicUnit = new(); // 체력바를 가진 오브젝트들
-    public LinkedList<UI_HPbar> _stateBarList = new(); // hp바 리스트
     public Queue<UI_HPbar> _stateBarPool = new(); // hp바 풀링
     public UI_HPbar _stateBarPrefab; //hp 프리팹
 
@@ -14,7 +13,7 @@ public class UIStatebarGroup : UIBase
     public override void Init(UIData uiData)
     {
         base.Init(uiData);
-
+        _stateBarPrefab.gameObject.SetActive(false);
     }
 
     private void LateUpdate()
@@ -32,19 +31,18 @@ public class UIStatebarGroup : UIBase
             Vector3 screenPosition = Camera.main.WorldToScreenPoint(worldPosition);
 
             //화면에 있다면 없다면
-            if (!(screenPosition.z > 0 &&
+            if (screenPosition.z > 0 &&
                 screenPosition.x > 0 && screenPosition.x < Screen.width &&
-                screenPosition.y > 0 && screenPosition.y < Screen.height))
+                screenPosition.y > 0 && screenPosition.y < Screen.height)
+            {
+                //화면에 노출 된다면
+                unit.Value.gameObject.SetActive(true);
+                unit.Value.OnUpdatePosition(screenPosition);
+            }
+            else
             {
                 unit.Value.gameObject.SetActive(false);
             }
-        }
-
-
-        foreach (var item in _stateBarList)
-        {
-            if (item.gameObject.activeInHierarchy)
-                item.OnUpdate();
         }
     }
 
@@ -63,6 +61,14 @@ public class UIStatebarGroup : UIBase
         _dicUnit.Remove(unit);
     }
 
+    public void SetActive(IDamageable unit, bool isActive)
+    {
+        if (_dicUnit.TryGetValue(unit, out UI_HPbar value))
+        {
+            value.gameObject.SetActive(isActive);
+        }
+    }
+
     private UI_HPbar GetOrCreateStateBar()
     {
         UI_HPbar ret;
@@ -72,7 +78,6 @@ public class UIStatebarGroup : UIBase
             ret = Instantiate(_stateBarPrefab, transform);
 
         ret.gameObject.SetActive(true);
-        _stateBarList.AddLast(ret);
         return ret;
     }
 
@@ -80,7 +85,6 @@ public class UIStatebarGroup : UIBase
     {
         stateBar.Clear();
         stateBar.gameObject.SetActive(false);
-        _stateBarList.Remove(stateBar);
         _stateBarPool.Enqueue(stateBar);
     }
 

@@ -120,4 +120,13 @@ public static class Utils
         return (current != 0 && max != 0) ? current / max : 0;
     }
 
+    public static Color HexToColor(string hex)
+    {
+        if (ColorUtility.TryParseHtmlString(hex, out Color ret))
+        {
+            return ret;
+        }
+        Debug.Log($"문자열 {hex}가 color로 치환될 수 없습니다.");
+        return Color.white;
+    }
 }

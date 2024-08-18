@@ -9,7 +9,6 @@ public class PawnController : PawnBase
 
     private void Start()
     {
-        Init(_testCharacterNum);
     }
 
     public override void Init(int characterNum)

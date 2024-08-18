@@ -18,6 +18,11 @@ public class GameScene : BaseScene
         SpawningPool pool = go.GetOrAddComponent<SpawningPool>();
         pool.SetKeepMonsterCount(5);
 
+        var pawns = PawnObj.GetComponentsInChildren<PawnController>();
+        for (int i = 0; i < pawns.Length; i++)
+        {
+            Managers.Game.SetPawnInScene(pawns[i]);
+        }
 
     }
 

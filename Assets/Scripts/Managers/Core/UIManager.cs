@@ -22,15 +22,14 @@ public class UIManager : ManagerBase
     /// 팝업 생성 및 캐싱되어 있으면 반환
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public UIBase ShowUI<T>(UIData uiData) where T : UIBase
+    public UIBase ShowUI<T>(UIData uiData = null) where T : UIBase
     {
         //캐싱된 UI 찾기
         UIBase ui = GetUI<T>();
        
         if (ui == null)
         {
-            ui = Managers.Resource.LoadUI<T>();
-            ui.gameObject.transform.parent = _uiRoot;
+            ui = Managers.Resource.LoadUI<T>(_uiRoot);
             _uiStack.Add(ui);
             UpdateSortingOrder();
         }
