@@ -133,6 +133,13 @@ public class Define
         Area,
     }
 
+    public enum EEffectType
+    {
+        Common,
+        Flesh,
+        Dot,
+    }
+
     public enum ESkillDistanceType
     {
         LessMin,

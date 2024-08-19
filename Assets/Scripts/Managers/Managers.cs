@@ -22,6 +22,7 @@ public class Managers : MonoBehaviour
     SceneManagerEx _scene = new SceneManagerEx();
     SoundManager _sound = new SoundManager();
     UIManager _ui = new UIManager();
+    EffectManager _effect = new EffectManager();
 
     public static DataManager Data { get { return Instance._data; } }
     public static InputManager Input { get { return Instance._input; } }
@@ -30,6 +31,7 @@ public class Managers : MonoBehaviour
     public static SceneManagerEx Scene { get { return Instance._scene; } }
     public static SoundManager Sound { get { return Instance._sound; } }
     public static UIManager UI { get { return Instance._ui; } }
+    public static EffectManager Effect { get => Instance._effect; }
     #endregion
 
     private void Awake()
@@ -68,6 +70,7 @@ public class Managers : MonoBehaviour
             s_Instance._sound.Init();
             s_Instance._input.Init(go);
             s_Instance._ui.Init(go);
+            s_Instance._effect.Init();
             s_Instance._game.Init();
 
             DOTween.Init(true, true, LogBehaviour.Default).SetCapacity(200,10);
@@ -82,6 +85,7 @@ public class Managers : MonoBehaviour
         Scene.Clear();
         UI.Clear();
         Pool.Clear();
+        Effect.Clear();
     }
 
     

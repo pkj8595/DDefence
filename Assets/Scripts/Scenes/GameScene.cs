@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GameScene : BaseScene
 {
-    [field: SerializeField] public PawnGroup SelectdPawnGroup { get; set; }
     [field: SerializeField] public GameObject PawnObj { get; set; }
     [field: SerializeField] public GameObject ProjectileObj { get; set; }
 

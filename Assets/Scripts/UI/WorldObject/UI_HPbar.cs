@@ -11,8 +11,8 @@ public class UI_HPbar : MonoBehaviour
     [SerializeField] private Image imgMpSecond;
     [SerializeField] private RectTransform rectTransform;
     public IDamageable Unit { get; private set; }
-    float _hpSecondPercent = 1;
-    float _mpSecondPercent = 1;
+    float _hpSecondPercent = 1f;
+    float _mpSecondPercent = 1f;
 
     public void Init(IDamageable unit)
     {
@@ -28,8 +28,8 @@ public class UI_HPbar : MonoBehaviour
             imgHp.color = Utils.HexToColor("#c14a3b");//빨강
             imgHpSecond.color = Utils.HexToColor("#dad14b");//노랑
         }
-        _hpSecondPercent = 1;
-        _mpSecondPercent = 1;
+        _hpSecondPercent = 1f;
+        _mpSecondPercent = 1f;
     }
 
     public void OnUpdatePosition(Vector3 position)
