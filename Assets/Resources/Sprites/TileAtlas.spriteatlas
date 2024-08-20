@@ -48,6 +48,7 @@ SpriteAtlas:
   - {fileID: 1343069007, guid: 6027d3f6e952b624bb4aad4393fe32c8, type: 3}
   - {fileID: -1205183546, guid: 6027d3f6e952b624bb4aad4393fe32c8, type: 3}
   - {fileID: 21300000, guid: 8a59f0b8bee01dd4dbdf0ced066ff4a8, type: 3}
+  - {fileID: 21300000, guid: d72f134a9ffc56c4aa84cd931b1bbf6c, type: 3}
   - {fileID: -1041016682, guid: 6ac2acea60d336e4592419a0fc597555, type: 3}
   - {fileID: 1950720280, guid: 6ac2acea60d336e4592419a0fc597555, type: 3}
   - {fileID: -1241476957, guid: 6ac2acea60d336e4592419a0fc597555, type: 3}
@@ -62,6 +63,7 @@ SpriteAtlas:
   - rotatingBladeTrap_5
   - rotatingBladeTrap_4
   - Arrow
+  - Arrow1
   - arrowTrap_2
   - arrowTrap_3
   - arrowTrap_0

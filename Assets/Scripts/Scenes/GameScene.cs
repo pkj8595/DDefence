@@ -6,6 +6,7 @@ public class GameScene : BaseScene
 {
     [field: SerializeField] public GameObject PawnObj { get; set; }
     [field: SerializeField] public GameObject ProjectileObj { get; set; }
+    [field: SerializeField] public GameObject EffectObj { get; set; }
 
 
     protected override void Init()
@@ -43,10 +44,12 @@ public class GameScene : BaseScene
                 return PawnObj;
             case Define.EParentObj.Projectile:
                 return ProjectileObj;
+            case Define.EParentObj.Effect:
+                return EffectObj;
             default:
                 Debug.LogError("찾을 수 없는 ParentObj");
                 return null;
         }
-        
+
     }
 }

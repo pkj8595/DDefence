@@ -5,7 +5,6 @@ using UnityEngine;
 public class LookAtCamera : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer _render;
-    private Vector3 _preVec = Vector3.zero;
     private Transform _parentTransform;
 
     private void Start()

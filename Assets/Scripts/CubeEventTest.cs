@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class CubeEventTest : MonoBehaviour
 {
-    void TestEventCallback()
+
+    public void Update()
     {
-        Debug.Log("callback receive");
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            Managers.Effect.PlayAniEffect("EletricA", this.transform);
+        }
     }
 }

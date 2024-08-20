@@ -98,15 +98,19 @@ public class BoardManager : MonoSingleton<BoardManager>
     private void ChangeEditMode()
     {
         _isEditMode = !_isEditMode;
+        
         if (_isEditMode)
         {
             UnmergeMeshes();
+            var uiBoard = Managers.UI.ShowUI<UIBoard>();
+            uiBoard.SetActive(_isEditMode);
         }
         else
         {
             _isSelectNode = false;
             ClearPreviewNode();
             MergeAllMeshes();
+            Managers.UI.ColseUI<UIBoard>();
         }
     }
 

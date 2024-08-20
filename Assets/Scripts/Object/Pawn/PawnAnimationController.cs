@@ -10,6 +10,7 @@ public class PawnAnimationController : MonoBehaviour
     public Define.EDamageType _attackType = Define.EDamageType.Melee;
     private PawnBase _pawnBase;
     public Animator _animator;
+    public ParticleSystem _moveDust;
 
     //todo : particleManager 만들기
     //[SerializeField] private ParticleSystem _moveDust;
@@ -52,7 +53,13 @@ public class PawnAnimationController : MonoBehaviour
     public void SetAniState(Define.EPawnAniState state)
     {
         if (_state != state)
+        {
+            if (state == Define.EPawnAniState.Running)
+                _moveDust.Play();
+            else
+                _moveDust.Stop();
             _animator.Play(state.ToString());
+        }
     }
 
     public void SetAniTrigger(Define.EPawnAniTriger trigger)

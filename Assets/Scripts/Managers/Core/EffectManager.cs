@@ -3,15 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public interface IEffectComponent
-{
-    public void PlayEffect(Vector3 position);
-    public void PlayEffect(Vector3 position, Vector3 normal, Transform parent = null, Define.EEffectType effectType = Define.EEffectType.Common);
-
-    public void SetActive(bool isActive);
-}
-
-
 public class EffectManager : ManagerBase
 {
     public override void Init()
@@ -39,7 +30,7 @@ public class EffectManager : ManagerBase
 
     public ParticleSystem LoadEffect(string name, Vector3 pos, Vector3 normal, Transform parent)
     {
-        string path = $"Prefebs/Effects/{name}";
+        string path = $"Prefebs/Effects/ParticleEffects/{name}";
         GameObject prefab = Resources.Load<GameObject>(path);
         GameObject gameObj;
         if (parent == null)
@@ -51,5 +42,57 @@ public class EffectManager : ManagerBase
         return gameObj.GetComponent<ParticleSystem>();
     }
 
+    List<EffectAniController> _aniEffectList = new List<EffectAniController>(10);
+    public EffectAniController PlayAniEffect(string name, Transform parent = null, int sortingOrder = 200)
+    {
+        GameObject effectObjects = Managers.Scene.CurrentScene.GetParentObj(Define.EParentObj.Effect);
 
+        EffectAniController ret = GetPoolAniEffect();
+        if (ret.transform.parent != effectObjects.transform)
+        {
+            ret.transform.SetParent(effectObjects.transform);
+        }
+        ret.name = name;
+        ret.PlayAniEffect(name, parent, sortingOrder);
+        return ret;
+    }
+
+    public EffectAniController PlayAniEffect(string name, Vector3 position, int sortingOrder = 200)
+    {
+        GameObject effectObjects = Managers.Scene.CurrentScene.GetParentObj(Define.EParentObj.Effect);
+
+        EffectAniController ret = GetPoolAniEffect();
+        if (ret.transform.parent != effectObjects.transform)
+        {
+            ret.transform.SetParent(effectObjects.transform);
+        }
+        ret.name = name;
+        ret.PlayAniEffect(name, position, sortingOrder);
+        return ret;
+    }
+
+    private EffectAniController GetPoolAniEffect()
+    {
+        for (int i = 0; i < _aniEffectList.Count; i++)
+        {
+            if (!_aniEffectList[i].IsRunning())
+            {
+                return _aniEffectList[i];   
+            }
+        }
+        string path = $"Prefabs/Effects/EffectAnimation";
+        GameObject prefab = Resources.Load<GameObject>(path);
+        EffectAniController ret = GameObject.Instantiate(prefab).GetComponent<EffectAniController>();
+        _aniEffectList.Add(ret);
+        return ret;
+    }
+    public void RemoveAniEffect(EffectAniController controller)
+    {
+        GameObject effectObjects = Managers.Scene.CurrentScene.GetParentObj(Define.EParentObj.Effect);
+        controller.StopEffect();
+        if (controller.transform.parent != effectObjects.transform)
+        {
+            controller.transform.SetParent(effectObjects.transform);
+        }
+    }
 }

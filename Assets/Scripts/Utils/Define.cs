@@ -59,6 +59,7 @@ public class Define
     {
         Pawn,
         Projectile,
+        Effect,
     }
 
     public enum Scene
