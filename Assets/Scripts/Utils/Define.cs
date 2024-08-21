@@ -118,6 +118,7 @@ public class Define
         Melee,
         Ranged,
         Magic,
+        Tower,
     }
 
     public enum EAffectType

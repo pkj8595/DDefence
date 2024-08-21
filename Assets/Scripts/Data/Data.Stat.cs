@@ -17,7 +17,6 @@ public struct CombatStat
     public float movementSpeed;
     public float criticalHitChance;
     public float dodgepChance;
-    public float dodgepEnetration;
     public float magicDuration;
     public float statusEffectResistance;
     public float balance;
@@ -39,7 +38,6 @@ public struct CombatStat
         ret.movementSpeed = a * b.movementSpeed;
         ret.criticalHitChance = a * b.criticalHitChance;
         ret.dodgepChance = a * b.dodgepChance;
-        ret.dodgepEnetration = a * b.dodgepEnetration;
         ret.magicDuration = a * b.magicDuration;
         ret.statusEffectResistance = a * b.statusEffectResistance;
         ret.balance = a * b.balance;
@@ -62,7 +60,6 @@ public struct CombatStat
         ret.movementSpeed = a.movementSpeed + b.movementSpeed;
         ret.criticalHitChance = a.criticalHitChance + b.criticalHitChance;
         ret.dodgepChance = a.dodgepChance + b.dodgepChance;
-        ret.dodgepEnetration = a.dodgepEnetration + b.dodgepEnetration;
         ret.magicDuration = a.magicDuration + b.magicDuration;
         ret.statusEffectResistance = a.statusEffectResistance + b.statusEffectResistance;
         ret.balance = a.balance + b.balance;

@@ -62,13 +62,6 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable
         AniController.SetAniTrigger(trigger);
     }
 
-
-    private void Awake()
-    {
-        
-    }
-
-
     public virtual void Update()
     {
         AI?.OnUpdate();
@@ -356,7 +349,7 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable
         return PawnStat.IsDead;
     }
 
-    public Stat GetStat()
+    public IStat GetStat()
     {
         return PawnStat;
     }

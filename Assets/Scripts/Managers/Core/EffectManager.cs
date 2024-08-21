@@ -45,13 +45,7 @@ public class EffectManager : ManagerBase
     List<EffectAniController> _aniEffectList = new List<EffectAniController>(10);
     public EffectAniController PlayAniEffect(string name, Transform parent = null, int sortingOrder = 200)
     {
-        GameObject effectObjects = Managers.Scene.CurrentScene.GetParentObj(Define.EParentObj.Effect);
-
         EffectAniController ret = GetPoolAniEffect();
-        if (ret.transform.parent != effectObjects.transform)
-        {
-            ret.transform.SetParent(effectObjects.transform);
-        }
         ret.name = name;
         ret.PlayAniEffect(name, parent, sortingOrder);
         return ret;
@@ -59,13 +53,7 @@ public class EffectManager : ManagerBase
 
     public EffectAniController PlayAniEffect(string name, Vector3 position, int sortingOrder = 200)
     {
-        GameObject effectObjects = Managers.Scene.CurrentScene.GetParentObj(Define.EParentObj.Effect);
-
         EffectAniController ret = GetPoolAniEffect();
-        if (ret.transform.parent != effectObjects.transform)
-        {
-            ret.transform.SetParent(effectObjects.transform);
-        }
         ret.name = name;
         ret.PlayAniEffect(name, position, sortingOrder);
         return ret;
@@ -77,6 +65,12 @@ public class EffectManager : ManagerBase
         {
             if (!_aniEffectList[i].IsRunning())
             {
+                GameObject effectObjects = Managers.Scene.CurrentScene.GetParentObj(Define.EParentObj.Effect);
+                if (_aniEffectList[i].transform.parent != effectObjects.transform)
+                {
+                    _aniEffectList[i].transform.SetParent(effectObjects.transform);
+                }
+
                 return _aniEffectList[i];   
             }
         }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PawnStat : MonoBehaviour, Stat
+public class PawnStat : Stat
 {
     /// <summary>
     /// 전투 스탯
@@ -19,48 +19,27 @@ public class PawnStat : MonoBehaviour, Stat
     private readonly List<Data.StatData> _runeStatList = new List<Data.StatData>(Define.Rune_Count);
     private readonly List<Data.StatData> _traitStatList = new List<Data.StatData>(Define.Trait_Count);
 
-    [SerializeField] private float _hp;
-    [SerializeField] private float _mana;
-    public float Hp { get => _hp; set 
-        {
-            _hp = value < _combatStat.maxHp ? value : _combatStat.maxHp;
-        }
-    }
-    public float Mana { get => _mana; set 
-        { 
-            _mana = value < _combatStat.maxMana ? value : _combatStat.maxMana;
-        }
-    }
-
     [field: SerializeField] public int KillCount { get; set; }
     [field: SerializeField] public int WaveCount { get; set; }
-    public float MaxHp { get => _combatStat.maxHp; }
-    public float MaxMana { get => _combatStat.maxMana; }
+    public override float MaxHp { get => _combatStat.maxHp; }
+    public override float MaxMana { get => _combatStat.maxMana; }
+    public override float Protection { get => _combatStat.protection;}
     public int EXP { get { return KillCount + (WaveCount * 10); }}
-    public bool IsDead { get; set; }
     public float MoveSpeed { get { return _combatStat.movementSpeed; } }
     public CombatStat CombatStat { get => _combatStat; set => _combatStat = value; }
 
-    private System.Action _OnDeadEvent;
-    private System.Action _OnDeadTargetEvent;
-
-    private System.Action _OnAffectEvent;
-    private List<AffectBase> _affectList = new List<AffectBase>();
-
-    public void Init(int statDataNum, System.Action onDead, System.Action onDeadTarget)
+    
+    public override void Init(int statDataNum, System.Action onDead, System.Action onDeadTarget)
     {
+        base.Init(statDataNum, onDead, onDeadTarget);
+
         SetBaseStat(Managers.Data.StatDict[statDataNum]);
         CalculateCombatStat();
         Hp = _combatStat.maxHp;
         Mana = _combatStat.maxMana;
-        _OnDeadEvent = onDead;
-        _OnDeadTargetEvent = onDeadTarget;
-
-        StartCoroutine(UpdateAffect());
     }
 
     #region ChangeStat
-    
     private void SetBaseStat(Data.StatData statData)
     {
         _baseStat = statData;
@@ -119,53 +98,8 @@ public class PawnStat : MonoBehaviour, Stat
     }
     #endregion
 
-    public void SetAffectEvent(System.Action affectAction)
-    {
-        _OnAffectEvent -= affectAction;
-        _OnAffectEvent += affectAction;
-    }
-    public void RemoveAffectEvent(System.Action affectAction)
-    {
-        _OnAffectEvent -= affectAction;
-    }
 
-    IEnumerator UpdateAffect()
-    {
-        while (!IsDead)
-        {
-            for (int i = _affectList.Count - 1; i >= 0; i--)
-            {
-                if (_affectList[i].IsExpired())
-                {
-                    _affectList[i].Remove();
-                    _affectList.RemoveAt(i);
-                }
-            }
-            _OnAffectEvent?.Invoke();
-            yield return YieldCache.WaitForSeconds(1f);
-        }
-    }
-
-    /// <summary>
-    /// 피격시 실행되는 로직
-    /// </summary>
-    /// <param name="msg"></param>
-    public virtual void ApplyDamageMessage(ref DamageMessage msg)
-    {
-        //affect 실행
-        ApplyAffect(msg.skillAffectList, msg.attacker);
-    }
-
-    private void ApplyAffect(AffectBase[] affects, PawnStat attacker)
-    {
-        for (int i = 0; i < affects.Length; i++)
-        {
-            affects[i]?.ApplyAffect(attacker, this);
-        }
-    }
-
-    
-    public float GetAttackValue(Define.EDamageType damageType)
+    public override float GetAttackValue(Define.EDamageType damageType)
     {
         // ((Attack * 밸런스) * skill value) )  * (randomValue > 80) ? 1f : 1.5f
         float damageTypeValue = 0f;
@@ -189,14 +123,14 @@ public class PawnStat : MonoBehaviour, Stat
         float ret = damageTypeValue * 
                     balanceValue * 
                     (Random.Range(0, 100) < CombatStat.criticalHitChance ? 1f : 1.5f);
-
+        
         return ret;
     }
 
-    public virtual void OnAttacked(float damageAmount, PawnStat attacker)
+    public override void OnAttacked(float damageAmount, Stat attacker)
     {
         // 회피스탯 적용
-        if (Random.Range(0, 1000) < 200 + (_combatStat.dodgepChance - attacker.CombatStat.dodgepEnetration))
+        if (Random.Range(0, 1000) < _combatStat.dodgepChance)
         {
             Debug.Log("회피");
             //todo effectManager text
@@ -204,7 +138,7 @@ public class PawnStat : MonoBehaviour, Stat
         }
 
         //todo effectManager damageNum
-        float damage = Mathf.Max(0, damageAmount - _combatStat.protection);
+        float damage = Mathf.Max(0, CalculateDamage(damageAmount, _combatStat.protection));
         Hp -= damage;
         if (Hp < 0)
         {
@@ -213,20 +147,10 @@ public class PawnStat : MonoBehaviour, Stat
         }
     }
 
-    private void OnDead(PawnStat attacker)
+    public override void OnDeadTarget()
     {
-        if (attacker != null)
-        {
-            attacker.KillCount++;
-            attacker.OnDeadTarget();
-        }
-        IsDead = true;
-        _OnDeadEvent?.Invoke();
-    }
-
-    public void OnDeadTarget()
-    {
-        _OnDeadTargetEvent.Invoke();
+        base.OnDeadTarget();
+        KillCount++;
     }
 
     public void IncreadMana()

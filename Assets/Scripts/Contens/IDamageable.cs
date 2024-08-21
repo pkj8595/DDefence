@@ -6,12 +6,12 @@ public interface IDamageable
 {
     public Define.ETeam Team { get; set; }
     public Define.WorldObject WorldObjectType { get; set; }
+    public Vector3 StateBarOffset { get; }
 
     public abstract bool ApplyTakeDamege(DamageMessage message);
     public abstract Transform GetTransform();
     public abstract bool IsDead();
-    public Stat GetStat();
+    public IStat GetStat();
 
-    public Vector3 StateBarOffset { get; }
 }
 

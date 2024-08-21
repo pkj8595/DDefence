@@ -7,9 +7,21 @@ public class CubeEventTest : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
-            Managers.Effect.PlayAniEffect("EletricA", this.transform);
+          
+        }
+    }
+
+    private float GetCalculateDamege(float damage, float protection)
+    {
+        if (0 <= protection)
+        {
+            return (float)(damage / (1f + (protection * 0.01f)));
+        }
+        else
+        {
+            return damage;
         }
     }
 }

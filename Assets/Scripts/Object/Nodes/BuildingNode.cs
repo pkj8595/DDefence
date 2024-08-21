@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildingNode : NodeBase, IDamageable
+public class BuildingNode : NodeBase, IDamageable, ISelectedable
 {
     public Define.ETeam Team { get; set; } = Define.ETeam.Playable;
     public Define.WorldObject WorldObjectType { get; set; } = Define.WorldObject.Building;
 
-    public Vector3 StateBarOffset => throw new System.NotImplementedException();
+    [SerializeField] private Vector3 BuildingStateBarOffset;
+    public Vector3 StateBarOffset => BuildingStateBarOffset;
+
+    private BuildingStat _stat;
 
     public virtual void InitBuildingNode(int tableNum)
     {
@@ -19,12 +22,13 @@ public class BuildingNode : NodeBase, IDamageable
         //todo 건물 테이블 수정하고 구현
     }
 
+
     public virtual bool ApplyTakeDamege(DamageMessage message)
     {
         return false;
     }
 
-    public virtual Stat GetStat()
+    public virtual IStat GetStat()
     {
         throw new System.NotImplementedException();
     }
@@ -38,4 +42,21 @@ public class BuildingNode : NodeBase, IDamageable
     {
         throw new System.NotImplementedException();
     }
+
+    #region ISelectable
+    public void OnSelect()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnDeSelect()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public bool IsSelected()
+    {
+        throw new System.NotImplementedException();
+    }
+    #endregion
 }

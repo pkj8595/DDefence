@@ -196,7 +196,6 @@ namespace Data
         public float movementSpeed;
         public float criticalHitChance;
         public float dodgepChance;
-        public float dodgepEnetration;
         public float magicDuration;
         public float statusEffectResistance;
         public float balance;
@@ -216,7 +215,6 @@ namespace Data
             ret.movementSpeed           = a * b.movementSpeed;
             ret.criticalHitChance       = a * b.criticalHitChance;
             ret.dodgepChance            = a * b.dodgepChance;
-            ret.dodgepEnetration        = a * b.dodgepEnetration;
             ret.magicDuration           = a * b.magicDuration;
             ret.statusEffectResistance  = a * b.statusEffectResistance;
             ret.balance                 = a * b.balance;
@@ -252,14 +250,18 @@ namespace Data
         public string name;
         public string desc;
         public string prefab;
-        public string sprite;
-        public int tier;
-        public int range;
-        public int damage;
-        public int attackSpeed;
+
+        public float maxHp;
+        public float maxMana;
+        public float damageValue;
+        public float protection;
+        public float manaRegeneration;
+
+        public int baseSkill;
+        public int upgrade;
+
         public int goods;
         public int goods_amount;
-        public string projectile;
     }
     #endregion
 

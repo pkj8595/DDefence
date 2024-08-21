@@ -7,7 +7,7 @@ public class BoardManager : MonoSingleton<BoardManager>
     private MeshFilter mergedMeshFilter;
     private MeshRenderer mergedMeshRenderer;
     private MeshCollider mergedMeshCollider;
-    [SerializeField] private GameObject combineMeshObject;
+    [SerializeField] private GameObject _combineMeshObject;
     [SerializeField] private GameObject _nodeGroup;
     [SerializeField] private GameObject _buildingGroup;
     [SerializeField] private NavMeshSurface navSurface;
@@ -32,9 +32,9 @@ public class BoardManager : MonoSingleton<BoardManager>
 
     private void Start()
     {
-        if (combineMeshObject == null)
+        if (_combineMeshObject == null)
         {
-            combineMeshObject = GameObject.Find("CombineMesh");
+            _combineMeshObject = GameObject.Find("CombineMesh");
         }
 
         if (navSurface == null)
@@ -42,9 +42,9 @@ public class BoardManager : MonoSingleton<BoardManager>
             navSurface = GetComponentInChildren<NavMeshSurface>();
         }
 
-        mergedMeshFilter = combineMeshObject.GetOrAddComponent<MeshFilter>();
-        mergedMeshRenderer = combineMeshObject.GetOrAddComponent<MeshRenderer>();
-        mergedMeshCollider = combineMeshObject.GetOrAddComponent<MeshCollider>();
+        mergedMeshFilter = _combineMeshObject.GetOrAddComponent<MeshFilter>();
+        mergedMeshRenderer = _combineMeshObject.GetOrAddComponent<MeshRenderer>();
+        mergedMeshCollider = _combineMeshObject.GetOrAddComponent<MeshCollider>();
 
         LoadBoard();
 
@@ -108,6 +108,7 @@ public class BoardManager : MonoSingleton<BoardManager>
         else
         {
             _isSelectNode = false;
+            _selectedNodeIndex = -1;
             ClearPreviewNode();
             MergeAllMeshes();
             Managers.UI.ColseUI<UIBoard>();

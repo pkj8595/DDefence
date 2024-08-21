@@ -39,7 +39,7 @@ public class ArrowProjectile : ProjectileBase
 
         // Path에 따라 이동 (LookAt을 사용하여 타겟을 바라봄)
         transform.DOPath(path, duration, PathType.CatmullRom)
-            .SetEase(Ease.OutQuint)
+            .SetEase(Ease.Linear)
             .SetLookAt(0.01f);
 
     }

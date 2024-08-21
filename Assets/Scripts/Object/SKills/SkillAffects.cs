@@ -26,7 +26,7 @@ public abstract class AffectBase
     {
         _data = data;
     }
-    public abstract void ApplyAffect(PawnStat attecker, PawnStat taker);
+    public abstract void ApplyAffect(Stat attecker, Stat taker);
     public abstract void Remove();
     public abstract bool IsExpired();
 }
@@ -39,7 +39,7 @@ public abstract class TimedAffect : AffectBase
     {
     }
 
-    public override void ApplyAffect(PawnStat attecker, PawnStat taker) { }
+    public override void ApplyAffect(Stat attecker, Stat taker) { }
 
     public override void Remove()
     {
@@ -62,14 +62,10 @@ public class DamageAffect : AffectBase
         DamageValue = data.value;
     }
 
-    public override void ApplyAffect(PawnStat attacker, PawnStat taker)
+    public override void ApplyAffect(Stat attacker, Stat taker)
     {
         // 예시: target의 체력을 줄이는 로직
-        var healthComponent = taker.GetComponent<PawnStat>();
-        if (healthComponent != null)
-        {
-            healthComponent.OnAttacked((DamageValue * 0.01f) * attacker.GetAttackValue(_data.damageType), attacker);
-        }
+        taker.OnAttacked((DamageValue * 0.01f) * attacker.GetAttackValue(_data.damageType), attacker);
     }
 
     public override bool IsExpired()
@@ -92,13 +88,16 @@ public class MeleeDamageBuffAffect : TimedAffect
         BuffValue = data.value;
     }
 
-    public override void ApplyAffect(PawnStat attecker, PawnStat taker)
+    public override void ApplyAffect(Stat attecker, Stat taker)
     {
-        _target = taker;
-        var stat = taker.CombatStat;
-        stat.meleeDamage += BuffValue;
-        taker.CombatStat = stat;
-        taker.SetAffectEvent(UpdateAction);
+        if(taker is PawnStat)
+        {
+            _target = taker as PawnStat;
+            CombatStat stat = _target.CombatStat;
+            stat.meleeDamage += BuffValue;
+            _target.CombatStat = stat;
+            _target.SetAffectEvent(UpdateAction);
+        }
     }
 
     public override void Remove()
