@@ -24,6 +24,8 @@ namespace Data
         public RuneData[] RuneTable;
         public SkillData[] SkillTable;
         public SkillAffectData[] SkillAffectTable;
+        public ProductionData[] ProductionTable;
+        public BuffData[] BuffTable;
 
 
         public void MakeTableData(Dictionary<int, CharacterData> tableData)
@@ -95,6 +97,21 @@ namespace Data
             for (int i = 0; i < SkillAffectTable.Length; i++)
             {
                 tableData.Add(SkillAffectTable[i].tableNum, SkillAffectTable[i]);
+            }
+        }
+        public void MakeTableData(Dictionary<int, BuffData> tableData)
+        {
+            for (int i = 0; i < BuffTable.Length; i++)
+            {
+                tableData.Add(BuffTable[i].tableNum, BuffTable[i]);
+            }
+        }
+
+        public void MakeTableData(Dictionary<int, ProductionData> tableData)
+        {
+            for (int i = 0; i < ProductionTable.Length; i++)
+            {
+                tableData.Add(ProductionTable[i].tableNum, ProductionTable[i]);
             }
         }
 
@@ -201,6 +218,7 @@ namespace Data
         public float balance;
         public float hpRegeneration;
         public float manaRegeneration;
+        public float searchRange;
 
         public static CombatStat operator *(float a, StatConversionData b)
         {
@@ -220,6 +238,7 @@ namespace Data
             ret.balance                 = a * b.balance;
             ret.hpRegeneration          = a * b.hpRegeneration;
             ret.manaRegeneration        = a * b.manaRegeneration;
+            ret.searchRange             = a * b.searchRange;
 
             return ret;
         }
@@ -256,12 +275,11 @@ namespace Data
         public float damageValue;
         public float protection;
         public float manaRegeneration;
-
         public int baseSkill;
-        public int upgrade;
-
-        public int goods;
-        public int goods_amount;
+        public int productionTable;
+        public int upgradeNum;
+        public int upgrade_goods;
+        public int upgrade_goods_amount;
     }
     #endregion
 
@@ -326,5 +344,29 @@ namespace Data
         public Define.ETargetType targetType;
         public string effectStr;
         public int value;
+    }
+
+    [Serializable]
+    public class BuffData : TableBase
+    {
+        public const int Table = 402;
+
+        public string name;
+        public string desc;
+        public string icon;
+        public int duration;
+        public int statTable;
+    }
+
+    [Serializable]
+    public class ProductionData : TableBase
+    {
+        public const int Table = 500;
+
+        public string name;
+        public string desc;
+        public int itemNum;
+        public int itemAmount;
+        public int waveCount;
     }
 }

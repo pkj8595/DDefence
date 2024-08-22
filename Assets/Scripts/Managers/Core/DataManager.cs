@@ -14,6 +14,8 @@ public class DataManager : ManagerBase
     public Dictionary<int, Data.RuneData> RuneDict { get; private set; } = new ();
     public Dictionary<int, Data.SkillData> SkillDict { get; private set; } = new ();
     public Dictionary<int, Data.SkillAffectData> SkillAffectDict { get; private set; } = new ();
+    public Dictionary<int, Data.BuffData> BuffDict { get; private set; } = new ();
+    public Dictionary<int, Data.ProductionData> ProductionDict { get; private set; } = new ();
 
 
     public override void Init()
@@ -31,6 +33,8 @@ public class DataManager : ManagerBase
         tableGroupData.MakeTableData(RuneDict);
         tableGroupData.MakeTableData(SkillDict);
         tableGroupData.MakeTableData(SkillAffectDict);
+        tableGroupData.MakeTableData(BuffDict);
+        tableGroupData.MakeTableData(ProductionDict);
 
     }
 

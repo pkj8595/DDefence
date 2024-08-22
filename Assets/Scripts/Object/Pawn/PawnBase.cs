@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Cysharp.Threading.Tasks;
 
-public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable
+public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAttackable
 {
     private Data.CharacterData _characterData;
 
@@ -30,7 +30,7 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable
     //option
     [field : SerializeField] public IDamageable LockTarget { get; set; }
     public bool HasTarget => LockTarget != null && !LockTarget.IsDead();
-    public float SearchRange { get; set; } = 10f;
+    public float SearchRange { get => PawnStat.CombatStat.searchRange; }
     public float LastCombatTime { get; set; } = 0f;
     public Action OnDeadAction { get; set; }
     public Vector3 StateBarOffset => Vector3.up * 1.2f;
@@ -280,7 +280,7 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable
 
     private void OnDeadTarget()
     {
-        LockTarget = this.SearchTarget(SearchRange, PawnSkills.GetCurrentSkill().TargetType);
+        LockTarget = IAttackable.SearchTarget(this, SearchRange, PawnSkills.GetCurrentSkill().TargetType);
         if (LockTarget == null)
         {
             //_ai.SetState(_ai.GetReturnState());

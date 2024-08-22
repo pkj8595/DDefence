@@ -117,6 +117,15 @@
       "intelligence": 0,
       "willpower": 0,
       "accuracy": 0
+    },
+    {
+      "tableNum": 102500001,
+      "vitality": 0,
+      "strength": 1,
+      "agility": 0,
+      "intelligence": 0,
+      "willpower": 0,
+      "accuracy": 0
     }
   ],
   "StatConversionTable": [
@@ -133,12 +142,12 @@
       "movementSpeed": 0.1,
       "criticalHitChance": 0,
       "dodgepChance": 0,
-      "dodgepEnetration": 0,
       "magicDuration": 0,
       "statusEffectResistance": 0.4,
       "balance": 0,
       "hpRegeneration": 1,
-      "manaRegeneration": 0
+      "manaRegeneration": 0,
+      "searchRange": 0.5
     },
     {
       "tableNum": 103000001,
@@ -153,12 +162,12 @@
       "movementSpeed": 0,
       "criticalHitChance": 0,
       "dodgepChance": 0,
-      "dodgepEnetration": 0,
       "magicDuration": 0,
       "statusEffectResistance": 0,
       "balance": 0.5,
       "hpRegeneration": 0,
-      "manaRegeneration": 0
+      "manaRegeneration": 0,
+      "searchRange": 0.5
     },
     {
       "tableNum": 103000002,
@@ -173,12 +182,12 @@
       "movementSpeed": 0.2,
       "criticalHitChance": 0.5,
       "dodgepChance": 0.5,
-      "dodgepEnetration": 0,
       "magicDuration": 0,
       "statusEffectResistance": 0,
       "balance": 0,
       "hpRegeneration": 0,
-      "manaRegeneration": 0
+      "manaRegeneration": 0,
+      "searchRange": 0.5
     },
     {
       "tableNum": 103000003,
@@ -193,18 +202,18 @@
       "movementSpeed": 0,
       "criticalHitChance": 0,
       "dodgepChance": 0,
-      "dodgepEnetration": 0,
       "magicDuration": 1,
       "statusEffectResistance": 0,
       "balance": 0,
       "hpRegeneration": 0,
-      "manaRegeneration": 0.8
+      "manaRegeneration": 0.8,
+      "searchRange": 0.5
     },
     {
       "tableNum": 103000004,
       "type": 4,
       "maxHp": 0.5,
-      "maxMana": 0.6,
+      "maxMana": 6,
       "meleeDamage": 0,
       "rangedDamage": 0,
       "magicDamage": 0.5,
@@ -213,12 +222,12 @@
       "movementSpeed": 0,
       "criticalHitChance": 0,
       "dodgepChance": 0,
-      "dodgepEnetration": 0,
       "magicDuration": 0.5,
       "statusEffectResistance": 1,
       "balance": 0,
       "hpRegeneration": 0,
-      "manaRegeneration": 0.8
+      "manaRegeneration": 0.8,
+      "searchRange": 0.5
     },
     {
       "tableNum": 103000005,
@@ -233,12 +242,12 @@
       "movementSpeed": 0,
       "criticalHitChance": 1,
       "dodgepChance": 0.5,
-      "dodgepEnetration": 1,
       "magicDuration": 0,
       "statusEffectResistance": 0,
       "balance": 1,
       "hpRegeneration": 0,
-      "manaRegeneration": 0
+      "manaRegeneration": 0,
+      "searchRange": 0.5
     }
   ],
   "TileBaseTable": [
@@ -264,61 +273,81 @@
       "tableNum": 202101000,
       "name": "화살 함정1",
       "desc": "화살이 날아온다 아플듯",
-      "installableLayer": 0,
       "prefab": "ArrowTrab",
-      "sprite": "arrowTrap",
-      "tier": 0,
-      "range": 3,
-      "damage": 10,
-      "attackSpeed": 1,
-      "goods": 301001001,
-      "goods_amount": 100,
-      "projectile": "Arrow"
+      "maxHp": 100,
+      "maxMana": 100,
+      "damageValue": 50,
+      "protection": 20,
+      "manaRegeneration": 10,
+      "baseSkill": 400002001,
+      "productionTable": "",
+      "upgradeNum": 202101001,
+      "upgrade_goods": 301001001,
+      "upgrade_goods_amount": 100
     },
     {
       "tableNum": 202101001,
       "name": "화살 함정2",
       "desc": "화살이 날아온다 아플듯",
-      "installableLayer": 0,
       "prefab": "ArrowTrab",
-      "sprite": "arrowTrap",
-      "tier": 1,
-      "range": 5,
-      "damage": 20,
-      "attackSpeed": 1.2,
-      "goods": 301001001,
-      "goods_amount": 100,
-      "projectile": "Arrow"
+      "maxHp": 100,
+      "maxMana": 100,
+      "damageValue": 70,
+      "protection": 20,
+      "manaRegeneration": 10,
+      "baseSkill": 400002002,
+      "productionTable": "",
+      "upgradeNum": 202101002,
+      "upgrade_goods": 301001001,
+      "upgrade_goods_amount": 100
     },
     {
       "tableNum": 202101002,
       "name": "화살 함정3",
       "desc": "화살이 날아온다 아플듯",
-      "installableLayer": 0,
       "prefab": "ArrowTrab",
-      "sprite": "arrowTrap",
-      "tier": 2,
-      "range": 7,
-      "damage": 30,
-      "attackSpeed": 1.5,
-      "goods": 301001001,
-      "goods_amount": 100,
-      "projectile": "Arrow"
+      "maxHp": 120,
+      "maxMana": 100,
+      "damageValue": 100,
+      "protection": 20,
+      "manaRegeneration": 10,
+      "baseSkill": 400002002,
+      "productionTable": "",
+      "upgradeNum": "",
+      "upgrade_goods": 301001001,
+      "upgrade_goods_amount": 100
     },
     {
-      "tableNum": 202102000,
-      "name": "회전칼날함정1",
-      "desc": "칼날이 회전하고 있다.",
-      "installableLayer": 1,
-      "prefab": "RotatingBladeTrap",
-      "sprite": "rotatingBladeTrap",
-      "tier": 0,
-      "range": 5,
-      "damage": 10,
-      "attackSpeed": 1,
-      "goods": "",
-      "goods_amount": "",
-      "projectile": ""
+      "tableNum": 202200000,
+      "name": "논",
+      "desc": "매턴 식량을 생산한다. ",
+      "prefab": "Production_Cornfield",
+      "maxHp": 100,
+      "maxMana": 0,
+      "damageValue": 0,
+      "protection": 0,
+      "manaRegeneration": 0,
+      "baseSkill": "",
+      "productionTable": 402001001,
+      "upgradeNum": 202200001,
+      "upgrade_goods": 301001001,
+      "upgrade_goods_amount": 200
+    },
+    {
+      "tableNum": 202200001,
+      "name": "논",
+      "desc": "매턴 식량을 생산한다. ",
+      "prefab": "Production_Cornfield",
+      "maxHp": 100,
+      "maxMana": 0,
+      "damageValue": 0,
+      "protection": 0,
+      "manaRegeneration": 0,
+      "baseSkill": "",
+      "productionTable": 402001002,
+      "upgradeNum": "",
+      "upgrade_goods": "",
+      "upgrade_goods_amount": ""
     }
   ],
   "GoodsTable": [
@@ -332,6 +361,24 @@
       "tableNum": 301001002,
       "name": "마석",
       "desc": "무언가 느껴진다.",
+      "imageStr": "testImg"
+    },
+    {
+      "tableNum": 301001003,
+      "name": "목재",
+      "desc": "나무다. 필요한 곳이 있을 것이다.",
+      "imageStr": "testImg"
+    },
+    {
+      "tableNum": 301001004,
+      "name": "석재",
+      "desc": "돌이다. 필요한 곳이 있을 것이다.",
+      "imageStr": "testImg"
+    },
+    {
+      "tableNum": 301001005,
+      "name": "식량",
+      "desc": "먹어야 살 수 있다.",
       "imageStr": "testImg"
     }
   ],
@@ -367,7 +414,7 @@
       "targetType": 1,
       "manaAmount": 5,
       "minRange": 0,
-      "maxRange": 1.3,
+      "maxRange": 1,
       "splashRange": 0,
       "coolTime": 1,
       "effectStr": "",
@@ -389,7 +436,7 @@
       "skillType": 0,
       "targetType": 1,
       "manaAmount": 5,
-      "minRange": 5,
+      "minRange": 2,
       "maxRange": 10,
       "splashRange": 0,
       "coolTime": 2,
@@ -412,7 +459,7 @@
       "skillType": 0,
       "targetType": 1,
       "manaAmount": 20,
-      "minRange": 5,
+      "minRange": 2,
       "maxRange": 10,
       "splashRange": 0,
       "coolTime": 30,
@@ -435,7 +482,7 @@
       "skillType": 0,
       "targetType": 1,
       "manaAmount": 10,
-      "minRange": 3,
+      "minRange": 2,
       "maxRange": 10,
       "splashRange": 2,
       "coolTime": 10,
@@ -458,7 +505,7 @@
       "skillType": 0,
       "targetType": 1,
       "manaAmount": 30,
-      "minRange": 3,
+      "minRange": 2,
       "maxRange": 10,
       "splashRange": 0,
       "coolTime": 20,
@@ -480,90 +527,117 @@
       "affectType": 0,
       "damageType": 0,
       "targetType": 1,
-      "value": 30,
-      "duration": "",
-      "combatStetType": "",
-      "isPercent": ""
+      "effectStr": "",
+      "value": 30
     },
     {
       "tableNum": 401001001,
       "affectType": 0,
       "damageType": 0,
       "targetType": 1,
-      "value": 60,
-      "duration": "",
-      "combatStetType": "",
-      "isPercent": ""
+      "effectStr": "",
+      "value": 60
     },
     {
       "tableNum": 401001100,
       "affectType": 0,
       "damageType": 1,
       "targetType": 1,
-      "value": 30,
-      "duration": "",
-      "combatStetType": "",
-      "isPercent": ""
+      "effectStr": "",
+      "value": 30
     },
     {
       "tableNum": 401001101,
       "affectType": 0,
       "damageType": 1,
       "targetType": 1,
-      "value": 60,
-      "duration": "",
-      "combatStetType": "",
-      "isPercent": ""
+      "effectStr": "",
+      "value": 60
     },
     {
       "tableNum": 401001200,
       "affectType": 0,
       "damageType": 2,
       "targetType": 1,
-      "value": 25,
-      "duration": "",
-      "combatStetType": "",
-      "isPercent": ""
+      "effectStr": "",
+      "value": 25
     },
     {
       "tableNum": 401002000,
       "affectType": 1,
       "damageType": 2,
       "targetType": 0,
-      "value": 10,
-      "duration": "",
-      "combatStetType": "",
-      "isPercent": ""
+      "effectStr": "",
+      "value": 10
     },
     {
       "tableNum": 401003000,
       "affectType": 2,
       "damageType": 2,
       "targetType": 2,
-      "value": 25,
-      "duration": "",
-      "combatStetType": "",
-      "isPercent": ""
+      "effectStr": "",
+      "value": 102500001
     },
     {
       "tableNum": 401004000,
       "affectType": 3,
       "damageType": 2,
       "targetType": 1,
-      "value": 25,
-      "duration": "",
-      "combatStetType": "",
-      "isPercent": ""
+      "effectStr": "eff_",
+      "value": 25
     },
     {
       "tableNum": 401005000,
       "affectType": 4,
       "damageType": 2,
       "targetType": 1,
-      "value": 10,
-      "duration": "",
-      "combatStetType": "",
-      "isPercent": ""
+      "effectStr": "eff_poison",
+      "value": 10
+    },
+    {
+      "tableNum": 401006000,
+      "affectType": 5,
+      "damageType": 2,
+      "targetType": 1,
+      "effectStr": "eff_burn",
+      "value": 10
     }
-  ]
+  ],
+  "BuffTable": [
+    {
+      "tableNum": 402001001,
+      "name": "근접 힘 버프",
+      "desc": "힘이 쎄질거같다",
+      "icon": "testIcon",
+      "duration": -1,
+      "statTable": 102500001
+    }
+  ],
+  "ProductionTable": [
+    {
+      "tableNum": 500001001,
+      "name": "세금 1",
+      "desc": "{0}턴간 {1}개의 금화를 획득합니다.",
+      "itemNum": 301001001,
+      "itemAmount": 1,
+      "waveCount": 1
+    },
+    {
+      "tableNum": 500004001,
+      "name": "수확 1",
+      "desc": "{0}턴간 {1}개의 식량을 획득합니다.",
+      "itemNum": 301001004,
+      "itemAmount": 1,
+      "waveCount": 1
+    },
+    {
+      "tableNum": 500004002,
+      "name": "수확 2",
+      "desc": "{0}턴간 {1}개의 식량을 획득합니다.",
+      "itemNum": 301001004,
+      "itemAmount": 2,
+      "waveCount": 1
+    }
+  ],
+  "ShopTable": []
 }

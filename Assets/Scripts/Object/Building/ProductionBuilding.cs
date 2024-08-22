@@ -6,7 +6,6 @@ using UnityEngine;
 public class ProductionBuilding : BuildingBase
 {
     public GameObject buildingPrefab;
-    public UnitSkill _skill;
 
     public override void Init(BuildingData data)
     {

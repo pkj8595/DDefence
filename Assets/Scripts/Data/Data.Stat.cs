@@ -22,6 +22,7 @@ public struct CombatStat
     public float balance;
     public float hpRegeneration;
     public float manaRegeneration;
+    public float searchRange;
 
 
 
@@ -43,6 +44,7 @@ public struct CombatStat
         ret.balance = a * b.balance;
         ret.hpRegeneration = a * b.hpRegeneration;
         ret.manaRegeneration = a * b.manaRegeneration;
+        ret.searchRange = a * b.searchRange;
 
         return ret;
     }
@@ -65,6 +67,7 @@ public struct CombatStat
         ret.balance = a.balance + b.balance;
         ret.hpRegeneration = a.hpRegeneration + b.hpRegeneration;
         ret.manaRegeneration = a.manaRegeneration + b.manaRegeneration;
+        ret.searchRange = a.searchRange + b.searchRange;
         return ret;
     }
 

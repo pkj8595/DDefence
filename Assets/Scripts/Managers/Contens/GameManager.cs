@@ -5,22 +5,24 @@ using UnityEngine;
 
 public class GameManager
 {
-    //Dictionary<int, GameObject> _monster = new Dictionary<int, GameObject>();
-    //Dictionary<int, GameObject> _eventObj = new Dictionary<int, GameObject>(); // 상호작용 오브젝트
+    private Dictionary<Define.GoodsType, int> _goods = new();
+    public Dictionary<Define.GoodsType, int> Goods { get => _goods; set => _goods = value; }
 
     HashSet<IDamageable> _enumyPawnGroup = new HashSet<IDamageable>();
     HashSet<IDamageable> _pawnGroup = new HashSet<IDamageable>();
     //HashSet<IDamageable> _buildingGroup { get => BoardManager.Instance._constructedBuildingList; }
     UIStateBarGroup _uiStatebarGroup;
-
     public Action<int> OnSpawnEvent;
 
     public void Init()
     {
         //_uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
 
+        foreach(var data in Managers.Data.GoodsDict)
+        {
+            _goods.Add((Define.GoodsType)data.Key, 0);
+        }
     }
-
 
     public PawnBase SpawnPawn(int tableNum, Define.ETeam team)
     {

@@ -149,6 +149,15 @@ public class Define
         MoreMax,
     }
 
+    public enum GoodsType
+    {
+        gold = 301001001,
+        manaStone = 301001002,
+        wood = 301001003,
+        stone = 301001004,
+        food = 301001005,
+    }
+
     public static class Path
     {
         public const string Sprite = "Sprites/";
