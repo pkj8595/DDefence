@@ -162,7 +162,7 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable
     /// </summary>
     /// <param name="message"></param>
     /// <returns></returns>
-    public  bool ApplyTakeDamege(DamageMessage message)
+    public  bool ApplyTakeDamage(DamageMessage message)
     {
         SetTriggerAni(Define.EPawnAniTriger.Hit);
         PawnStat.ApplyDamageMessage(ref message);
@@ -221,12 +221,6 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable
             AniController.SetAniTrigger(skill.AniTriger);
     }
 
-    IEnumerator ExecuteSkill(Skill skill)
-    {
-        State = skill.MotionAni;
-        yield return YieldCache.WaitForSeconds(skill.MotionDuration);
-        AniController.SetAniTrigger(skill.AniTriger);
-    }
 
     /// <summary>
     /// 타격타이밍에 실행 -> animation에서 OnHitEvent 호출시 
@@ -249,7 +243,7 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable
             {
                 for (int i = 0; i < unitList.Count; i++)
                 {
-                    unitList[i].ApplyTakeDamege(msg);
+                    unitList[i].ApplyTakeDamage(msg);
                 }
             }
             else

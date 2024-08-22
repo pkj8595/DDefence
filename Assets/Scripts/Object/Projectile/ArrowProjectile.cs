@@ -60,7 +60,7 @@ public class ArrowProjectile : ProjectileBase
             {
                 if (others[0].gameObject.TryGetComponent(out IDamageable damageable))
                 {
-                    damageable.ApplyTakeDamege(_msg);
+                    damageable.ApplyTakeDamage(_msg);
                     transform.SetParent(others[0].transform);
                     if (_effHit != null)
                     {

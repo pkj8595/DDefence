@@ -8,7 +8,7 @@ public interface IDamageable
     public Define.WorldObject WorldObjectType { get; set; }
     public Vector3 StateBarOffset { get; }
 
-    public abstract bool ApplyTakeDamege(DamageMessage message);
+    public abstract bool ApplyTakeDamage(DamageMessage message);
     public abstract Transform GetTransform();
     public abstract bool IsDead();
     public IStat GetStat();
