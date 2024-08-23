@@ -23,7 +23,7 @@ public class Skill
 
     public List<AffectBase> AffectList { get; } = new List<AffectBase>(Define.Affect_Count);
     public float LastRunTime { get; set; }
-    private PawnStat _attacker;
+    private IStat _attacker;
 
     public Skill(int skillTableNum)
     {
@@ -45,13 +45,12 @@ public class Skill
     /// </summary>
     /// <param name="attacker"></param>
     /// <returns>실행 가능하면 자원을 소모하고 true 반환</returns>
-    public bool ReadySkill(PawnStat attacker)
+    public bool ReadySkill(IStat attacker)
     {
         if (IsReady(attacker.Mana))
         {
             LastRunTime = Time.time;
-            _attacker = attacker;
-            _attacker.Mana -= ManaAmount;
+            attacker.Mana -= ManaAmount;
             return true;
         }
         return false;
@@ -70,7 +69,10 @@ public class Skill
                 if (Vector3.Distance(obj.GetTransform().position, coll.transform.position) < MinRange)
                     continue;
 
-                IDamageable unit =  coll.GetComponent<IDamageable>();
+                IDamageable unit =  coll.attachedRigidbody.GetComponent<IDamageable>();
+                if (unit == null)
+                    continue;
+
                 if (unit.GetTargetType(obj.Team) == TargetType)
                 {
                     units.Add(unit);
@@ -85,7 +87,10 @@ public class Skill
             var colliders = Physics.OverlapSphere(obj.GetTransform().position, MaxRange, layer);
             foreach (Collider coll in colliders)
             {
-                IDamageable unit = coll.GetComponent<IDamageable>();
+                IDamageable unit = coll.attachedRigidbody.GetComponent<IDamageable>();
+                if (unit == null)
+                    continue;
+
                 if (unit.GetTargetType(obj.Team) == TargetType)
                 {
                     units.Add(unit);

@@ -1714,6 +1714,7 @@ MonoBehaviour:
   - {fileID: 6162374489451764278, guid: 443ee60ee0f508d4b93a5951c4d4671b, type: 3}
   - {fileID: 6162374489451764278, guid: 0fa411809227c69499a46bc3245242c7, type: 3}
   - {fileID: 6162374489451764278, guid: bebc254c8ea7b024991c55a57788e922, type: 3}
+  - {fileID: 6162374489451764278, guid: 01cebff7da7c45e429686c4d038dc1af, type: 3}
   _buildingList: []
   tileSize: {x: 1, y: 1, z: 1}
   _previewNode: {fileID: 0}

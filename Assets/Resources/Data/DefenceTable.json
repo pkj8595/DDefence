@@ -279,7 +279,7 @@
       "damageValue": 50,
       "protection": 20,
       "manaRegeneration": 10,
-      "baseSkill": 400002001,
+      "baseSkill": 400500001,
       "productionTable": "",
       "upgradeNum": 202101001,
       "upgrade_goods": 301001001,
@@ -295,7 +295,7 @@
       "damageValue": 70,
       "protection": 20,
       "manaRegeneration": 10,
-      "baseSkill": 400002002,
+      "baseSkill": 400500001,
       "productionTable": "",
       "upgradeNum": 202101002,
       "upgrade_goods": 301001001,
@@ -311,7 +311,7 @@
       "damageValue": 100,
       "protection": 20,
       "manaRegeneration": 10,
-      "baseSkill": 400002002,
+      "baseSkill": 400500001,
       "productionTable": "",
       "upgradeNum": "",
       "upgrade_goods": 301001001,
@@ -355,7 +355,7 @@
       "tableNum": 301001001,
       "name": "금화",
       "desc": "반짝반짝하다",
-      "imageStr": "testImg"
+      "imageStr": "img_gold"
     },
     {
       "tableNum": 301001002,
@@ -475,6 +475,29 @@
       ]
     },
     {
+      "tableNum": 400500001,
+      "name": "화살쏘기",
+      "desc": "기계에서 화살을 쏜다.",
+      "icon": "testIcon",
+      "skillType": 0,
+      "targetType": 1,
+      "manaAmount": 5,
+      "minRange": 2,
+      "maxRange": 10,
+      "splashRange": 0,
+      "coolTime": 2,
+      "effectStr": "",
+      "aniTriger": 1,
+      "motionAni": "",
+      "motionDuration": 0,
+      "projectile": "ArrowPenetrationProjectile",
+      "arr_affect": [
+        401001100,
+        null,
+        null
+      ]
+    },
+    {
       "tableNum": 400003001,
       "name": "마법: 미사일!",
       "desc": "위대한 마법의 힘으로!",
@@ -490,7 +513,7 @@
       "aniTriger": 0,
       "motionAni": 4,
       "motionDuration": 4,
-      "projectile": "ArrowProjectile",
+      "projectile": "",
       "arr_affect": [
         401001002,
         null,

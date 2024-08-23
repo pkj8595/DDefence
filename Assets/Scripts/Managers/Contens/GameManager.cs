@@ -71,7 +71,7 @@ public class GameManager
                 break;
             case Define.WorldObject.Pawn:
                 {
-                    if (go.Team == Define.ETeam.Enumy)
+                    if (go.Team == Define.ETeam.Enemy)
                     {
                         if (_enumyPawnGroup.Contains(go))
                         {

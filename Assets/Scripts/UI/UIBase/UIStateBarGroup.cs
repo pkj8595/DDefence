@@ -49,6 +49,8 @@ public class UIStateBarGroup : UIBase
 
     public void AddUnit(IDamageable unit)
     {
+        if (_dicUnit.ContainsKey(unit))
+            return;
         var stateBar = GetOrCreateStateBar();
         stateBar.Init(unit);
         _dicUnit.Add(unit, stateBar);

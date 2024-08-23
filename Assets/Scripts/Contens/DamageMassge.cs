@@ -8,13 +8,15 @@ public struct DamageMessage
     public Vector3 hitPoint;
     public Vector3 hitNormal;
     public AffectBase[] skillAffectList;
+    public Skill skill;
 
-    public DamageMessage(PawnStat attacker, Vector3 hitPoint, Vector3 hitNormal, AffectBase[] skillAffectList)
+    public DamageMessage(Stat attacker, Vector3 hitPoint, Vector3 hitNormal, Skill skill)
     {
         this.attacker = attacker;
         this.hitPoint = hitPoint;
         this.hitNormal = hitNormal;
-        this.skillAffectList = skillAffectList;
+        this.skill = skill;
+        this.skillAffectList = skill.AffectList.ToArray();
     }
 }
 /*

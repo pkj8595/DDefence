@@ -129,4 +129,6 @@ public static class Utils
         Debug.Log($"문자열 {hex}가 color로 치환될 수 없습니다.");
         return Color.white;
     }
+
+    
 }

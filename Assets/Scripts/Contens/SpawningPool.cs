@@ -30,7 +30,7 @@ public class SpawningPool : MonoBehaviour
     {
         _reserveCount++;
         yield return new WaitForSeconds(Random.Range(0, _spawnTime));
-        PawnBase obj = Managers.Game.SpawnPawn(101001001,Define.ETeam.Enumy);
+        PawnBase obj = Managers.Game.SpawnPawn(101001001,Define.ETeam.Enemy);
         NavMeshAgent nma = obj._navAgent;
 
         Vector3 randPos;

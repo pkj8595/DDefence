@@ -5,16 +5,16 @@ using UnityEngine;
 public class BuildingBase : MonoBehaviour, IDamageable, ISelectedable
 {
     [SerializeField] public GameObject _model;
-    public Define.ETeam Team { get; set; } = Define.ETeam.Playable;
+    [field: SerializeField] public Define.ETeam Team { get; set; } = Define.ETeam.Playable;
     public Define.WorldObject WorldObjectType { get; set; } = Define.WorldObject.Building;
 
     [SerializeField] private Vector3 BuildingStateBarOffset;
     public Vector3 StateBarOffset => BuildingStateBarOffset;
 
-    protected BuildingStat _stat;
-    protected Data.BuildingData _data;
-    protected UnitSkill _skill;
-    protected Production _production;
+    public Data.BuildingData Data { get; private set; }
+    public  BuildingStat Stat { get; private set; }
+    protected BuildingProduction _production;
+    protected BuildingSkill _skill;
 
     public int BuildingTableNum;
 
@@ -31,40 +31,48 @@ public class BuildingBase : MonoBehaviour, IDamageable, ISelectedable
     public virtual void Init(Data.BuildingData data)
     {
         //todo 건물 테이블 수정하고 구현
-        _data = data;
-        if (_stat == null)
-            _stat = gameObject.GetOrAddComponent<BuildingStat>();
-        _stat.Init(data.tableNum, OnDead, OnDeadTarget);
+        Data = data;
+        if (Stat == null)
+            Stat = gameObject.GetOrAddComponent<BuildingStat>();
+        Stat.Init(data.tableNum, OnDead, OnDeadTarget);
 
-        if (_data.productionTable != 0)
+        if (Data.productionTable != 0)
         {
-            _production = gameObject.GetOrAddComponent<Production>();
-            _production.Init(_data.productionTable, this);
+            _production = gameObject.GetOrAddComponent<BuildingProduction>();
+            _production.Init(Data.productionTable, this);
         }
 
-        if (_data.baseSkill != 0)
+        if (Data.baseSkill != 0)
         {
-            _skill = new UnitSkill();
-            _skill.Init(_stat.Mana);
-            _skill.SetBaseSkill(new Skill(_data.baseSkill));
+            _skill = gameObject.GetOrAddComponent<BuildingSkill>();
+            _skill.Init(this);
         }
 
+        UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
+        uiStatebarGroup.AddUnit(this);
     }
 
     public void UpgradeBuilding()
     {
-        if (_data.upgrade_goods_amount < Managers.Game.Goods[(Define.GoodsType)_data.upgrade_goods])
+        if (Data.upgrade_goods_amount < Managers.Game.Goods[(Define.GoodsType)Data.upgrade_goods])
         {
-            Managers.Game.Goods[(Define.GoodsType)_data.upgrade_goods] -= _data.upgrade_goods_amount;
+            Managers.Game.Goods[(Define.GoodsType)Data.upgrade_goods] -= Data.upgrade_goods_amount;
         }
 
-        Init(_data.upgradeNum);
+        Init(Data.upgradeNum);
+    }
+
+    private void OnDestroy()
+    {
+        UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
+        uiStatebarGroup.RemoveUnit(this);
     }
 
 
     public void OnDead()
     {
-
+        UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
+        uiStatebarGroup.SetActive(this, false);
     }
 
     public void OnDeadTarget()
@@ -74,14 +82,14 @@ public class BuildingBase : MonoBehaviour, IDamageable, ISelectedable
 
     public virtual bool ApplyTakeDamage(DamageMessage message)
     {
-        _stat.ApplyDamageMessage(ref message);
+        Stat.ApplyDamageMessage(ref message);
 
         return false;
     }
 
     public virtual IStat GetStat()
     {
-        return _stat;
+        return Stat;
     }
 
     public Transform GetTransform()
@@ -91,7 +99,7 @@ public class BuildingBase : MonoBehaviour, IDamageable, ISelectedable
 
     public bool IsDead()
     {
-        return _stat.IsDead;
+        return Stat.IsDead;
     }
 
     #region ISelectable

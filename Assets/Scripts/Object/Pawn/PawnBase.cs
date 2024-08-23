@@ -232,7 +232,7 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
         DamageMessage msg = new DamageMessage(PawnStat,
                                            Vector3.zero,
                                            Vector3.zero,
-                                           skill.AffectList.ToArray());
+                                           skill);
         if (skill.DetectTargetInSkillRange(this, out List<IDamageable> unitList))
         {
             ProjectileBase projectile = skill.MakeProjectile(
@@ -276,6 +276,15 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
         AI.SetState(AI.GetDeadState());
         UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
         uiStatebarGroup.SetActive(this, false);
+        GetComponent<Collider>().enabled = false;
+    }
+
+    private void OnLive()
+    {
+        AI.SetState(AI.GetIdleState());
+        UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
+        uiStatebarGroup.SetActive(this, true);
+        GetComponent<Collider>().enabled = false;
     }
 
     private void OnDeadTarget()

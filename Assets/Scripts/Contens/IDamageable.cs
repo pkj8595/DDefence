@@ -36,7 +36,7 @@ public interface IAttackable
 
         foreach (var collider in colliders)
         {
-            IDamageable unit = collider.GetComponent<IDamageable>();
+            IDamageable unit = collider.attachedRigidbody.GetComponent<IDamageable>();
             if (unit != null && !unit.IsDead() && unit.GetTargetType(transform.Team) == targetType)
             {
                 return unit;
