@@ -4,8 +4,8 @@ using UnityEngine;
 
 public interface IDamageable
 {
-    public Define.ETeam Team { get; set; }
-    public Define.WorldObject WorldObjectType { get; set; }
+    public Define.ETeam Team { get;}
+    public Define.WorldObject WorldObjectType { get;}
     public Vector3 StateBarOffset { get; }
 
     public abstract bool ApplyTakeDamage(DamageMessage message);
@@ -14,11 +14,12 @@ public interface IDamageable
     public IStat GetStat();
 
 
-    
+
 }
 
 public interface IAttackable
 {
+    public Define.ETeam Team {get;}
     public float SearchRange { get;}
 
     /// <summary>
@@ -36,6 +37,9 @@ public interface IAttackable
 
         foreach (var collider in colliders)
         {
+            if (collider.transform == transform.GetTransform())
+                continue;
+
             IDamageable unit = collider.attachedRigidbody.GetComponent<IDamageable>();
             if (unit != null && !unit.IsDead() && unit.GetTargetType(transform.Team) == targetType)
             {

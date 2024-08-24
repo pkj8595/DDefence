@@ -39,7 +39,7 @@ public abstract class Stat : MonoBehaviour, IStat
     public abstract float MaxHp { get;}
     public abstract float MaxMana { get;}
     public abstract float Protection { get;}
-    public bool IsDead { get; set; }
+    public bool IsDead { get; protected set; }
 
     protected System.Action _OnDeadEvent;
     protected System.Action _OnDeadTargetEvent;
@@ -51,6 +51,7 @@ public abstract class Stat : MonoBehaviour, IStat
     {
         _OnDeadEvent = onDead;
         _OnDeadTargetEvent = onDeadTarget;
+        IsDead = false;
         StartCoroutine(UpdateAffect());
     }
 

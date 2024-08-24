@@ -59,6 +59,8 @@ public class UIStateBarGroup : UIBase
 
     public void RemoveUnit(IDamageable unit)
     {
+        if (!_dicUnit.ContainsKey(unit))
+            return;
         DeActiveStatebar(_dicUnit[unit]);
         _dicUnit.Remove(unit);
     }

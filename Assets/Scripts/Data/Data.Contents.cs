@@ -269,7 +269,7 @@ namespace Data
         public string name;
         public string desc;
         public string prefab;
-
+        public bool isDamageable;
         public float maxHp;
         public float maxMana;
         public float damageValue;

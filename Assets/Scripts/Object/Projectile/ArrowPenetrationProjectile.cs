@@ -5,8 +5,6 @@ using DG.Tweening;
 
 public class ArrowPenetrationProjectile : ProjectileBase
 {
-    public Vector3 _offsetTarget;
-    public float arrowRange = 10f;
     public float duration = 1f;
     Sequence sequence;
 
@@ -18,27 +16,41 @@ public class ArrowPenetrationProjectile : ProjectileBase
 
     public void Shot()
     {
-        if (_target == null) return;
-
         sequence = DOTween.Sequence();
-        sequence.Append(transform.DOMove(transform.forward * _msg.skill.MaxRange, duration)
+
+        Vector3 targetPosition = transform.position + (transform.forward * _msg.skill.MaxRange);
+        sequence.Append(transform.DOMove(targetPosition, duration)
                 .SetEase(Ease.Linear));
-        sequence.AppendCallback(() => { Destroy(); });
+        sequence.AppendCallback(() => { Release(); });
     }
 
-    protected override void Destroy()
+    protected override void OnTriggerEnter(Collider other)
+    {
+        base.OnTriggerEnter(other);
+
+        if (other.TryGetComponent(out IDamageable damageable))
+        {
+            damageable.ApplyTakeDamage(_msg);
+            OnStopProjectile(other.transform);
+        }
+        else if (1 << other.gameObject.layer == (int)Define.Layer.Ground)
+        {
+            OnStopProjectile();
+        }
+    }
+
+    protected override void OnStopProjectile(Transform targetTransform = null)
+    {
+        base.OnStopProjectile(targetTransform);
+        sequence.Kill();
+        Invoke(nameof(Release), 2f);
+        if (targetTransform != null)
+            transform.SetParent(targetTransform);
+    }
+
+    protected override void Release()
     {
         gameObject.SetActive(false);
         Managers.Resource.Destroy(gameObject);
     }
-
-    protected override void HandleImpact(Collider[] others)
-    {
-        base.HandleImpact(others);
-        
-        _projectileCollider.enabled = false;
-        sequence.Kill();
-        Invoke(nameof(Destroy), 2f);
-    }
-
 }

@@ -2,19 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildingBase : MonoBehaviour, IDamageable, ISelectedable
+public class BuildingBase : MonoBehaviour, ISelectedable
 {
     [SerializeField] public GameObject _model;
     [field: SerializeField] public Define.ETeam Team { get; set; } = Define.ETeam.Playable;
     public Define.WorldObject WorldObjectType { get; set; } = Define.WorldObject.Building;
 
-    [SerializeField] private Vector3 BuildingStateBarOffset;
-    public Vector3 StateBarOffset => BuildingStateBarOffset;
-
     public Data.BuildingData Data { get; private set; }
     public  BuildingStat Stat { get; private set; }
     protected BuildingProduction _production;
     protected BuildingSkill _skill;
+    protected BuildingDamageable _damageable;
 
     public int BuildingTableNum;
 
@@ -48,8 +46,16 @@ public class BuildingBase : MonoBehaviour, IDamageable, ISelectedable
             _skill.Init(this);
         }
 
-        UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
-        uiStatebarGroup.AddUnit(this);
+        if (data.isDamageable)
+        {
+            _damageable = gameObject.GetOrAddComponent<BuildingDamageable>();
+            _damageable.Init(this);
+
+            UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
+            uiStatebarGroup.AddUnit(_damageable);
+        }
+
+        
     }
 
     public void UpgradeBuilding()
@@ -62,44 +68,31 @@ public class BuildingBase : MonoBehaviour, IDamageable, ISelectedable
         Init(Data.upgradeNum);
     }
 
-    private void OnDestroy()
-    {
-        UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
-        uiStatebarGroup.RemoveUnit(this);
-    }
-
-
-    public void OnDead()
-    {
-        UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
-        uiStatebarGroup.SetActive(this, false);
-    }
-
+   
     public void OnDeadTarget()
     {
 
     }
 
-    public virtual bool ApplyTakeDamage(DamageMessage message)
+    private void OnDestroy()
     {
-        Stat.ApplyDamageMessage(ref message);
-
-        return false;
+        if (_damageable != null)
+        {
+            UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
+            uiStatebarGroup.RemoveUnit(_damageable);
+        }
     }
 
-    public virtual IStat GetStat()
+    public void OnDead()
     {
-        return Stat;
-    }
+        if (_damageable != null)
+        {
+            UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
+            uiStatebarGroup.SetActive(_damageable, false);
+        }
 
-    public Transform GetTransform()
-    {
-        return transform;
-    }
-
-    public bool IsDead()
-    {
-        return Stat.IsDead;
+        Managers.Effect.PlayAniEffect("SmallStingHit", transform.position);
+        gameObject.SetActive(false);
     }
 
     #region ISelectable

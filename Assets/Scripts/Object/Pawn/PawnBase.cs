@@ -90,7 +90,7 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
         PawnStat.Init(_characterData.statDataNum, OnDead, OnDeadTarget);
         AI.Init(this);
 
-        //_colliderAttackRange.radius = _stat.AttackRange;
+        _navAgent.enabled = true;
         _navAgent.speed = PawnStat.MoveSpeed;
         PawnSkills.Init(PawnStat.Mana);
         PawnSkills.SetBaseSkill(new Skill(_characterData.basicSkill));
@@ -235,9 +235,7 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
                                            skill);
         if (skill.DetectTargetInSkillRange(this, out List<IDamageable> unitList))
         {
-            ProjectileBase projectile = skill.MakeProjectile(
-                Managers.Scene.CurrentScene.GetParentObj(Define.EParentObj.Projectile).transform
-                );
+            ProjectileBase projectile = skill.MakeProjectile();
 
             if (projectile == null)
             {
@@ -276,7 +274,7 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
         AI.SetState(AI.GetDeadState());
         UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
         uiStatebarGroup.SetActive(this, false);
-        GetComponent<Collider>().enabled = false;
+        _navAgent.enabled = false;
     }
 
     private void OnLive()
@@ -284,7 +282,7 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
         AI.SetState(AI.GetIdleState());
         UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
         uiStatebarGroup.SetActive(this, true);
-        GetComponent<Collider>().enabled = false;
+        _navAgent.enabled = true;
     }
 
     private void OnDeadTarget()

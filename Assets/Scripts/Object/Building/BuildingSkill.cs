@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildingSkill : MonoBehaviour
+public class BuildingSkill : MonoBehaviour, IAttackable
 {
     public Transform _shotTrans;
     public Collider _detectCollider;
@@ -12,6 +12,10 @@ public class BuildingSkill : MonoBehaviour
 
     public IDamageable LockTarget;
     public HashSet<IDamageable> _pawnListInRange = new ();
+
+    public float SearchRange => _skills.GetCurrentSkill().MaxRange;
+
+    public Define.ETeam Team => _buildingBase.Team;
 
     public void Init(BuildingBase buildingBase)
     {
@@ -31,17 +35,22 @@ public class BuildingSkill : MonoBehaviour
 
             foreach (IDamageable target in _pawnListInRange)
             {
-                if (SearchTarget(target, skill))
+                if (SearchTargetToRay(target, skill))
                 {
                     StartSkill();
                 }
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            StartSkill();
+        }
     }
 
     private void StartSkill()
     {
-        if (_skills.ReadyCurrentSkill(_buildingBase.GetStat()))
+        if (_skills.ReadyCurrentSkill(_buildingBase.Stat))
         {
             Skill skill = _skills.GetRunnigSkill();
             DamageMessage msg = new DamageMessage(_buildingBase.Stat,
@@ -49,12 +58,9 @@ public class BuildingSkill : MonoBehaviour
                                                   Vector3.zero,
                                                   skill);
 
-            ProjectileBase projectileBase = skill.MakeProjectile(
-                Managers.Scene.CurrentScene.GetParentObj(Define.EParentObj.Projectile).transform
-                );
-
+            ProjectileBase projectileBase = skill.MakeProjectile();
             projectileBase.Init(_shotTrans.transform, 
-                                LockTarget.GetTransform(),
+                                null,
                                 _skills.GetRunnigSkill().SplashRange,
                                 msg);
             _buildingBase.Stat.IncreadMana();
@@ -92,9 +98,9 @@ public class BuildingSkill : MonoBehaviour
     /// <param name="other"></param>
     /// <param name="skill"></param>
     /// <returns></returns>
-    private bool SearchTarget(IDamageable other, Skill skill)
+    private bool SearchTargetToRay(IDamageable other, Skill skill)
     {
-        if (_buildingBase.GetTargetType(other.Team) != skill.TargetType)
+        if (this.GetTargetType(other.Team) != skill.TargetType)
         {
             return false;
         }

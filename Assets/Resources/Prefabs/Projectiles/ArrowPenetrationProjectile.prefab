@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 9115350138891856114}
   - component: {fileID: 9115350138891856113}
   - component: {fileID: 7199753774878702917}
-  - component: {fileID: 1691155848400759044}
+  - component: {fileID: 3286409028477665482}
   m_Layer: 0
   m_Name: ArrowPenetrationProjectile
   m_TagString: Untagged
@@ -228,9 +228,9 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.06, y: 0.06, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1691155848400759044
+  m_Size: {x: 0.06, y: 0.06, z: 0.3}
+  m_Center: {x: 0, y: 0, z: 0.3}
+--- !u!114 &3286409028477665482
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -243,9 +243,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _effHit: {fileID: 0}
-  _speed: 25
+  _speed: 10
   _projectileCollider: {fileID: 7199753774878702917}
-  IsPenetration: 1
   _offsetTarget: {x: 0, y: 0, z: 0}
-  arrowRange: 10
   duration: 1

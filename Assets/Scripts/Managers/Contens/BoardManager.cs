@@ -72,7 +72,6 @@ public class BoardManager : MonoSingleton<BoardManager>
             _previewNode.transform.position = ComputeNodeScalePosition(_previewNode, nodeMouse.position);
             _previewNode.Position = nodeMouse.position;
             _previewNode.SetNodeRotation(nodeMouse.normal);
-           
 
             ChangeMaterialPreviewNode(CanPlaceBuilding(nodeMouse.position, _previewNode.NodeSize));
         }

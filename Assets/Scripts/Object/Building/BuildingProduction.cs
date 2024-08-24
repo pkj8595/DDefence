@@ -14,7 +14,7 @@ public class BuildingProduction : MonoBehaviour
 
     public void EndWave()
     {
-        if (_buildingBase.IsDead())
+        if (_buildingBase.Stat.IsDead)
             return;
 
         Managers.Game.Goods[(Define.GoodsType)_data.itemNum] += _data.itemAmount;

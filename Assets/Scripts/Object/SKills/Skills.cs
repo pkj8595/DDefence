@@ -70,7 +70,7 @@ public class Skill
                     continue;
 
                 IDamageable unit =  coll.attachedRigidbody.GetComponent<IDamageable>();
-                if (unit == null)
+                if (unit == null || unit.IsDead())
                     continue;
 
                 if (unit.GetTargetType(obj.Team) == TargetType)
@@ -133,6 +133,9 @@ public class Skill
     {
         if (string.IsNullOrEmpty(data.projectile))
             return null;
+
+        if (parent == null)
+            parent = Managers.Scene.CurrentScene.GetParentObj(Define.EParentObj.Projectile).transform;
 
         var obj = Managers.Resource.Instantiate(Define.Path.Prefab_Bullet + data.projectile, parent);
         return obj.GetComponent<ProjectileBase>();
