@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager
+public partial class GameManager
 {
     private Dictionary<Define.GoodsType, int> _goods = new();
     public Dictionary<Define.GoodsType, int> Goods { get => _goods; set => _goods = value; }

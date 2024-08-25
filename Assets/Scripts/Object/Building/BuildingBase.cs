@@ -16,7 +16,7 @@ public class BuildingBase : MonoBehaviour, ISelectedable
 
     public int BuildingTableNum;
 
-    public void Awake()
+    public void Start()
     {
         Init(BuildingTableNum);
     }

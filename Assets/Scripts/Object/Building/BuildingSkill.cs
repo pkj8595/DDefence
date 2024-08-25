@@ -6,6 +6,7 @@ public class BuildingSkill : MonoBehaviour, IAttackable
 {
     public Transform _shotTrans;
     public Collider _detectCollider;
+    public Animator _animator;
 
     BuildingBase _buildingBase;
     protected UnitSkill _skills = new UnitSkill();
@@ -41,14 +42,38 @@ public class BuildingSkill : MonoBehaviour, IAttackable
                 }
             }
         }
-
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            StartSkill();
-        }
     }
 
     private void StartSkill()
+    {
+        if(_animator != null)
+        {
+            _animator.Play("Attack");
+        }
+        else
+        {
+            if (_skills.ReadyCurrentSkill(_buildingBase.Stat))
+            {
+                Skill skill = _skills.GetRunnigSkill();
+                DamageMessage msg = new DamageMessage(_buildingBase.Stat,
+                                                      Vector3.zero,
+                                                      Vector3.zero,
+                                                      skill);
+
+                ProjectileBase projectileBase = skill.MakeProjectile();
+                projectileBase.Init(_shotTrans.transform, 
+                                    null,
+                                    _skills.GetRunnigSkill().SplashRange,
+                                    msg);
+                _buildingBase.Stat.IncreadMana();
+            }
+        }
+    }
+
+    /// <summary>
+    /// animation callback 
+    /// </summary>
+    public void BegineSkill()
     {
         if (_skills.ReadyCurrentSkill(_buildingBase.Stat))
         {
@@ -58,14 +83,15 @@ public class BuildingSkill : MonoBehaviour, IAttackable
                                                   Vector3.zero,
                                                   skill);
 
-            ProjectileBase projectileBase = skill.MakeProjectile();
-            projectileBase.Init(_shotTrans.transform, 
-                                null,
-                                _skills.GetRunnigSkill().SplashRange,
-                                msg);
-            _buildingBase.Stat.IncreadMana();
+            LockTarget.ApplyTakeDamage(msg);
         }
     }
+
+    public void EndSkill()
+    {
+
+    }
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -106,7 +132,7 @@ public class BuildingSkill : MonoBehaviour, IAttackable
         }
 
         float skillRange = skill.MaxRange;
-        int layer = (int)Define.Layer.Pawn | (int)Define.Layer.Building;
+        int layer = (int)Define.Layer.Pawn;
         Vector3 directionEnumy = other.GetTransform().position - _shotTrans.position;
         if (Physics.Raycast(_shotTrans.position, directionEnumy, out RaycastHit hit, skillRange, layer)) 
         {

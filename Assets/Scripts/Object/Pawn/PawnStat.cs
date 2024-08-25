@@ -153,9 +153,10 @@ public class PawnStat : Stat
         KillCount++;
     }
 
-    public void IncreadMana()
+    public void IncreadHPMana()
     {
         Mana += _combatStat.manaRegeneration;
+        Hp += _combatStat.hpRegeneration;
     }
 
 }

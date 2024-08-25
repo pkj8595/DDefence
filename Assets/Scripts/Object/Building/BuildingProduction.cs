@@ -2,10 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildingProduction : MonoBehaviour
+public interface IProductionable
+{
+    public void EndWave();
+}
+
+public class BuildingProduction : MonoBehaviour, IProductionable
 {
     BuildingBase _buildingBase;
     Data.ProductionData _data;
+
+    private void OnEnable()
+    {
+        Managers.Game.RegisterProduction(this);
+    }
+
+    private void OnDisable()
+    {
+        Managers.Game.RemoveProduction(this);
+    }
+
     public void Init(int tableNum, BuildingBase buildingBase)
     {
         _buildingBase = buildingBase;

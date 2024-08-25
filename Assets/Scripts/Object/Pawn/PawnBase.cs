@@ -258,7 +258,7 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
     {
         PawnSkills.ClearCurrentSkill();
         LastCombatTime = Time.time;
-        PawnStat.IncreadMana();
+        PawnStat.IncreadHPMana();
         AI.SetState(AI.GetIdleState());
     }
 
