@@ -145,9 +145,9 @@
       "magicDuration": 0,
       "statusEffectResistance": 0.4,
       "balance": 0,
-      "hpRegeneration": 1,
+      "hpRegeneration": 0.4,
       "manaRegeneration": 0,
-      "searchRange": 0.5
+      "searchRange": 0.2
     },
     {
       "tableNum": 103000001,
@@ -167,7 +167,7 @@
       "balance": 0.5,
       "hpRegeneration": 0,
       "manaRegeneration": 0,
-      "searchRange": 0.5
+      "searchRange": 0.2
     },
     {
       "tableNum": 103000002,
@@ -187,7 +187,7 @@
       "balance": 0,
       "hpRegeneration": 0,
       "manaRegeneration": 0,
-      "searchRange": 0.5
+      "searchRange": 0.2
     },
     {
       "tableNum": 103000003,
@@ -207,7 +207,7 @@
       "balance": 0,
       "hpRegeneration": 0,
       "manaRegeneration": 0.8,
-      "searchRange": 0.5
+      "searchRange": 0.2
     },
     {
       "tableNum": 103000004,
@@ -227,7 +227,7 @@
       "balance": 0,
       "hpRegeneration": 0,
       "manaRegeneration": 0.8,
-      "searchRange": 0.5
+      "searchRange": 0.2
     },
     {
       "tableNum": 103000005,
@@ -247,7 +247,129 @@
       "balance": 1,
       "hpRegeneration": 0,
       "manaRegeneration": 0,
-      "searchRange": 0.5
+      "searchRange": 0.2
+    }
+  ],
+  "WaveTable": [
+    {
+      "tableNum": 110001000,
+      "name": "겁 많아 보이는 고블린들",
+      "desc": "위축되어 보이는게 조심할 필요는 없어보이네요!",
+      "difficulty": 1,
+      "arr_characterNum": [
+        101001001,
+        null,
+        null,
+        null,
+        null
+      ],
+      "arr_charAmount": [
+        5,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "tableNum": 110001001,
+      "name": "양아치 고블린들",
+      "desc": "가는 길마다 침을 뱉고 다닙니다. 껄렁껄렁한 고블린 무리군요! ",
+      "difficulty": 2,
+      "arr_characterNum": [
+        101001001,
+        null,
+        null,
+        null,
+        null
+      ],
+      "arr_charAmount": [
+        7,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "tableNum": 110001002,
+      "name": "고블린 무리",
+      "desc": "무기를 들고있는게 경계가 필요한 친구 같습니다.",
+      "difficulty": 3,
+      "arr_characterNum": [
+        101001001,
+        null,
+        null,
+        null,
+        null
+      ],
+      "arr_charAmount": [
+        10,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "tableNum": 110002000,
+      "name": "떠돌아다니는 해골들",
+      "desc": "어디를 가고 있는 친구들일까요? 어라? 이쪽으로 오는군요!",
+      "difficulty": 1,
+      "arr_characterNum": [
+        101001002,
+        null,
+        null,
+        null,
+        null
+      ],
+      "arr_charAmount": [
+        5,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "tableNum": 110002001,
+      "name": "언덕 위에 있는 해골들",
+      "desc": "어이쿠! 저 해골 친구들은 발을 잘 못 디뎌서 굴러오고 있습니다. 그래도 대피를 해야겠네요",
+      "difficulty": 2,
+      "arr_characterNum": [
+        101001002,
+        null,
+        null,
+        null,
+        null
+      ],
+      "arr_charAmount": [
+        7,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "tableNum": 110002002,
+      "name": "무기를 들고다니는 해골",
+      "desc": "그래도 무기를 들고 있는게 전에 만났던 친구들과는 달라보입니다.",
+      "difficulty": 3,
+      "arr_characterNum": [
+        101001002,
+        null,
+        null,
+        null,
+        null
+      ],
+      "arr_charAmount": [
+        10,
+        null,
+        null,
+        null,
+        null
+      ]
     }
   ],
   "TileBaseTable": [
@@ -273,6 +395,7 @@
       "tableNum": 202101000,
       "name": "화살 함정1",
       "desc": "화살이 날아온다 아플듯",
+      "isDamageable": 0,
       "prefab": "ArrowTrab",
       "maxHp": 100,
       "maxMana": 100,
@@ -289,6 +412,7 @@
       "tableNum": 202101001,
       "name": "화살 함정2",
       "desc": "화살이 날아온다 아플듯",
+      "isDamageable": 0,
       "prefab": "ArrowTrab",
       "maxHp": 100,
       "maxMana": 100,
@@ -305,6 +429,7 @@
       "tableNum": 202101002,
       "name": "화살 함정3",
       "desc": "화살이 날아온다 아플듯",
+      "isDamageable": 0,
       "prefab": "ArrowTrab",
       "maxHp": 120,
       "maxMana": 100,
@@ -318,9 +443,44 @@
       "upgrade_goods_amount": 100
     },
     {
-      "tableNum": 202200000,
+      "tableNum": 202102000,
+      "name": "창살 함정1",
+      "desc": "창살이 뾰족하다.",
+      "isDamageable": 0,
+      "prefab": "SpearTrab",
+      "maxHp": 120,
+      "maxMana": 100,
+      "damageValue": 100,
+      "protection": 20,
+      "manaRegeneration": 10,
+      "baseSkill": 400500001,
+      "productionTable": "",
+      "upgradeNum": 202101002,
+      "upgrade_goods": 301001001,
+      "upgrade_goods_amount": 100
+    },
+    {
+      "tableNum": 202102001,
+      "name": "창살 함정2",
+      "desc": "창살이 뾰족하다.",
+      "isDamageable": 0,
+      "prefab": "SpearTrab",
+      "maxHp": 120,
+      "maxMana": 100,
+      "damageValue": 100,
+      "protection": 20,
+      "manaRegeneration": 10,
+      "baseSkill": 400500001,
+      "productionTable": "",
+      "upgradeNum": "",
+      "upgrade_goods": 301001001,
+      "upgrade_goods_amount": 100
+    },
+    {
+      "tableNum": 202000000,
       "name": "논",
-      "desc": "매턴 식량을 생산한다. ",
+      "desc": "매 턴 식량을 생산한다. ",
+      "isDamageable": 1,
       "prefab": "Production_Cornfield",
       "maxHp": 100,
       "maxMana": 0,
@@ -336,7 +496,8 @@
     {
       "tableNum": 202200001,
       "name": "논",
-      "desc": "매턴 식량을 생산한다. ",
+      "desc": "매 턴 식량을 생산한다. ",
+      "isDamageable": 1,
       "prefab": "Production_Cornfield",
       "maxHp": 100,
       "maxMana": 0,
@@ -402,6 +563,36 @@
       "skillTableNum": 400002002,
       "releaseGoods": 301001001,
       "releaseAmount": 100
+    }
+  ],
+  "ShopTable": [
+    {
+      "tableNum": 303001001,
+      "name": "하급 랜덤 캐릭터 뽑기",
+      "desc": "무슨 캐릭터가 나올까?",
+      "goods": 301001001,
+      "goods_amount": 100
+    },
+    {
+      "tableNum": 303001002,
+      "name": "하급 랜덤 건물 뽑기",
+      "desc": "무슨 건물이 나올까?",
+      "goods": 301001001,
+      "goods_amount": 100
+    },
+    {
+      "tableNum": 303001003,
+      "name": "하급 랜덤 유물 뽑기",
+      "desc": "무슨 유물이 나올까?",
+      "goods": 301001001,
+      "goods_amount": 100
+    },
+    {
+      "tableNum": 303001004,
+      "name": "하급 랜덤 룬 뽑기",
+      "desc": "무슨 룬이 나올까?",
+      "goods": 301001001,
+      "goods_amount": 100
     }
   ],
   "SkillTable": [
@@ -661,6 +852,5 @@
       "itemAmount": 2,
       "waveCount": 1
     }
-  ],
-  "ShopTable": []
+  ]
 }

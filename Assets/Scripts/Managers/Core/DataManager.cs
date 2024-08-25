@@ -8,10 +8,12 @@ public class DataManager : ManagerBase
     public Dictionary<int, Data.CharacterData> CharacterDict { get; private set; } = new ();
     public Dictionary<int, Data.StatData> StatDict { get; private set; } = new ();
     public Dictionary<int, Data.StatConversionData> StatConversionDict { get; private set; } = new ();
+    public Dictionary<int, Data.WaveData> WaveDict { get; private set; } = new ();
     public Dictionary<int, Data.TileBaseData> TileBaseDict { get; private set; } = new ();
     public Dictionary<int, Data.BuildingData> BuildingDict { get; private set; } = new ();
     public Dictionary<int, Data.GoodsData> GoodsDict { get; private set; } = new ();
     public Dictionary<int, Data.RuneData> RuneDict { get; private set; } = new ();
+    public Dictionary<int, Data.ShopData> ShopDict { get; private set; } = new ();
     public Dictionary<int, Data.SkillData> SkillDict { get; private set; } = new ();
     public Dictionary<int, Data.SkillAffectData> SkillAffectDict { get; private set; } = new ();
     public Dictionary<int, Data.BuffData> BuffDict { get; private set; } = new ();
@@ -27,10 +29,12 @@ public class DataManager : ManagerBase
         tableGroupData.MakeTableData(CharacterDict);
         tableGroupData.MakeTableData(StatDict);
         tableGroupData.MakeTableData(StatConversionDict);
+        tableGroupData.MakeTableData(WaveDict);
         tableGroupData.MakeTableData(TileBaseDict);
         tableGroupData.MakeTableData(BuildingDict);
         tableGroupData.MakeTableData(GoodsDict);
         tableGroupData.MakeTableData(RuneDict);
+        tableGroupData.MakeTableData(ShopDict);
         tableGroupData.MakeTableData(SkillDict);
         tableGroupData.MakeTableData(SkillAffectDict);
         tableGroupData.MakeTableData(BuffDict);

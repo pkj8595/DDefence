@@ -18,14 +18,17 @@ namespace Data
         public CharacterData[] CharacterTable;
         public StatData[] StatTable;
         public StatConversionData[] StatConversionTable;
+        public WaveData[] WaveTable;
         public TileBaseData[] TileBaseTable;
         public BuildingData[] BuildingTable;
         public GoodsData[] GoodsTable;
         public RuneData[] RuneTable;
+        public ShopData[] ShopTable;
         public SkillData[] SkillTable;
         public SkillAffectData[] SkillAffectTable;
-        public ProductionData[] ProductionTable;
         public BuffData[] BuffTable;
+        public ProductionData[] ProductionTable;
+        
 
 
         public void MakeTableData(Dictionary<int, CharacterData> tableData)
@@ -49,6 +52,14 @@ namespace Data
             for (int i = 0; i < StatConversionTable.Length; i++)
             {
                 tableData.Add(StatConversionTable[i].tableNum, StatConversionTable[i]);
+            }
+        }
+
+        public void MakeTableData(Dictionary<int, WaveData> tableData)
+        {
+            for (int i = 0; i < WaveTable.Length; i++)
+            {
+                tableData.Add(WaveTable[i].tableNum, WaveTable[i]);
             }
         }
 
@@ -81,6 +92,14 @@ namespace Data
             for (int i = 0; i < RuneTable.Length; i++)
             {
                 tableData.Add(RuneTable[i].tableNum, RuneTable[i]);
+            }
+        }
+
+        public void MakeTableData(Dictionary<int, ShopData> tableData)
+        {
+            for (int i = 0; i < ShopTable.Length; i++)
+            {
+                tableData.Add(ShopTable[i].tableNum, ShopTable[i]);
             }
         }
 
@@ -146,6 +165,7 @@ namespace Data
         public string Horns;
     }
     #endregion
+
 
     #region 102 
     [Serializable]
@@ -245,6 +265,18 @@ namespace Data
 
     }
     #endregion
+    [Serializable]
+    public class WaveData : TableBase
+    {
+        public const int Table = 110;
+
+        public string name;
+        public string desc;
+        public int difficulty;
+        public int[] arr_characterNum = new int[5];
+        public int[] arr_charAmount = new int[5];
+    }
+
 
     #region 201
     [Serializable]
@@ -310,6 +342,17 @@ namespace Data
         public int releaseAmount;
     }
     #endregion
+
+    [Serializable]
+    public class ShopData : TableBase
+    {
+        public const int Table = 303;
+
+        public string name;
+        public string desc;
+        public int goods;
+        public int goods_amount;
+    }
 
     [Serializable]
     public class SkillData : TableBase
