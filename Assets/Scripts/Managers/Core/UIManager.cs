@@ -30,13 +30,41 @@ public class UIManager : ManagerBase
         if (ui == null)
         {
             ui = Managers.Resource.LoadUI<T>(_uiRoot);
+            if (ui == null)
+                return null;
             _uiStack.Add(ui);
-            UpdateSortingOrder();
+        }
+        else
+        {
+            _uiStack.Remove(ui);
+            _uiStack.Add(ui);
         }
 
+        UpdateSortingOrder();
+        ui.SetUIBaseData();
+        ui.Init(uiData);
+        ui.UpdateUI();
+        return ui;
+    }
+
+    public UIBase ShowUIPopup<T>(UIData uiData = null) where T : UIPopup
+    {
+        //캐싱된 UI 찾기
+        UIBase ui = GetUI<T>();
+
         if (ui == null)
-            return null;
-        
+        {
+            ui = Managers.Resource.LoadUIPopup<T>(_uiRoot);
+            if (ui == null)
+                return null;
+            _uiStack.Add(ui);
+        }
+        else
+        {
+            _uiStack.Remove(ui);
+            _uiStack.Add(ui);
+        }
+        UpdateSortingOrder();
         ui.SetUIBaseData();
         ui.Init(uiData);
         ui.UpdateUI();
@@ -90,4 +118,10 @@ public class UIManager : ManagerBase
             return null;
     }
 
+
+    public void ShowToastMessage(string message)
+    {
+        var toast = ShowUIPopup<UIToastMessage>() as UIToastMessage;
+        toast.SetMessage(message);
+    }
 }

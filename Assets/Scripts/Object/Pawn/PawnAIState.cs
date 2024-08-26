@@ -86,9 +86,14 @@ public class MoveState : IUnitState
         //타겟이 있다면 범위 체크 밖에 나갔다면 
         if (_pawn.HasTarget)
         {
-            
-            if (!_unitAI.CheckOutRangeTarget()) 
+
+            if (!_unitAI.CheckOutRangeTarget())
                 _pawn.TrackingAndAttackTarget();
+        }
+        
+        else
+        {
+            _unitAI.SetState(_unitAI.GetIdleState());
         }
     }
 
@@ -140,7 +145,7 @@ public class ReturnToBaseState : IUnitState
 {
     private UnitAI _unitAI;
     PawnBase _pawn;
-    public string GetNames() => "ReturnToBaseState";
+    public string GetNames() => GetType().Name;
 
     public ReturnToBaseState(UnitAI unitAI)
     {
@@ -150,11 +155,15 @@ public class ReturnToBaseState : IUnitState
 
     public void EnterState()
     {
+        _pawn.SetDestination(_unitAI.OriginPosition.Value);
     }
 
     public void UpdateState()
     {
-
+        if (_unitAI.OriginPosition == null)
+        {
+            _unitAI.SetState(_unitAI.GetIdleState());
+        }
     }
     public void AdjustUpdate()
     {

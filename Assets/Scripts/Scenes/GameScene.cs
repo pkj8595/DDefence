@@ -14,15 +14,19 @@ public class GameScene : BaseScene
         base.Init();
         SCENE_TYPE = Define.Scene.Game;
         
-        GameObject go = new GameObject { name = "SpawningPool" };
-        SpawningPool pool = go.GetOrAddComponent<SpawningPool>();
-        pool.SetKeepMonsterCount(5);
+        SpawningPool pool = gameObject.GetOrAddComponent<SpawningPool>();
+        pool.Init();
+        SelectedManager select = gameObject.GetOrAddComponent<SelectedManager>();
+        select.Init();
+
 
         var pawns = PawnObj.GetComponentsInChildren<PawnController>();
         for (int i = 0; i < pawns.Length; i++)
         {
             Managers.Game.SetPawnInScene(pawns[i]);
         }
+
+        pool.StartWaveEnemySpawn(Managers.Data.WaveDict[110001000]);
 
     }
 

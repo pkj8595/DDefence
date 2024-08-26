@@ -2,54 +2,56 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Cysharp.Threading.Tasks;
 
 public class SpawningPool : MonoBehaviour
 {
     [SerializeField] int _monsterCount = 0;
-    [SerializeField] int _reserveCount = 0;
-    [SerializeField] int _keepMonsterCount = 0;
-    [SerializeField] Vector3 _spawnPos;
-    [SerializeField] float _spawnRadius = 15.0f;
-    [SerializeField] float _spawnTime = 5.0f;
 
-    void Start()
+    [SerializeField] List<GameObject> _gateList = new();
+    [SerializeField] readonly Queue<int> _enemyQueue = new Queue<int>();
+
+    public void Init()
     {
         Managers.Game.OnSpawnEvent -= AddMonsterCount;
         Managers.Game.OnSpawnEvent += AddMonsterCount;
     }
 
-    void Update()
-    {
-        
-    }
-
     public void AddMonsterCount(int value) { _monsterCount += value; }
-    public void SetKeepMonsterCount(int count) { _keepMonsterCount = count; }
 
-    IEnumerator ReserveSpawn()
+    public void StartWaveEnemySpawn(Data.WaveData data)
     {
-        _reserveCount++;
-        yield return new WaitForSeconds(Random.Range(0, _spawnTime));
-        PawnBase obj = Managers.Game.SpawnPawn(101001001,Define.ETeam.Enemy);
-        NavMeshAgent nma = obj._navAgent;
-
-        Vector3 randPos;
-
-        while (true)
+        //wave 데이터의 캐릭터 코드를 모두 큐에 삽입
+        for (int i = 0; i < data.arr_characterNum.Length; i++)
         {
-            //좌표를 기준으로 반지름안에 점을 반환
-            Vector3 randDir = Random.insideUnitCircle * Random.Range(0, _spawnRadius);
-            randDir.y = 0;
-            randPos = _spawnPos + randDir;
-
-            NavMeshPath path = new NavMeshPath();
-            // Agent 위치로부터 randPos까지 최단 경로를 계산한후 path.corners 에 저장
-            if (nma.CalculatePath(randPos, path))
-                break;
+            for (int j = 0; j < data.arr_charAmount[i]; j++)
+            {
+                _enemyQueue.Enqueue(data.arr_characterNum[i]);
+            }
         }
-        obj.transform.position = randPos;
-        _reserveCount--;
+
+        if (0 < _gateList.Count)
+            RunSpawnWave().Forget();
+        else
+            Debug.LogError("not find gate");
     }
+
+    async UniTaskVoid RunSpawnWave()
+    {
+        await UniTask.NextFrame();
+
+        while(_enemyQueue.Count > 0)
+        {
+            _monsterCount++;
+            PawnBase obj = Managers.Game.SpawnPawn(_enemyQueue.Dequeue(), Define.ETeam.Enemy);
+            int gateIndex = Utils.Round(Random.Range(0, _gateList.Count - 1));
+            obj.transform.position = _gateList[gateIndex].transform.position;
+
+            await UniTask.Delay(500);
+        }
+
+    }
+
 
 
 }

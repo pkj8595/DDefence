@@ -106,8 +106,8 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
 
     public void Init(int tableNum, Define.ETeam team)
     {
-        Init(tableNum);
         Team = team;
+        Init(tableNum);
     }
 
     protected virtual void Init() { }
@@ -168,6 +168,15 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
         SetTriggerAni(Define.EPawnAniTriger.Hit);
         PawnStat.ApplyDamageMessage(ref message);
         LastCombatTime = Time.time;
+
+        //공격 당했을때 공격의 대상이 적이라면 target를 수정 
+        if (message.attacker != null && message.attacker.TryGetComponent(out IDamageable damageable))
+        {
+            if (damageable.GetTargetType(Team) == Define.ETargetType.Enemy && !damageable.IsDead())
+            {
+                LockTarget = damageable;
+            }
+        }
         return false;
     }
 
@@ -331,6 +340,7 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
     public virtual void OnSelect()
     {
         _isSelected = true;
+        Debug.Log($"{gameObject.name} is Select");
     }
 
     public virtual void OnDeSelect()

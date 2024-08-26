@@ -91,7 +91,10 @@ public partial class GameManager
     public void SetPawnInScene(PawnController pawn)
     {
         pawn.Init(pawn._testCharacterNum);
-        _pawnGroup.Add(pawn);
+        if (pawn.Team == Define.ETeam.Playable)
+            _pawnGroup.Add(pawn);
+        else
+            _enumyPawnGroup.Add(pawn);
     }
 
 }

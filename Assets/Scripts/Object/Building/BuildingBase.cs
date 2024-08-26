@@ -98,17 +98,15 @@ public class BuildingBase : MonoBehaviour, ISelectedable
     #region ISelectable
     public void OnSelect()
     {
-        throw new System.NotImplementedException();
     }
 
     public void OnDeSelect()
     {
-        throw new System.NotImplementedException();
     }
 
     public bool IsSelected()
     {
-        throw new System.NotImplementedException();
+        return false;
     }
     #endregion
 

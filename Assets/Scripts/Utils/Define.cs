@@ -169,6 +169,7 @@ public class Define
         public const string Sprite_Bullet = "Sprites/Projectiles/";
 
         public const string UI = "UI/UIBase/";
+        public const string UIPopup = "UI/Popup/";
 
     }
 

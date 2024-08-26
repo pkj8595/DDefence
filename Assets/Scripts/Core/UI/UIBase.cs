@@ -6,15 +6,14 @@ using UnityEngine.UI;
 public abstract class UIBase : MonoBehaviour
 {
     public Canvas canvas;
-    private string uiName;
 
-    public string UIName { get => uiName; set => uiName = value; }
+    public string UIName { get; set; }
 
     public virtual void SetUIBaseData()
     {
         if (canvas == null)
             canvas = GetComponent<Canvas>();
-        uiName = this.GetType().Name;
+        UIName = this.GetType().Name;
     }
 
     public void SetSortingOrder(int sortingOrder)

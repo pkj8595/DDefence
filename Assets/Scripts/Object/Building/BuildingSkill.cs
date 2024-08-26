@@ -65,7 +65,7 @@ public class BuildingSkill : MonoBehaviour, IAttackable
                                     null,
                                     _skills.GetRunnigSkill().SplashRange,
                                     msg);
-                _buildingBase.Stat.IncreadMana();
+                EndSkill();
             }
         }
     }
@@ -89,7 +89,8 @@ public class BuildingSkill : MonoBehaviour, IAttackable
 
     public void EndSkill()
     {
-
+        _buildingBase.Stat.IncreadMana();
+        _skills.ClearCurrentSkill();
     }
 
 

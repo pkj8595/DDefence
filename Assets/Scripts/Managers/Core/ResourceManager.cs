@@ -28,6 +28,15 @@ public class ResourceManager : ManagerBase
         return gameObj.GetComponent<T>();
     }
 
+    public T LoadUIPopup<T>(Transform parent = null) where T : UIBase
+    {
+        string path = Define.Path.UIPopup + typeof(T).Name;
+        GameObject prefab = Resources.Load<GameObject>(path);
+        GameObject gameObj = GameObject.Instantiate(prefab, parent);
+        gameObj.name = prefab.name;
+        return gameObj.GetComponent<T>();
+    }
+
     public GameObject Instantiate(string path, Transform parent = null)
     {
         GameObject original = Load<GameObject>($"Prefabs/{path}");
