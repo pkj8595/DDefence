@@ -5,23 +5,17 @@ using UnityEngine;
 
 public partial class GameManager
 {
-    private Dictionary<Define.GoodsType, int> _goods = new();
-    public Dictionary<Define.GoodsType, int> Goods { get => _goods; set => _goods = value; }
+    public Inventory Inven { get; private set; } = new Inventory();
 
     HashSet<IDamageable> _enumyPawnGroup = new HashSet<IDamageable>();
     HashSet<IDamageable> _pawnGroup = new HashSet<IDamageable>();
-    //HashSet<IDamageable> _buildingGroup { get => BoardManager.Instance._constructedBuildingList; }
-    UIStateBarGroup _uiStatebarGroup;
+    List<BuildingNode> BuildingGroup { get => BoardManager.Instance._constructedBuildingList; }
     public Action<int> OnSpawnEvent;
 
     public void Init()
     {
-        //_uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
 
-        foreach(var data in Managers.Data.GoodsDict)
-        {
-            _goods.Add((Define.GoodsType)data.Key, 0);
-        }
+        Inven.Init();
     }
 
     public PawnBase SpawnPawn(int tableNum, Define.ETeam team)

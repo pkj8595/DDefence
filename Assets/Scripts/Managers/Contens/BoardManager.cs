@@ -16,7 +16,7 @@ public class BoardManager : MonoSingleton<BoardManager>
     [SerializeField] private List<GameObject> _buildingList;
 
     [SerializeField] private Dictionary<Vector3Int, NodeBase> _dirNodes = new();
-    [field : SerializeField] public HashSet<BuildingNode> _constructedBuildingList { get; } = new();
+    [field : SerializeField] public List<BuildingNode> _constructedBuildingList { get; } = new();
     [SerializeField] private Vector3 tileSize = new Vector3(1, 1, 1); // 각 셀의 크기
 
     private bool _isEditMode = false;
@@ -73,7 +73,7 @@ public class BoardManager : MonoSingleton<BoardManager>
             _previewNode.Position = nodeMouse.position;
             _previewNode.SetNodeRotation(nodeMouse.normal);
 
-            ChangeMaterialPreviewNode(CanPlaceBuilding(nodeMouse.position, _previewNode.NodeSize));
+            ChangeMaterialPreviewNode(CanPlaceBuilding(nodeMouse.position, _previewNode.NodeSize, _previewNode));
         }
     }
 
@@ -225,7 +225,7 @@ public class BoardManager : MonoSingleton<BoardManager>
         }
 
         Vector3Int gridPosition = previewNode.Position;
-        if (!CanPlaceBuilding(gridPosition, node.NodeSize))
+        if (!CanPlaceBuilding(gridPosition, node.NodeSize, previewNode))
         {
             Debug.Log("이미 설치된 위치입니다.");
             return;
@@ -296,8 +296,47 @@ public class BoardManager : MonoSingleton<BoardManager>
     }
 
 
-    private bool CanPlaceBuilding(Vector3Int gridPosition, Vector3Int size)
+    private bool CanPlaceBuilding(Vector3Int gridPosition, Vector3Int size, NodeBase node)
     {
+        //블록노드의 경우 y가 0이 아니라면 아래 blocknode를 찾는다.
+        if(node is BlockNode)
+        {
+            if (gridPosition.y != 0)
+            {
+                for (int x = 0; x < size.x; x++)
+                {
+                    for (int z = 0; z < size.z; z++)
+                    {
+                        Vector3Int nodePosition = new Vector3Int(gridPosition.x + x, gridPosition.y - 1, gridPosition.z + z);
+                        if (_dirNodes.ContainsKey(nodePosition))
+                        {
+                            if (_dirNodes[nodePosition] is not BlockNode)
+                                return false;
+                        }
+                        else
+                            return false;
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (int x = 0; x < size.x; x++)
+            {
+                for (int z = 0; z < size.z; z++)
+                {
+                    Vector3Int nodePosition = new Vector3Int(gridPosition.x + x, gridPosition.y - 1, gridPosition.z + z);
+                    if (_dirNodes.ContainsKey(nodePosition))
+                    {
+                        if (_dirNodes[nodePosition] is not BlockNode)
+                            return false;
+                    }
+                    else
+                        return false;
+                }
+            }
+        }
+
         for (int y = 0; y < size.y; y++)
         {
             for (int x = 0; x < size.x; x++)

@@ -60,9 +60,9 @@ public class BuildingBase : MonoBehaviour, ISelectedable
 
     public void UpgradeBuilding()
     {
-        if (Data.upgrade_goods_amount < Managers.Game.Goods[(Define.GoodsType)Data.upgrade_goods])
+        if (Data.upgrade_goods_amount < Managers.Game.Inven.Goods[(Define.GoodsType)Data.upgrade_goods])
         {
-            Managers.Game.Goods[(Define.GoodsType)Data.upgrade_goods] -= Data.upgrade_goods_amount;
+            Managers.Game.Inven.Goods[(Define.GoodsType)Data.upgrade_goods] -= Data.upgrade_goods_amount;
         }
 
         Init(Data.upgradeNum);

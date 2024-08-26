@@ -92,6 +92,7 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
 
         _navAgent.enabled = true;
         _navAgent.speed = PawnStat.MoveSpeed;
+        GetComponent<Collider>().enabled = true;
         PawnSkills.Init(PawnStat.Mana);
         PawnSkills.SetBaseSkill(new Skill(_characterData.basicSkill));
         
@@ -275,6 +276,7 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
         UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
         uiStatebarGroup.SetActive(this, false);
         _navAgent.enabled = false;
+        GetComponent<Collider>().enabled = false;
     }
 
     private void OnLive()
@@ -283,6 +285,7 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
         UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
         uiStatebarGroup.SetActive(this, true);
         _navAgent.enabled = true;
+        GetComponent<Collider>().enabled = true;
     }
 
     private void OnDeadTarget()

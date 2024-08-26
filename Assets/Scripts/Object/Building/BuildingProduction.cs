@@ -33,7 +33,7 @@ public class BuildingProduction : MonoBehaviour, IProductionable
         if (_buildingBase.Stat.IsDead)
             return;
 
-        Managers.Game.Goods[(Define.GoodsType)_data.itemNum] += _data.itemAmount;
+        Managers.Game.Inven.Goods[(Define.GoodsType)_data.itemNum] += _data.itemAmount;
     }
 
 
