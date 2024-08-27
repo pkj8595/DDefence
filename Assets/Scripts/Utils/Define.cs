@@ -18,7 +18,6 @@ public class Define
         Building,
     }
     
-
     public enum Layer
     {
         Water       = 1 << 4,
@@ -48,13 +47,6 @@ public class Define
         Cool
     }
   
-
-    public enum TrapState
-    {
-        Idle,
-        Attack,
-    }
-
     public enum EParentObj
     {
         Pawn,
@@ -67,6 +59,7 @@ public class Define
         Unknown,
         Login,
         Game,
+        Ending,
     }
 
     public enum Sound
@@ -149,7 +142,7 @@ public class Define
         MoreMax,
     }
 
-    public enum GoodsType
+    public enum EGoodsType
     {
         gold = 301001001,
         manaStone = 301001002,
@@ -157,6 +150,8 @@ public class Define
         stone = 301001004,
         food = 301001005,
     }
+
+    
 
     public static class Path
     {

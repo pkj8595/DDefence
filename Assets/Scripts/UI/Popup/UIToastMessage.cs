@@ -22,6 +22,11 @@ public class UIToastMessage : UIPopup
         transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.InQuad);
     }
 
+    public override void SetSortingOrder(int sortingOrder)
+    {
+        canvas.sortingOrder = 10000;
+    }
+
     private void FadeReset()
     {
         if (coroutine != null)

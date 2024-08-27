@@ -76,9 +76,14 @@ public class UIManager : ManagerBase
     /// </summary>
     public void UpdateSortingOrder()
     {
+        int activeCount = 0;
         for (int i = 0; i < _uiStack.Count; i++)
         {
-            _uiStack[i].SetSortingOrder(baseSortingOrder + (i * sortingOrderAddValue));
+            if (_uiStack[i].isActiveAndEnabled)
+            {
+                activeCount++;
+                _uiStack[i].SetSortingOrder(baseSortingOrder + (activeCount * sortingOrderAddValue));
+            }
         }
     }
 

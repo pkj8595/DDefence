@@ -8,7 +8,7 @@ public class BuildingBase : MonoBehaviour, ISelectedable
     [field: SerializeField] public Define.ETeam Team { get; set; } = Define.ETeam.Playable;
     public Define.WorldObject WorldObjectType { get; set; } = Define.WorldObject.Building;
 
-    public Data.BuildingData Data { get; private set; }
+    public Data.BuildingData BuildingData { get; private set; }
     public  BuildingStat Stat { get; private set; }
     protected BuildingProduction _production;
     protected BuildingSkill _skill;
@@ -29,18 +29,18 @@ public class BuildingBase : MonoBehaviour, ISelectedable
     public virtual void Init(Data.BuildingData data)
     {
         //todo 건물 테이블 수정하고 구현
-        Data = data;
+        BuildingData = data;
         if (Stat == null)
             Stat = gameObject.GetOrAddComponent<BuildingStat>();
         Stat.Init(data.tableNum, OnDead, OnDeadTarget);
 
-        if (Data.productionTable != 0)
+        if (BuildingData.productionTable != 0)
         {
             _production = gameObject.GetOrAddComponent<BuildingProduction>();
-            _production.Init(Data.productionTable, this);
+            _production.Init(BuildingData.productionTable, this);
         }
 
-        if (Data.baseSkill != 0)
+        if (BuildingData.baseSkill != 0)
         {
             _skill = gameObject.GetOrAddComponent<BuildingSkill>();
             _skill.Init(this);
@@ -58,14 +58,15 @@ public class BuildingBase : MonoBehaviour, ISelectedable
         
     }
 
-    public void UpgradeBuilding()
+    public void OnClickUpgradeBuilding()
     {
-        if (Data.upgrade_goods_amount < Managers.Game.Inven.Goods[(Define.GoodsType)Data.upgrade_goods])
+        if (Managers.Game.Inven.SpendItem(BuildingData.upgrade_goods, BuildingData.upgrade_goods_amount))
         {
-            Managers.Game.Inven.Goods[(Define.GoodsType)Data.upgrade_goods] -= Data.upgrade_goods_amount;
+            Init(BuildingData.upgradeNum);
+            return;
         }
 
-        Init(Data.upgradeNum);
+        Managers.UI.ShowToastMessage("업그레이드 비용이 부족합니다.");
     }
 
    

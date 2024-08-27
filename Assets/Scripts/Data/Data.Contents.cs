@@ -19,6 +19,8 @@ namespace Data
         public StatData[] StatTable;
         public StatConversionData[] StatConversionTable;
         public WaveData[] WaveTable;
+        public StoryData[] StoryTable;
+        public StoryChoiceData[] StoryChoiceTable;
         public TileBaseData[] TileBaseTable;
         public BuildingData[] BuildingTable;
         public GoodsData[] GoodsTable;
@@ -29,7 +31,6 @@ namespace Data
         public BuffData[] BuffTable;
         public ProductionData[] ProductionTable;
         
-
 
         public void MakeTableData(Dictionary<int, CharacterData> tableData)
         {
@@ -54,12 +55,27 @@ namespace Data
                 tableData.Add(StatConversionTable[i].tableNum, StatConversionTable[i]);
             }
         }
-
         public void MakeTableData(Dictionary<int, WaveData> tableData)
         {
             for (int i = 0; i < WaveTable.Length; i++)
             {
                 tableData.Add(WaveTable[i].tableNum, WaveTable[i]);
+            }
+        }
+
+        public void MakeTableData(Dictionary<int, StoryData> tableData)
+        {
+            for (int i = 0; i < StoryTable.Length; i++)
+            {
+                tableData.Add(StoryTable[i].tableNum, StoryTable[i]);
+            }
+        }
+ 
+        public void MakeTableData(Dictionary<int, StoryChoiceData> tableData)
+        {
+            for (int i = 0; i < StoryChoiceTable.Length; i++)
+            {
+                tableData.Add(StoryChoiceTable[i].tableNum, StoryChoiceTable[i]);
             }
         }
 
@@ -149,7 +165,7 @@ namespace Data
         public int upgradeChar;
         public int ignoreAffect;
         public int basicSkill;
-
+        public int[] arr_rune = new int[3];
         public string Head;
         public string Ears;
         public string Eyes;
@@ -277,6 +293,33 @@ namespace Data
         public int[] arr_charAmount = new int[5];
     }
 
+    [Serializable]
+    public class StoryData : TableBase
+    {
+        public const int Table = 111;
+
+        public int eventType;
+        public string name;
+        public string desc;
+        public int priority;
+        public int[] arr_choice = new int[3];
+    }
+
+    [Serializable]
+    public class StoryChoiceData : TableBase
+    {
+        public const int Table = 112;
+
+        public string name;
+        public string desc;
+        public int priority;
+        public int nextStoryTable;
+        public int pushWave;
+        public int[] arr_getItem = new int[2];
+        public int[] arr_getItemAmount = new int[2];
+        public int[] arr_requiredGoods = new int[3];
+        public int[] arr_requiredAmount = new int[3];
+    }
 
     #region 201
     [Serializable]

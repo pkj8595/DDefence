@@ -4,17 +4,18 @@ using UnityEngine;
 using UnityEngine.AI;
 using Cysharp.Threading.Tasks;
 
-public class SpawningPool : MonoBehaviour
+public class SpawningPool 
 {
     [SerializeField] int _monsterCount = 0;
 
-    [SerializeField] List<GameObject> _gateList = new();
+    [SerializeField] List<GameObject> _gateList;
     [SerializeField] readonly Queue<int> _enemyQueue = new Queue<int>();
 
     public void Init()
     {
         Managers.Game.OnSpawnEvent -= AddMonsterCount;
         Managers.Game.OnSpawnEvent += AddMonsterCount;
+        _gateList = GameView.Instance.GateList;
     }
 
     public void AddMonsterCount(int value) { _monsterCount += value; }
@@ -50,6 +51,17 @@ public class SpawningPool : MonoBehaviour
             await UniTask.Delay(500);
         }
 
+        while (_monsterCount > 0)
+        {
+            await UniTask.Delay(500);
+        }
+
+        EndWave();
+    }
+
+    public void EndWave()
+    {
+        Managers.Game.RunEndWave();
     }
 
 

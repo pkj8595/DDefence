@@ -71,6 +71,7 @@ public abstract class ProjectileBase : MonoBehaviour
     }
 
     protected abstract void Release();
+
     protected virtual void PlayEffect()
     {
         if (_effHit != null)

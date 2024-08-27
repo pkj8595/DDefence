@@ -16,7 +16,7 @@ public abstract class UIBase : MonoBehaviour
         UIName = this.GetType().Name;
     }
 
-    public void SetSortingOrder(int sortingOrder)
+    public virtual void SetSortingOrder(int sortingOrder)
     {
         canvas.sortingOrder = sortingOrder;
     }
@@ -38,5 +38,10 @@ public abstract class UIBase : MonoBehaviour
     public virtual void Close()
     {
         gameObject.SetActive(false);
+    }
+
+    public virtual void OnClickClose()
+    {
+        Close();
     }
 }

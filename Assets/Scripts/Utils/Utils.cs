@@ -62,14 +62,13 @@ public static class Utils
         return CalculateTableNum(tableNum) / 1000;
     }
 
-    public static int CalculateTable(int tableNum, int category, int index)
-    {
-        return (tableNum * 1000000) + (category * 1000) + index;
-    }
-
     public static int CalculateTableBaseNumber(int tableNum)
     {
         return tableNum - (tableNum % 1000);
+    }
+    public static int CalculateTable(int tableNum, int category, int index)
+    {
+        return (tableNum * 1000000) + (category * 1000) + index;
     }
 
     /// <summary>

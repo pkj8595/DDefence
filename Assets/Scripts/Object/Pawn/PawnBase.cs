@@ -120,7 +120,7 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
                 //Debug.Log("경로가 완전히 생성.");
                 break;
             case NavMeshPathStatus.PathPartial:
-                //Debug.Log("일부만 생성.");
+                Debug.Log("일부만 생성.");
                 if (_navAgent.path.corners != null)
                     _destPos = _navAgent.path.corners[_navAgent.path.corners.Length - 1];
                 break;

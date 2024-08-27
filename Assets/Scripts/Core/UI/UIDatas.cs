@@ -10,3 +10,8 @@ public abstract class UIData
     
 }
 
+public class UIStoryData : UIData
+{
+    public int StoryDataNum { get; set; }
+}
+

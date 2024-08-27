@@ -20,20 +20,7 @@ public static class Extension
         return go != null && go.activeSelf;
     }
 
-    public static int ToInt(this Enum enumValue)
-    {
-        return Convert.ToInt32(enumValue);
-    }
-
-    private static readonly Dictionary<Enum, string> cacheEStr = new();
-    public static string ToString(this Enum value)
-    {
-        if (cacheEStr.ContainsKey(value))
-        {
-            cacheEStr.Add(value, value.ToString());
-        }
-        return cacheEStr[value];
-    }
+   
 
     public static void ResetTransform(this Transform transform)
     {
@@ -68,4 +55,22 @@ public static class Extension
 
 
 
+}
+
+public static class Enum 
+{
+    public static int ToInt(this System.Enum enumValue)
+    {
+        return Convert.ToInt32(enumValue);
+    }
+
+    private static readonly Dictionary<System.Enum, string> cacheEStr = new();
+    public static string ToStr(this System.Enum value)
+    {
+        if (!cacheEStr.ContainsKey(value))
+        {
+            cacheEStr.Add(value, value.ToString());
+        }
+        return cacheEStr[value];
+    }
 }

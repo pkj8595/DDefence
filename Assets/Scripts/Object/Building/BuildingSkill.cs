@@ -22,7 +22,7 @@ public class BuildingSkill : MonoBehaviour, IAttackable
     {
         _buildingBase = buildingBase;
         _skills.Init(_buildingBase.Stat.Mana);
-        _skills.SetBaseSkill(new Skill( buildingBase.Data.baseSkill));
+        _skills.SetBaseSkill(new Skill( buildingBase.BuildingData.baseSkill));
         _detectCollider.isTrigger = true;
     }
 

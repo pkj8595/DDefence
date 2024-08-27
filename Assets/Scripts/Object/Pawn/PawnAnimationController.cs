@@ -53,13 +53,13 @@ public class PawnAnimationController : MonoBehaviour
     {
         if (_state != state)
         {
-            _animator.Play(state.ToString());
+            _animator.Play(state.ToStr());
         }
     }
 
     public void SetAniTrigger(Define.EPawnAniTriger trigger)
     {
-        _animator.SetTrigger(trigger.ToString());
+        _animator.SetTrigger(trigger.ToStr());
     }
 
     public void OnBeginAttack()

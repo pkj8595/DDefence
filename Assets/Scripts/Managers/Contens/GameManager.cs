@@ -14,7 +14,6 @@ public partial class GameManager
 
     public void Init()
     {
-
         Inven.Init();
     }
 

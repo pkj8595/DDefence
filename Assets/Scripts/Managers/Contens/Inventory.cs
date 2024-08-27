@@ -4,16 +4,13 @@ using UnityEngine;
 
 public class Inventory 
 {
-    private Dictionary<Define.GoodsType, int> _goods = new();
-    public Dictionary<Define.GoodsType, int> Goods { get => _goods; set => _goods = value; }
-
     public Dictionary<int, int> _itemDic = new Dictionary<int, int>();
 
     public void Init()
     {
         foreach (var data in Managers.Data.GoodsDict)
         {
-            _goods.Add((Define.GoodsType)data.Key, 0);
+            _itemDic.Add(data.Key, 0);
         }
     }
 
@@ -26,6 +23,40 @@ public class Inventory
         }
 
         _itemDic.Add(itemNum, amount);
+    }
+
+    /// <summary>
+    /// 아이템이 있는지 체크
+    /// </summary>
+    /// <param name="itemNum"></param>
+    /// <param name="itemAmount"></param>
+    /// <returns>아이템의 수량이 충분하면 true</returns>
+    public bool CheckItem(int itemNum, int itemAmount)
+    {
+        if (_itemDic.ContainsKey(itemNum))
+        {
+            if (itemAmount <= _itemDic[itemNum])
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// 아이템이 있는지 체크 후 소모
+    /// </summary>
+    /// <param name="itemNum"></param>
+    /// <param name="itemAmount"></param>
+    /// <returns>아이템과 수량이 충분하면 소모하다 true 리턴</returns>
+    public bool SpendItem(int itemNum, int itemAmount)
+    {
+        if (CheckItem(itemNum, itemAmount))
+        {
+            _itemDic[itemNum] -= itemAmount;
+            return true;
+        }
+        return false;
     }
 
 }

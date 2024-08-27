@@ -16,7 +16,7 @@ public class UnitAI
     public PawnBase Pawn { get; private set; }
     public bool HasTarget => Pawn.HasTarget;
     public float SearchRange => Pawn.SearchRange;
-    public Vector3 OriginPosition { get; set; }
+    public Vector3? OriginPosition { get; set; }
 
     private float _cooltime = 0.0f;
     public void Init(PawnBase pawn)
