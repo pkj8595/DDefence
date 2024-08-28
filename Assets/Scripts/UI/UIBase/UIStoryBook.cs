@@ -50,6 +50,7 @@ public class UIStoryBook : UIBase
                 _btnChoiceItem[i].SetActive(false);
         }
         
+        //선택지가 없다면 close 버튼 활성화
         if (choiceCount == 0)
         {
             _btnClose.SetActive(true);
@@ -64,6 +65,8 @@ public class UIStoryBook : UIBase
     {
         for (int j = 0; j < choiseData.arr_requiredGoods.Length; j++)
         {
+            if (choiseData.arr_requiredGoods[j] == 0)
+                continue;
             //소모되는 수량이 충분하지 않다면 false 리턴
             if (!Managers.Game.Inven.CheckItem(choiseData.arr_requiredGoods[j],
                                               choiseData.arr_requiredAmount[j]))
@@ -101,6 +104,8 @@ public class UIStoryBook : UIBase
         StringBuilder builder = new StringBuilder();
         builder.Append(data.desc);
         builder.Append("\n\n");
+        builder.Append($"저 멀리 누군가 보입니다. 아~ {waveData.name}이네요!");
+        builder.Append("\n");
         builder.Append(waveData.desc);
         _txtContent.text = builder.ToString();
         _btnClose.SetActive(true);
@@ -129,22 +134,22 @@ public class ChoiceItem
     [SerializeField] private GameObject _imgBlock;
     public Data.StoryChoiceData ChoiceData { get; set; }
 
-    public void SetData(Data.StoryChoiceData data)
+    public void SetData(Data.StoryChoiceData chioseData)
     {
-        _txtName.text = data.name;
+        _txtName.text = chioseData.name;
         //todo item Name and Amount
         StringBuilder requiredItemStr = new();
-        for (int i = 0; i < data.arr_requiredGoods.Length; i++)
+        for (int i = 0; i < chioseData.arr_requiredGoods.Length; i++)
         {
-            if (data.arr_requiredGoods[i] != 0)
+            if (chioseData.arr_requiredGoods[i] != 0)
             {
-                requiredItemStr.Append(GetItemAmountStr(new ItemBase(data.arr_getItem[i]),
-                                                        data.arr_getItemAmount[i]));
+                requiredItemStr.Append(GetItemAmountStr(new ItemBase(chioseData.arr_requiredGoods[i]),
+                                                        chioseData.arr_requiredAmount[i]));
             }
         }
 
         _txtDesc.text = requiredItemStr.ToString();
-        ChoiceData = data;
+        ChoiceData = chioseData;
     }
 
     public void SetBlockActive(bool isBlock)

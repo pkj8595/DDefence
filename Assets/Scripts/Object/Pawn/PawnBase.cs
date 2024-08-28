@@ -12,7 +12,7 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
     [field: SerializeField] public Define.ETeam Team { get; set; } = Define.ETeam.Playable;
     public Define.WorldObject WorldObjectType { get; set; } = Define.WorldObject.Pawn;
     [SerializeField] protected Define.EPawnAniState _state = Define.EPawnAniState.Idle;
-    [SerializeField] protected Vector3 _destPos;
+    [field : SerializeField] protected Vector3 _destPos { get; set; }
     [SerializeField] protected Transform _projectileTrans;
 
 
@@ -108,6 +108,24 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
     {
         Team = team;
         Init(tableNum);
+        if (team == Define.ETeam.Enemy)
+        {
+            EnemyInit();
+        }
+    }
+
+    private void EnemyInit() 
+    {
+        EnemyFindTarget enemyFindTarget = gameObject.GetOrAddComponent<EnemyFindTarget>();
+        enemyFindTarget.Init();
+    }
+
+    private void ChangeTeam()
+    {
+        Team = Define.ETeam.Playable;
+        EnemyFindTarget enemyComponent = GetComponent<EnemyFindTarget>();
+        if (enemyComponent != null)
+            Destroy(enemyComponent);
     }
 
     protected virtual void Init() { }
@@ -169,10 +187,12 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
         PawnStat.ApplyDamageMessage(ref message);
         LastCombatTime = Time.time;
 
-        //공격 당했을때 공격의 대상이 적이라면 target를 수정 
+        //공격 당했을때 공격의 대상이 공격 범위내의 적이라면 target를 수정 
         if (message.attacker != null && message.attacker.TryGetComponent(out IDamageable damageable))
         {
-            if (damageable.GetTargetType(Team) == Define.ETargetType.Enemy && !damageable.IsDead())
+            if (damageable.GetTargetType(Team) == Define.ETargetType.Enemy &&
+                !damageable.IsDead() &&
+                PawnSkills.GetCurrentSkill().MaxRange > Vector3.Distance(damageable.GetTransform().position,transform.position))
             {
                 LockTarget = damageable;
             }
@@ -271,8 +291,6 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
         PawnStat.IncreadHPMana();
         AI.SetState(AI.GetIdleState());
     }
-
-
     #endregion
 
     /// <summary>
@@ -282,16 +300,29 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
     {
         OnDeadAction?.Invoke();
         AI.SetState(AI.GetDeadState());
-        UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
+        UIStateBarGroup uiStatebarGroup = Managers.UI.GetUI<UIStateBarGroup>() as UIStateBarGroup;
         uiStatebarGroup.SetActive(this, false);
         _navAgent.enabled = false;
         GetComponent<Collider>().enabled = false;
+        OnDeadEnemy().Forget();
     }
+
+    async UniTaskVoid OnDeadEnemy()
+    {
+        await UniTask.Delay(3000);
+        if (Team == Define.ETeam.Enemy)
+        {
+            Managers.Game.Despawn(this);
+            //Destroy(GetComponent<EnemyFindTarget>());
+            Managers.Resource.Destroy(this.gameObject);
+        }
+    }
+
 
     private void OnLive()
     {
         AI.SetState(AI.GetIdleState());
-        UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
+        UIStateBarGroup uiStatebarGroup = Managers.UI.GetUI<UIStateBarGroup>() as UIStateBarGroup;
         uiStatebarGroup.SetActive(this, true);
         _navAgent.enabled = true;
         GetComponent<Collider>().enabled = true;
@@ -333,7 +364,6 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
     public void OnMoveStop()
     {
         _destPos = gameObject.transform.position;
-        _destPos.z = 0;
         _navAgent.ResetPath();
     }
 
@@ -367,4 +397,5 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
     {
         return PawnStat;
     }
+
 }

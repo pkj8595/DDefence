@@ -15,14 +15,12 @@ public partial class GameManager
     {
         Stroy,
         BattleReady,
-        Battle
+        Battle,
+        Count
     }
 
     public Stack<Data.WaveData> WaveStack { get; set; } = new();
-    public Stack<Data.StoryData> StoryStack { get; set; } = new();
-
-    public Data.StoryData _currentStoryData;
-    public Data.WaveData _currentWaveData;
+    public PriorityQueue<Data.StoryData> StoryStack { get; set; } = new();
 
     private EGamePhase GamePhase { get; set; } = EGamePhase.Stroy;
     public int _waveCount = 0;
@@ -38,13 +36,60 @@ public partial class GameManager
         _pool.Init();
         GamePhase = EGamePhase.Stroy;
         _waveCount = 0;
-        
+
+        //딕셔너리를 처음부터 순회해서 카테고리가 0인 데이터만 넣는다.
+        var storyEnumer = Managers.Data.StoryDict.GetEnumerator();
+        while (storyEnumer.MoveNext())
+        {
+            if (Utils.CalculateCategory(storyEnumer.Current.Value.tableNum) == 0) 
+            {
+                StoryStack.Enqueue(storyEnumer.Current.Value, storyEnumer.Current.Value.priority);
+            }
+            else
+                break;
+        }
+
+        var waveEnumer = Managers.Data.WaveDict.GetEnumerator();
+        while (waveEnumer.MoveNext())
+        {
+            if (Utils.CalculateCategory(waveEnumer.Current.Value.tableNum) == 0)
+            {
+                WaveStack.Push(waveEnumer.Current.Value);
+            }
+        }
+
+        // _pool에서 적이 모두 디스폰 됐다면 EndPahse 실행
+        _pool.SetEndWaveAction(_battlePhase.EndPhase);
+        _pool.SetEndWaveAction(this.RunEndWave);
+    }
+
+    public void RunBattlePhase()
+    {
+        if (WaveStack.TryPop(out Data.WaveData data))
+        {
+            _pool.StartWaveEnemySpawn(data);
+        }
+        else
+        {
+            Debug.Log("WaveStack에 남은 웨이브가 없습니다.");
+            NextPhase();
+        }
+    }
+
+    public void StartGame()
+    {
+        SetPhase(GamePhase);
     }
 
     public void NextPhase()
     {
         GamePhase++;
-
+        if(EGamePhase.Count <= GamePhase)
+        {
+            GamePhase = EGamePhase.Stroy;
+            _waveCount++;
+        }
+        SetPhase(GamePhase);
     }
 
     public void SetPhase(EGamePhase gamePhase)
@@ -67,14 +112,13 @@ public partial class GameManager
     }
 
 
-
-
     #region production
     public HashSet<IProductionable> _productionList = new HashSet<IProductionable>();
 
     public void RegisterProduction(IProductionable productionable)
     {
-        _productionList.Add(productionable);
+        if (!_productionList.Contains(productionable))
+            _productionList.Add(productionable);
     }
 
     public void RemoveProduction(IProductionable productionable)

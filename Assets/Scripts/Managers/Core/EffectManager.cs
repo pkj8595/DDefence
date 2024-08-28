@@ -65,7 +65,7 @@ public class EffectManager : ManagerBase
         {
             if (!_aniEffectList[i].IsRunning())
             {
-                GameObject effectObjects = Managers.Scene.CurrentScene.GetParentObj(Define.EParentObj.Effect);
+                GameObject effectObjects = GameView.Instance.GetParentObj(Define.EParentObj.Effect);
                 if (_aniEffectList[i].transform.parent != effectObjects.transform)
                 {
                     _aniEffectList[i].transform.SetParent(effectObjects.transform);
@@ -82,7 +82,7 @@ public class EffectManager : ManagerBase
     }
     public void RemoveAniEffect(EffectAniController controller)
     {
-        GameObject effectObjects = Managers.Scene.CurrentScene.GetParentObj(Define.EParentObj.Effect);
+        GameObject effectObjects = GameView.Instance.GetParentObj(Define.EParentObj.Effect);
         controller.StopEffect();
         if (controller.transform.parent != effectObjects.transform)
         {

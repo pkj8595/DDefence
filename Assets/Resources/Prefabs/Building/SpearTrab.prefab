@@ -324,51 +324,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &3705089568774329464
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4867875442217381470}
-  - component: {fileID: 2003194438197772015}
-  m_Layer: 0
-  m_Name: Coll_DetectRange
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4867875442217381470
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3705089568774329464}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6162374489451764274}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &2003194438197772015
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3705089568774329464}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 0.13469172, z: 1}
-  m_Center: {x: 0, y: -0.32371223, z: 0}
 --- !u!1 &3705822252001539411
 GameObject:
   m_ObjectHideFlags: 0
@@ -578,6 +533,7 @@ GameObject:
   - component: {fileID: 3026930543155922607}
   - component: {fileID: 2418727387432282400}
   - component: {fileID: 3338440431622969533}
+  - component: {fileID: 3938325271458983010}
   m_Layer: 8
   m_Name: SpearTrab
   m_TagString: Untagged
@@ -598,7 +554,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6157558686726791214}
-  - {fileID: 4867875442217381470}
   - {fileID: 6554819347763557113}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -646,7 +601,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _shotTrans: {fileID: 6554819347763557113}
-  _detectCollider: {fileID: 2003194438197772015}
   _animator: {fileID: 3338440431622969533}
 --- !u!54 &3026930543155922607
 Rigidbody:
@@ -697,6 +651,24 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &3938325271458983010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6162374489451764278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1634b190cd6da2d479449c9953fb0332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxSize: {x: 1, y: -0.2, z: 1}
+  boxCenterOffset: {x: 0, y: -0.15, z: 0}
+  collisionLayers:
+    serializedVersion: 2
+    m_Bits: 512
+  boxOrientation: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &6453118298190773668
 GameObject:
   m_ObjectHideFlags: 0
@@ -845,5 +817,5 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6162374489451764274}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

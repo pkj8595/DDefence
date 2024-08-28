@@ -15,6 +15,10 @@ public class UIStateBarGroup : UIBase
         base.Init(uiData);
         _stateBarPrefab.gameObject.SetActive(false);
     }
+    public override void SetSortingOrder(int sortingOrder)
+    {
+        canvas.sortingOrder = 1;
+    }
 
     private void LateUpdate()
     {

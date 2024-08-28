@@ -7,20 +7,21 @@ public partial class GameManager
 {
     public Inventory Inven { get; private set; } = new Inventory();
 
-    HashSet<IDamageable> _enumyPawnGroup = new HashSet<IDamageable>();
-    HashSet<IDamageable> _pawnGroup = new HashSet<IDamageable>();
-    List<BuildingNode> BuildingGroup { get => BoardManager.Instance._constructedBuildingList; }
+    readonly HashSet<IDamageable> _enumyPawnGroup = new HashSet<IDamageable>();
+    readonly HashSet<IDamageable> _pawnGroup = new HashSet<IDamageable>();
+    List<BuildingNode> BuildingGroup { get => GameView.Instance.ConstructedBuildingList; }
     public Action<int> OnSpawnEvent;
 
     public void Init()
     {
         Inven.Init();
+        InitWave();
     }
 
     public PawnBase SpawnPawn(int tableNum, Define.ETeam team)
     {
         GameObject go = Managers.Resource.Instantiate("Pawn/Pawn",
-                    Managers.Scene.CurrentScene.GetParentObj(Define.EParentObj.Pawn).transform);
+                    GameView.Instance.GetParentObj(Define.EParentObj.Pawn).transform);
 
         PawnBase pawn = go.GetComponent<PawnBase>();
         pawn.Init(tableNum, team);
@@ -33,35 +34,11 @@ public partial class GameManager
         return pawn;
     }
 
-    public IDamageable Spawn(int tableNum, Define.ETeam team, Define.WorldObject worldType)
-    {
-        switch (worldType)
-        {
-            case Define.WorldObject.Unknown:
-                break;
-            case Define.WorldObject.Pawn:
-                return SpawnPawn(tableNum, team);
-            case Define.WorldObject.Building:
-                break;
-            default:
-                break;
-        }
-        return null;
-    }
 
     public void Despawn(IDamageable go)
     {
         switch (go.WorldObjectType)
         {
-            case Define.WorldObject.Unknown:
-                {
-                    if (_enumyPawnGroup.Contains(go))
-                    {
-                        _enumyPawnGroup.Remove(go);
-                        OnSpawnEvent?.Invoke(-1);
-                    }
-                }
-                break;
             case Define.WorldObject.Pawn:
                 {
                     if (go.Team == Define.ETeam.Enemy)

@@ -10,6 +10,10 @@ public abstract class BaseScene : MonoBehaviour
     void Awake()
     {
         Managers.InitManagers();
+    }
+
+    private void Start()
+    {
         Init();
     }
 
@@ -19,10 +23,5 @@ public abstract class BaseScene : MonoBehaviour
     }
 
     public abstract void Clear();
-
-    public virtual GameObject GetParentObj(Define.EParentObj obj)
-    {
-        return null;
-    }
 
 }

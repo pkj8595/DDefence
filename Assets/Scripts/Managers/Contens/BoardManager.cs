@@ -16,7 +16,7 @@ public class BoardManager : MonoSingleton<BoardManager>
     [SerializeField] private List<GameObject> _buildingList;
 
     [SerializeField] private Dictionary<Vector3Int, NodeBase> _dirNodes = new();
-    [field : SerializeField] public List<BuildingNode> _constructedBuildingList { get; } = new();
+    private List<BuildingNode> _constructedBuildingList { get => GameView.Instance.ConstructedBuildingList; }
     [SerializeField] private Vector3 tileSize = new Vector3(1, 1, 1); // 각 셀의 크기
 
     private bool _isEditMode = false;
@@ -401,10 +401,10 @@ public class BoardManager : MonoSingleton<BoardManager>
     /// <param name="worldPosition">world position</param>
     /// <param name="movealbePosition">이동 가능한 world position 반환</param>
     /// <returns>NavMesh.SamplePosition 성공 여부</returns>
-    public bool GetMoveablePosition(Vector3 worldPosition, out Vector3 movealbePosition)
+    public bool GetMoveablePosition(Vector3 worldPosition, out Vector3 movealbePosition, float maxDistance = 1f)
     {
         movealbePosition = Vector3.zero;
-        if (NavMesh.SamplePosition(worldPosition, out NavMeshHit hit, 1f, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(worldPosition, out NavMeshHit hit, maxDistance, NavMesh.AllAreas))
         {
             movealbePosition = hit.position;
             return true;

@@ -264,7 +264,47 @@
   ],
   "WaveTable": [
     {
-      "tableNum": 110001000,
+      "tableNum": 110000000,
+      "name": "테스트 몬스터웨이브 1",
+      "desc": "테스트 몬스터웨이브 1 내용",
+      "difficulty": 0,
+      "arr_characterNum": [
+        101001001,
+        null,
+        null,
+        null,
+        null
+      ],
+      "arr_charAmount": [
+        2,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "tableNum": 110000001,
+      "name": "테스트 몬스터웨이브 2",
+      "desc": "테스트 몬스터웨이브 2 내용",
+      "difficulty": 0,
+      "arr_characterNum": [
+        101001001,
+        null,
+        null,
+        null,
+        null
+      ],
+      "arr_charAmount": [
+        2,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "tableNum": 110100000,
       "name": "겁 많아 보이는 고블린들",
       "desc": "위축되어 보이는게 조심할 필요는 없어보이네요!",
       "difficulty": 1,
@@ -284,7 +324,7 @@
       ]
     },
     {
-      "tableNum": 110001001,
+      "tableNum": 110100001,
       "name": "양아치 고블린들",
       "desc": "가는 길마다 침을 뱉고 다닙니다. 껄렁껄렁한 고블린 무리군요! ",
       "difficulty": 2,
@@ -304,7 +344,7 @@
       ]
     },
     {
-      "tableNum": 110001002,
+      "tableNum": 110100002,
       "name": "고블린 무리",
       "desc": "무기를 들고있는게 경계가 필요한 친구 같습니다.",
       "difficulty": 3,
@@ -324,7 +364,7 @@
       ]
     },
     {
-      "tableNum": 110002000,
+      "tableNum": 110101000,
       "name": "떠돌아다니는 해골들",
       "desc": "어디를 가고 있는 친구들일까요? 어라? 이쪽으로 오는군요!",
       "difficulty": 1,
@@ -344,7 +384,7 @@
       ]
     },
     {
-      "tableNum": 110002001,
+      "tableNum": 110101001,
       "name": "언덕 위에 있는 해골들",
       "desc": "어이쿠! 저 해골 친구들은 발을 잘 못 디뎌서 굴러오고 있습니다. 우스워 보입니다. 그래도 대비를 해야겠네요",
       "difficulty": 2,
@@ -364,7 +404,7 @@
       ]
     },
     {
-      "tableNum": 110002002,
+      "tableNum": 110101002,
       "name": "무기를 들고다니는 해골",
       "desc": "그래도 무기를 들고 있는게 전에 만났던 친구들과는 달라보입니다.",
       "difficulty": 3,
@@ -386,59 +426,55 @@
   ],
   "StoryTable": [
     {
-      "tableNum": 111001000,
+      "tableNum": 111000000,
       "eventType": 0,
       "name": "어린 신",
       "desc": "어린 신과 만났고 적이 다가오고 있습니다.",
-      "priority": 1,
+      "priority": 100,
       "arr_choice": [
-        null,
         111001000,
         111001001,
         null
       ]
     },
     {
-      "tableNum": 111001001,
+      "tableNum": 111000001,
       "eventType": 0,
       "name": "모험가",
       "desc": "모험가는 정착을 결정합니다.",
-      "priority": 1,
+      "priority": 99,
       "arr_choice": [
-        null,
-        null,
-        null,
+        111001003,
+        111001004,
         null
       ]
     },
     {
-      "tableNum": 111001002,
+      "tableNum": 111000002,
       "eventType": 0,
       "name": "위협",
       "desc": "테스트 3",
       "priority": 1,
       "arr_choice": [
-        null,
-        null,
+        111001004,
         null,
         null
       ]
     },
     {
-      "tableNum": 111001003,
+      "tableNum": 111000003,
       "eventType": 0,
       "name": "다가오는 몬스터",
       "desc": "테스트 4",
       "priority": 1,
       "arr_choice": [
-        null,
-        null,
+        111001005,
         null,
         null
       ]
     },
     {
-      "tableNum": 111001004,
+      "tableNum": 111000004,
       "eventType": 0,
       "name": "언덕 위에 있는 해골들",
       "desc": "테스트 5",
@@ -446,18 +482,16 @@
       "arr_choice": [
         null,
         null,
-        null,
         null
       ]
     },
     {
-      "tableNum": 111001005,
+      "tableNum": 111000005,
       "eventType": 0,
       "name": "무기를 들고다니는 해골",
       "desc": "테스트 6",
       "priority": 1,
       "arr_choice": [
-        null,
         null,
         null,
         null
@@ -472,7 +506,6 @@
       "arr_choice": [
         null,
         null,
-        null,
         null
       ]
     },
@@ -483,7 +516,6 @@
       "desc": "랜덤 퀘스트 2",
       "priority": 1,
       "arr_choice": [
-        null,
         null,
         null,
         null
@@ -498,18 +530,28 @@
       "arr_choice": [
         null,
         null,
-        null,
         null
       ]
     },
     {
-      "tableNum": 111900002 ,
+      "tableNum": 111900002,
       "eventType": 2,
       "name": "길에 누워있는 사람",
       "desc": "당신은 오늘도 산뜻한 아침을 시작합니다. 마당을 쓸러 밖으로 나갔는데 누군가 바닥에 쓰러져 있네요",
       "priority": 1,
       "arr_choice": [
         null,
+        null,
+        null
+      ]
+    },
+    {
+      "tableNum": 111999999,
+      "eventType": 2,
+      "name": "끝!",
+      "desc": "즐거운 게임이 되셨나요? \n저는 당신이 이 게임을 이 곳까지 도달했음에 감사함을 느낍니다.\n\n그저 당신이 이 게임을 하면서 즐거우셨다면 좋겠습니다.\n아직 여정을 끝나지 않았을지도 모릅니다!\n\n다른 부족의 영지를 처들어갈 수도 있고\n드래곤을 길들이거나 사악한 리치가 될 수도 있겠죠! \n\n아직 여정은 무한합니다.\n비록 그게 지금은 아닐지라도 \n\n즐거운 게임이 되셨기를 바라며 이만 줄이겠습니다.\n플레이 해주셔서 감사합니다.",
+      "priority": 0,
+      "arr_choice": [
         null,
         null,
         null
@@ -521,26 +563,22 @@
       "tableNum": 111001000,
       "name": "맞서 싸운다.",
       "desc": "초이스 테스트1 내용",
-      "nextStoryTable": 111001002,
-      "pushWave": 110001000,
+      "nextStoryTable": 111000001,
+      "pushWave": 110000000,
       "arr_getItem": [
-        null,
         null,
         null
       ],
       "arr_getItemAmount": [
-        null,
         null,
         null
       ],
       "arr_requiredGoods": [
         null,
         null,
-        null,
         null
       ],
       "arr_requiredAmount": [
-        null,
         null,
         null,
         null
@@ -550,55 +588,47 @@
       "tableNum": 111001001,
       "name": "맞서 싸운다.test",
       "desc": "초이스 테스트2 내용",
-      "nextStoryTable": 111001002,
-      "pushWave": 110001000,
+      "nextStoryTable": 111000001,
+      "pushWave": 110100000,
       "arr_getItem": [
-        null,
         null,
         null
       ],
       "arr_getItemAmount": [
         null,
-        null,
         null
       ],
       "arr_requiredGoods": [
-        null,
         301001001,
         null,
         null
       ],
-      "arr_resourceAmount": [
-        null,
-        null,
+      "arr_requiredAmount": [
         10,
+        null,
         null
       ]
     },
     {
       "tableNum": 111001002,
       "name": "간호한다.",
-      "desc": "정신을 차린 그는 감사의 표시로 당신과 함께 하겠다고 합니다. ",
-      "nextStoryTable": "",
-      "pushWave": "",
+      "desc": "정신을 차린 그는 감사의 표시로 약간의 답례를 합니다.",
+      "nextStoryTable": 111000002,
+      "pushWave": 110100000,
       "arr_getItem": [
-        null,
         302001001,
         301001001
       ],
       "arr_getItemAmount": [
-        null,
         1,
         10
       ],
       "arr_requiredGoods": [
         null,
         null,
-        null,
         null
       ],
-      "arr_resourceAmount": [
-        null,
+      "arr_requiredAmount": [
         null,
         null,
         null
@@ -608,26 +638,22 @@
       "tableNum": 111001003,
       "name": "초이스 테스트4",
       "desc": "초이스 테스트4 내용",
-      "nextStoryTable": "",
-      "pushWave": "",
+      "nextStoryTable": 111000003,
+      "pushWave": 110100001,
       "arr_getItem": [
-        null,
         null,
         null
       ],
       "arr_getItemAmount": [
-        null,
         null,
         null
       ],
       "arr_requiredGoods": [
         null,
         null,
-        null,
         null
       ],
-      "arr_resourceAmount": [
-        null,
+      "arr_requiredAmount": [
         null,
         null,
         null
@@ -638,25 +664,21 @@
       "name": "초이스 테스트5",
       "desc": "초이스 테스트5 내용",
       "nextStoryTable": "",
-      "pushWave": "",
+      "pushWave": 110100002,
       "arr_getItem": [
-        null,
         null,
         null
       ],
       "arr_getItemAmount": [
-        null,
         null,
         null
       ],
       "arr_requiredGoods": [
         null,
         null,
-        null,
         null
       ],
-      "arr_resourceAmount": [
-        null,
+      "arr_requiredAmount": [
         null,
         null,
         null
@@ -670,22 +692,18 @@
       "pushWave": "",
       "arr_getItem": [
         null,
-        null,
         null
       ],
       "arr_getItemAmount": [
-        null,
         null,
         null
       ],
       "arr_requiredGoods": [
         null,
         null,
-        null,
         null
       ],
-      "arr_resourceAmount": [
-        null,
+      "arr_requiredAmount": [
         null,
         null,
         null
@@ -759,8 +777,8 @@
       "baseSkill": 400500001,
       "productionTable": "",
       "upgradeNum": "",
-      "upgrade_goods": 301001001,
-      "upgrade_goods_amount": 100
+      "upgrade_goods": "",
+      "upgrade_goods_amount": ""
     },
     {
       "tableNum": 202102000,
@@ -793,11 +811,11 @@
       "baseSkill": 400500001,
       "productionTable": "",
       "upgradeNum": "",
-      "upgrade_goods": 301001001,
-      "upgrade_goods_amount": 100
+      "upgrade_goods": "",
+      "upgrade_goods_amount": ""
     },
     {
-      "tableNum": 202000000,
+      "tableNum": 202200000,
       "name": "논",
       "desc": "매 턴 식량을 생산한다. ",
       "isDamageable": 1,
@@ -831,18 +849,35 @@
       "upgrade_goods_amount": ""
     },
     {
-      "tableNum": "",
+      "tableNum": 202201000,
       "name": "풍차",
-      "desc": "#무얼 생산해야하나",
-      "isDamageable": "",
-      "prefab": "",
-      "maxHp": "",
-      "maxMana": "",
-      "damageValue": "",
-      "protection": "",
-      "manaRegeneration": "",
+      "desc": "매 턴 식량을 생산한다. ",
+      "isDamageable": 1,
+      "prefab": "Production_wind",
+      "maxHp": 100,
+      "maxMana": 0,
+      "damageValue": 0,
+      "protection": 0,
+      "manaRegeneration": 0,
       "baseSkill": "",
-      "productionTable": "",
+      "productionTable": 402001002,
+      "upgradeNum": "",
+      "upgrade_goods": "",
+      "upgrade_goods_amount": ""
+    },
+    {
+      "tableNum": 202999000,
+      "name": "????",
+      "desc": "폐허 같은데 주변에서 빛이 난다. ",
+      "isDamageable": 1,
+      "prefab": "GodTower",
+      "maxHp": 200,
+      "maxMana": 100,
+      "damageValue": 30,
+      "protection": 10,
+      "manaRegeneration": 10,
+      "baseSkill": 400999000,
+      "productionTable": 500001001,
       "upgradeNum": "",
       "upgrade_goods": "",
       "upgrade_goods_amount": ""
@@ -1003,29 +1038,6 @@
       ]
     },
     {
-      "tableNum": 400500001,
-      "name": "화살쏘기",
-      "desc": "기계에서 화살을 쏜다.",
-      "icon": "testIcon",
-      "skillType": 0,
-      "targetType": 1,
-      "manaAmount": 5,
-      "minRange": 2,
-      "maxRange": 10,
-      "splashRange": 0,
-      "coolTime": 2,
-      "effectStr": "",
-      "aniTriger": 1,
-      "motionAni": "",
-      "motionDuration": 0,
-      "projectile": "ArrowPenetrationProjectile",
-      "arr_affect": [
-        401001100,
-        null,
-        null
-      ]
-    },
-    {
       "tableNum": 400003001,
       "name": "마법: 미사일!",
       "desc": "위대한 마법의 힘으로!",
@@ -1067,6 +1079,75 @@
       "projectile": "",
       "arr_affect": [
         401005000,
+        null,
+        null
+      ]
+    },
+    {
+      "tableNum": 400500001,
+      "name": "화살쏘기",
+      "desc": "벽에서 화살이 나온다. ",
+      "icon": "testIcon",
+      "skillType": 0,
+      "targetType": 1,
+      "manaAmount": 5,
+      "minRange": 2,
+      "maxRange": 10,
+      "splashRange": 0,
+      "coolTime": 2,
+      "effectStr": "",
+      "aniTriger": "",
+      "motionAni": "",
+      "motionDuration": "",
+      "projectile": "ArrowPenetrationProjectile",
+      "arr_affect": [
+        401001100,
+        null,
+        null
+      ]
+    },
+    {
+      "tableNum": 400500002,
+      "name": "창",
+      "desc": "바닥을 조심해야 된다.",
+      "icon": "testIcon",
+      "skillType": 0,
+      "targetType": 1,
+      "manaAmount": 5,
+      "minRange": 2,
+      "maxRange": 10,
+      "splashRange": 0,
+      "coolTime": 2,
+      "effectStr": "",
+      "aniTriger": "",
+      "motionAni": "",
+      "motionDuration": "",
+      "projectile": "",
+      "arr_affect": [
+        401001100,
+        null,
+        null
+      ]
+    },
+    {
+      "tableNum": 400999000,
+      "name": "아픈 빛",
+      "desc": "물리력을 가지고 있는거 같다.",
+      "icon": "testIcon",
+      "skillType": 0,
+      "targetType": 1,
+      "manaAmount": 5,
+      "minRange": 2,
+      "maxRange": 10,
+      "splashRange": 2,
+      "coolTime": 2,
+      "effectStr": "",
+      "aniTriger": "",
+      "motionAni": "",
+      "motionDuration": "",
+      "projectile": "ArrowProjectile",
+      "arr_affect": [
+        401001100,
         null,
         null
       ]

@@ -15,7 +15,18 @@ public class CubeEventTest : MonoBehaviour
 
     public void Test()
     {
-        Managers.UI.ShowToastMessage("테스트 메세지");
+        Destroy(this);
+
     }
-    
+
+    private void OnDisable()
+    {
+        Debug.Log("disable");
+    }
+
+    private void OnDestroy()
+    {
+        Debug.Log("destroy");
+    }
+
 }

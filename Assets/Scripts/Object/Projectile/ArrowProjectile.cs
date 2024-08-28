@@ -31,7 +31,7 @@ public class ArrowProjectile : ProjectileBase
         }
         Vector3 startPosition = _startTrans.position;
         Vector3 targetPosition = _target.position + _offsetTarget + (velocity);
-        float height = targetPosition.y - startPosition.y + addHeight;
+        float height =  (targetPosition.y > startPosition.y ? targetPosition.y : startPosition.y) + addHeight;
 
         // Path를 위한 waypoints 설정
         Vector3[] path = new Vector3[4];

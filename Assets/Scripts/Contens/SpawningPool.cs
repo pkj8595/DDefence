@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 using Cysharp.Threading.Tasks;
+using System;
 
 public class SpawningPool 
 {
@@ -10,6 +10,7 @@ public class SpawningPool
 
     [SerializeField] List<GameObject> _gateList;
     [SerializeField] readonly Queue<int> _enemyQueue = new Queue<int>();
+    Action _endWaveAction;
 
     public void Init()
     {
@@ -18,7 +19,10 @@ public class SpawningPool
         _gateList = GameView.Instance.GateList;
     }
 
-    public void AddMonsterCount(int value) { _monsterCount += value; }
+    public void AddMonsterCount(int value) 
+    {
+        _monsterCount += value; 
+    }
 
     public void StartWaveEnemySpawn(Data.WaveData data)
     {
@@ -45,15 +49,15 @@ public class SpawningPool
         {
             _monsterCount++;
             PawnBase obj = Managers.Game.SpawnPawn(_enemyQueue.Dequeue(), Define.ETeam.Enemy);
-            int gateIndex = Utils.Round(Random.Range(0, _gateList.Count - 1));
+            int gateIndex = Utils.Round(UnityEngine.Random.Range(0, _gateList.Count - 1));
             obj.transform.position = _gateList[gateIndex].transform.position;
 
-            await UniTask.Delay(500);
+            await UniTask.Delay(1000);
         }
 
         while (_monsterCount > 0)
         {
-            await UniTask.Delay(500);
+            await UniTask.Delay(1000);
         }
 
         EndWave();
@@ -61,9 +65,13 @@ public class SpawningPool
 
     public void EndWave()
     {
-        Managers.Game.RunEndWave();
+        _endWaveAction?.Invoke();
     }
 
-
+    public void SetEndWaveAction(Action action)
+    {
+        _endWaveAction -= action;
+        _endWaveAction += action;
+    }
 
 }

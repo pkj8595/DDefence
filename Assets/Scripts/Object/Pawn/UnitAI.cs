@@ -6,12 +6,12 @@ using UnityEngine;
 
 public class UnitAI
 {
-    private IUnitState _currentState;
-    private IdleState _idleState;
-    private MoveState _moveState;
-    private DeadState _deadState;
-    private SkillState _skillState;
-    private ReturnToBaseState _returnState;
+    private IUnitState                  _currentState;
+    private readonly IdleState          _idleState = new IdleState();
+    private readonly MoveState          _moveState = new MoveState();
+    private readonly DeadState          _deadState = new DeadState();
+    private readonly SkillState         _skillState = new SkillState();
+    private readonly ReturnToBaseState  _returnState = new ReturnToBaseState();
 
     public PawnBase Pawn { get; private set; }
     public bool HasTarget => Pawn.HasTarget;
@@ -22,11 +22,12 @@ public class UnitAI
     public void Init(PawnBase pawn)
     {
         Pawn = pawn;
-        _idleState = new IdleState(this);
-        _moveState = new MoveState(this);
-        _deadState = new DeadState(this);
-        _skillState = new SkillState(this);
-        _returnState = new ReturnToBaseState(this);
+
+        _idleState.Init(this);
+        _moveState.Init(this);
+        _deadState.Init(this);
+        _skillState.Init(this);
+        _returnState.Init(this);
 
         SetState(_idleState);
     }

@@ -4,27 +4,23 @@ using UnityEngine;
 
 public class StoryPhase : IPhase
 {
-    Data.StoryData _storyData;
-
-    public void SetStoryData(Data.StoryData data)
+    public void EnterPhase()
     {
-        if (Managers.Game.StoryStack.TryPop(out Data.StoryData storyData))
+        Data.StoryData storyData;
+        if (!Managers.Game.StoryStack.IsEmpty())
         {
-            _storyData = storyData;
+            storyData = Managers.Game.StoryStack.Dequeue();
         }
         else
         {
-            _storyData = Managers.Data.StoryDict[111999999];
+            storyData = Managers.Data.StoryDict[111999999];
         }
-    }
 
-    public void EnterPhase()
-    {
-        UIStoryData storyData = new UIStoryData
+        UIStoryData uiStoryData = new UIStoryData
         {
-            StoryDataNum = _storyData.tableNum
+            StoryDataNum = storyData.tableNum
         };
-        Managers.UI.ShowUI<UIStoryBook>(storyData);
+        Managers.UI.ShowUI<UIStoryBook>(uiStoryData);
     }
 
     public void EndPhase()
@@ -36,11 +32,10 @@ public class StoryPhase : IPhase
 
 public class BattleReadyPhase : IPhase
 {
-
-
     public void EnterPhase()
     {
-
+        UIMain uiMain = Managers.UI.ShowUI<UIMain>() as UIMain;
+        uiMain.ShowBtnNextPhase();
     }
 
     public void EndPhase()
@@ -52,16 +47,16 @@ public class BattleReadyPhase : IPhase
 
 public class BattlePhase : IPhase
 {
-    Data.StoryData _storyData;
-
     public void EnterPhase()
     {
-
+        Managers.Game.RunBattlePhase();
     }
 
+    
     public void EndPhase()
     {
-
+        UIMain uiMain = Managers.UI.ShowUI<UIMain>() as UIMain;
+        uiMain.ShowBtnNextPhase();
     }
 
 }

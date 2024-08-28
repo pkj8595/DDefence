@@ -1,3 +1,4 @@
+using Data;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,10 +6,17 @@ using UnityEngine;
 public class ItemBase
 {
     Data.TableBase tableBase;
+
+    public int GetTableNum => tableBase.tableNum;
     public virtual string Name { get; }
     public virtual string Desc { get; }
     public virtual string ImgStr { get; }
     public int Amount { get; set; }
+    protected virtual void Init(Data.TableBase tableBase)
+    {
+
+    }
+
     public ItemBase(int tableNum)
     {
         switch (Utils.CalculateTableNum(tableNum))
@@ -32,38 +40,41 @@ public class ItemBase
                 Debug.LogError($"{tableNum} 식별되지 않은 케이스");
                 break;
         }
+        Init(tableBase);
     }
-    
 }
 
 public class Rune : ItemBase
 {
     private Data.RuneData _runeData;
 
-    public Rune(int tableNum) : base(tableNum)
-    {
-    }
-
     public override string Name => _runeData.name;
     public override string Desc => _runeData.desc; 
     public override string ImgStr => _runeData.imageStr;
 
-    public void Init(Data.RuneData runeData)
+    protected override void Init(Data.TableBase tableBase)
     {
-        _runeData = runeData;
+        base.Init(tableBase);
+        _runeData = tableBase as Data.RuneData;
     }
+    public Rune(int tableNum) : base(tableNum) { }
 
 }
 
 
 public class Goods : ItemBase
 {
-    public Goods(int tableNum) : base(tableNum)
+
+    private Data.GoodsData _goodsData;
+    public override string Name => _goodsData.name;
+    public override string Desc => _goodsData.desc;
+    public override string ImgStr => _goodsData.imageStr;
+
+    protected override void Init(TableBase tableBase)
     {
+        base.Init(tableBase);
+        _goodsData = tableBase as GoodsData;
     }
-    public override string Name => throw new System.NotImplementedException();
+    public Goods(int tableNum) : base(tableNum) { }
 
-    public override string Desc => throw new System.NotImplementedException();
-
-    public override string ImgStr => throw new System.NotImplementedException();
 }

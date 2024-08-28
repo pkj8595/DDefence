@@ -59,7 +59,7 @@ public static class Utils
 
     public static int CalculateCategory(int tableNum)
     {
-        return CalculateTableNum(tableNum) / 1000;
+        return (tableNum / 1000) % 1000;
     }
 
     public static int CalculateTableBaseNumber(int tableNum)

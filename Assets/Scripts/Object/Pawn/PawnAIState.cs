@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public interface IUnitState
 {
+    void Init(UnitAI unitAI);
     void EnterState();
     void UpdateState();
     void AdjustUpdate();
@@ -21,7 +22,7 @@ public class IdleState : IUnitState
     {
         return "IdleState";
     }
-    public IdleState(UnitAI unitAI)
+    public void Init(UnitAI unitAI)
     {
         _unitAI = unitAI;
         _pawn = unitAI.Pawn;
@@ -64,9 +65,9 @@ public class MoveState : IUnitState
     private UnitAI _unitAI;
     PawnBase _pawn;
     public string GetNames() => "MoveState";
-    
 
-    public MoveState(UnitAI unitAI)
+
+    public void Init(UnitAI unitAI)
     {
         _unitAI = unitAI;
         _pawn = unitAI.Pawn;
@@ -86,14 +87,12 @@ public class MoveState : IUnitState
         //타겟이 있다면 범위 체크 밖에 나갔다면 
         if (_pawn.HasTarget)
         {
-
             if (!_unitAI.CheckOutRangeTarget())
                 _pawn.TrackingAndAttackTarget();
         }
-        
         else
         {
-            _unitAI.SetState(_unitAI.GetIdleState());
+         //   _unitAI.SetState(_unitAI.GetIdleState());
         }
     }
 
@@ -115,7 +114,7 @@ public class DeadState : IUnitState
     private UnitAI _unitAI;
     public string GetNames() => "DeadState";
 
-    public DeadState(UnitAI unitAI)
+    public void Init(UnitAI unitAI)
     {
         _unitAI = unitAI;
     }
@@ -147,7 +146,7 @@ public class ReturnToBaseState : IUnitState
     PawnBase _pawn;
     public string GetNames() => GetType().Name;
 
-    public ReturnToBaseState(UnitAI unitAI)
+    public void Init(UnitAI unitAI)
     {
         _unitAI = unitAI;
         _pawn = unitAI.Pawn;
@@ -183,7 +182,7 @@ public class ChaseState : IUnitState
     PawnBase _pawn;
     public string GetNames() => "ChaseState";
 
-    public ChaseState(UnitAI unitAI)
+    public void Init(UnitAI unitAI)
     {
         _unitAI = unitAI;
         _pawn = unitAI.Pawn;
@@ -212,7 +211,7 @@ public class SkillState : IUnitState
     PawnBase _pawn;
     public string GetNames() => "SkillState";
 
-    public SkillState(UnitAI unitAI)
+    public void Init(UnitAI unitAI)
     {
         _unitAI = unitAI;
         _pawn = unitAI.Pawn;

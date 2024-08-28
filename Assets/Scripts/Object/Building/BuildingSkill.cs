@@ -1,21 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 public class BuildingSkill : MonoBehaviour, IAttackable
 {
     public Transform _shotTrans;
-    public Collider _detectCollider;
     public Animator _animator;
-
-    BuildingBase _buildingBase;
-    protected UnitSkill _skills = new UnitSkill();
-
     public IDamageable LockTarget;
-    public HashSet<IDamageable> _pawnListInRange = new ();
+    public IDetectComponent DetectComponent;
+
+    protected UnitSkill _skills = new UnitSkill();
+    private BuildingBase _buildingBase;
+    private bool isInit = false;
 
     public float SearchRange => _skills.GetCurrentSkill().MaxRange;
-
     public Define.ETeam Team => _buildingBase.Team;
 
     public void Init(BuildingBase buildingBase)
@@ -23,24 +22,35 @@ public class BuildingSkill : MonoBehaviour, IAttackable
         _buildingBase = buildingBase;
         _skills.Init(_buildingBase.Stat.Mana);
         _skills.SetBaseSkill(new Skill( buildingBase.BuildingData.baseSkill));
-        _detectCollider.isTrigger = true;
+        DetectComponent = GetComponent<IDetectComponent>();
+        isInit = true;
+        StartSkillTask().Forget();
     }
 
-    public void Update()
+    async UniTaskVoid StartSkillTask()
     {
-        if (0 < _pawnListInRange.Count)
+        while (true)
         {
             Skill skill = _skills.GetCurrentSkill();
-            if (!skill.IsReady(_buildingBase.Stat.Mana))
-                return;
-
-            foreach (IDamageable target in _pawnListInRange)
+            if (isInit && skill.IsReady(_buildingBase.Stat.Mana))
             {
-                if (SearchTargetToRay(target, skill))
+                Collider[] colliders = DetectComponent.DetectCollision();
+                for (int i = 0; i < colliders.Length; i++)
                 {
-                    StartSkill();
+                    if (colliders[i] == null)
+                        continue;
+
+                    if (colliders[i].TryGetComponent(out IDamageable damageable))
+                    {
+                        if (SearchTargetToRay(damageable, skill))
+                        {
+                            StartSkill();
+                        }
+                    }
                 }
             }
+
+            await UniTask.Delay(200, cancellationToken: gameObject.GetCancellationTokenOnDestroy());
         }
     }
 
@@ -61,8 +71,8 @@ public class BuildingSkill : MonoBehaviour, IAttackable
                                                       skill);
 
                 ProjectileBase projectileBase = skill.MakeProjectile();
-                projectileBase.Init(_shotTrans.transform, 
-                                    null,
+                projectileBase.Init(_shotTrans.transform,
+                                    LockTarget.GetTransform(),
                                     _skills.GetRunnigSkill().SplashRange,
                                     msg);
                 EndSkill();
@@ -87,36 +97,13 @@ public class BuildingSkill : MonoBehaviour, IAttackable
         }
     }
 
+    /// <summary>
+    /// animation callback
+    /// </summary>
     public void EndSkill()
     {
         _buildingBase.Stat.IncreadMana();
         _skills.ClearCurrentSkill();
-    }
-
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (!IsPawn(other))
-            return;
-
-        _pawnListInRange.Add(other.attachedRigidbody.GetComponent<IDamageable>());
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (!IsPawn(other))
-            return;
-
-        _pawnListInRange.Remove(other.attachedRigidbody.GetComponent<IDamageable>());
-    }
-
-    private bool IsPawn(Collider other)
-    {
-        int layer = (int)Define.Layer.Pawn;
-        if (1 << other.gameObject.layer != layer)
-            return false;
-
-        return true;
     }
 
     /// <summary>
