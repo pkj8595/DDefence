@@ -25,6 +25,16 @@ public class Inventory
         _itemDic.Add(itemNum, amount);
     }
 
+    public int GetItem(int itemNum)
+    {
+        if (!_itemDic.ContainsKey(itemNum))
+        {
+            _itemDic.Add(itemNum, 0);
+        }
+
+        return _itemDic[itemNum];
+    }
+
     /// <summary>
     /// 아이템이 있는지 체크
     /// </summary>
@@ -58,5 +68,16 @@ public class Inventory
         }
         return false;
     }
+
+    public void SpendWaveCost(Define.EGoodsType goodsType,int itemAmount)
+    {
+        if (!_itemDic.ContainsKey((int)goodsType))
+        {
+            _itemDic.Add((int)goodsType, 0);
+        }
+        _itemDic[(int)goodsType] -= itemAmount;
+    }
+
+
 
 }

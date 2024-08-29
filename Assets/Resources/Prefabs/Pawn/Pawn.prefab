@@ -244,7 +244,7 @@ MonoBehaviour:
   _pawnBuilder: {fileID: 6623756326569235258}
   _attackType: 0
   _animator: {fileID: 6623756326569235261}
-  _moveDust: {fileID: 0}
+  spriteLibrary: {fileID: 6623756325375741245}
   Body: {fileID: 6623756325375741244}
 --- !u!114 &7794426029325188078
 MonoBehaviour:
@@ -273,6 +273,7 @@ GameObject:
   - component: {fileID: 1792929913}
   - component: {fileID: 892333171}
   - component: {fileID: 8088009069966384495}
+  - component: {fileID: 8136349819252071458}
   m_Layer: 9
   m_Name: Pawn
   m_TagString: Pawn
@@ -311,11 +312,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Team>k__BackingField: 0
   _state: 0
-  _destPos: {x: 0, y: 0, z: 0}
+  <_destPos>k__BackingField: {x: 0, y: 0, z: 0}
   _projectileTrans: {fileID: 4429359987017351780}
   _navAgent: {fileID: 1792929913}
   <AniController>k__BackingField: {fileID: 141670392}
-  _runeList: []
+  <RuneList>k__BackingField: []
   _isSelected: 0
   <AIStateStr>k__BackingField: 
   _testCharacterNum: 101001001
@@ -411,3 +412,16 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &8136349819252071458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6834267158829301281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef1715c919fc3c948add21311ff00a9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isUsing: 0

@@ -36,6 +36,8 @@ public class BattleReadyPhase : IPhase
     {
         UIMain uiMain = Managers.UI.ShowUI<UIMain>() as UIMain;
         uiMain.ShowBtnNextPhase();
+
+        Managers.Game.RunReadyWave();
     }
 
     public void EndPhase()

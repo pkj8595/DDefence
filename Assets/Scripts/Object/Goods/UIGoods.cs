@@ -7,26 +7,24 @@ using DG.Tweening;
 public class UIGoods : MonoBehaviour
 {
     public Image _imgGoods;
-    
+    public Define.EGoodsType goodsType;
+    public Text _txtAmount;
+
+    private void Start()
+    {
+        Init((int)goodsType);
+    }
+
     public void Init(int goodsNum)
     {
         var goods = Managers.Data.GoodsDict[goodsNum];
         _imgGoods.sprite = Managers.Resource.Load<Sprite>($"Sprites/UI/Icon/{goods.imageStr}");
+        _txtAmount.text = Managers.Game.Inven.GetItem(goodsNum).ToString();
     }
 
-    public void Init(ItemBase itemBase)
+    public void UpdateAmount()
     {
-
+        _txtAmount.text = Managers.Game.Inven.GetItem(goodsType.ToInt()).ToString();
     }
-
-    public void Explosion(Vector2 from, Vector2 to, float circleRange)
-    {
-        transform.position = from;
-        Sequence sequence = DOTween.Sequence();
-        sequence.Append(transform.DOMove(from + Random.insideUnitCircle * circleRange, 0.25f)).SetEase(Ease.OutCubic);
-        sequence.Append(transform.DOMove(to, 0.5f).SetEase(Ease.InCubic));
-        sequence.AppendCallback(() => { gameObject.SetActive(false); });
-    }
-
 
 }

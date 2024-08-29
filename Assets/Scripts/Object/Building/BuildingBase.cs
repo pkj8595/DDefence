@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildingBase : Unit, ISelectedable
+public class BuildingBase : Unit, ISelectedable, IWaveEvent
 {
     [SerializeField] public GameObject _model;
     [field: SerializeField] public Define.ETeam Team { get; set; } = Define.ETeam.Playable;
@@ -58,15 +58,22 @@ public class BuildingBase : Unit, ISelectedable
         
     }
 
-    public void OnClickUpgradeBuilding()
+    public override bool UpgradeUnit()
     {
+        if (BuildingData.upgradeNum == 0 || Team == Define.ETeam.Enemy)
+        {
+            Managers.UI.ShowToastMessage("적은 업그레이드 할 수 없습니다.");
+            return false;
+        }
+
         if (Managers.Game.Inven.SpendItem(BuildingData.upgrade_goods, BuildingData.upgrade_goods_amount))
         {
             Init(BuildingData.upgradeNum);
-            return;
+            return true;
         }
 
         Managers.UI.ShowToastMessage("업그레이드 비용이 부족합니다.");
+        return false;
     }
 
    
@@ -110,6 +117,16 @@ public class BuildingBase : Unit, ISelectedable
     public bool IsSelected()
     {
         return false;
+    }
+
+    public void EndWave()
+    {
+        Managers.Game.Inven.SpendWaveCost(Define.EGoodsType.gold, BuildingData.waveCost);
+    }
+
+    public void ReadyWave()
+    {
+        
     }
     #endregion
 

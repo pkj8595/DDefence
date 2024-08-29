@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Cysharp.Threading.Tasks;
 
-public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable
+public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, IWaveEvent
 {
     public Data.CharacterData CharacterData { get; private set; }
 
@@ -67,7 +67,14 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable
         AI?.OnUpdate();
     }
 
-   
+    private void OnDisable()
+    {
+        if (Team == Define.ETeam.Playable)
+        {
+            Managers.Game.RemoveWaveObject(this);
+        }
+    }
+
     public virtual void Init(int characterNum)
     {
         //component setting
@@ -95,11 +102,22 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable
         GetComponent<Collider>().enabled = true;
         PawnSkills.Init(PawnStat.Mana);
         PawnSkills.SetBaseSkill(new Skill(CharacterData.basicSkill));
-        
+
+        for (int i = 0; i < CharacterData.arr_rune.Length; i++)
+        {
+            if (CharacterData.arr_rune[i] == 0)
+                continue;
+            SetRuneData(Managers.Data.RuneDict[CharacterData.arr_rune[i]], i);
+        }
 
         //stateBar setting
         UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
         uiStatebarGroup.AddUnit(this);
+
+        if (Team == Define.ETeam.Playable)
+        {
+            Managers.Game.RegisterWaveObject(this);
+        }
 
         Init();
     }
@@ -111,6 +129,15 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable
         if (team == Define.ETeam.Enemy)
         {
             EnemyInit();
+        }
+        else
+        {
+            EnemyFindTarget enemyFindTarget = gameObject.GetComponent<EnemyFindTarget>();
+            if(enemyFindTarget != null)
+            if(enemyFindTarget != null)
+            {
+                enemyFindTarget.enabled = false;
+            }
         }
     }
 
@@ -251,6 +278,26 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable
             AniController.SetAniTrigger(skill.AniTriger);
     }
 
+    public void SetRuneData(Data.RuneData data, int index)
+    {
+        if (RuneList.Count == 0)
+        {
+            for (int i = 0; i < Define.Pawn_Rune_Limit_Count; i++)
+            {
+                RuneList.Add(null);
+            }
+        }
+
+        if (index < Define.Pawn_Rune_Limit_Count && index < RuneList.Count)
+        {
+            RuneList[index] = data;
+        }
+        else
+        {
+            Debug.LogError($"인덱스의 범위가 넘어갔습니다. : {index}");
+        }
+    }
+
 
     /// <summary>
     /// 타격타이밍에 실행 -> animation에서 OnHitEvent 호출시 
@@ -337,8 +384,6 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable
         }
     }
 
-   
-
     public void SetDestination(Vector3 position)
     {
         if (_destPos == position)
@@ -365,6 +410,29 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable
     {
         _destPos = gameObject.transform.position;
         _navAgent.ResetPath();
+    }
+
+    public override bool UpgradeUnit()
+    {
+        if (CharacterData.upgradeChar == 0 || Team == Define.ETeam.Enemy)
+        {
+            Managers.UI.ShowToastMessage("적은 업그레이드 할 수 없습니다.");
+            return false;
+        }
+
+        if (Managers.Game.Inven.SpendItem(CharacterData.upgradeRequire, CharacterData.upgradeRequireAmount))
+        {
+            Init(CharacterData.upgradeChar);
+            return true;
+        }
+
+        Managers.UI.ShowToastMessage("업그레이드 비용이 부족합니다.");
+        return false;
+    }
+
+    public Sprite GetIdleSprite()
+    {
+        return AniController.GetIdleSprite();
     }
 
     public virtual void OnSelect()
@@ -400,4 +468,14 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable
         return PawnStat;
     }
 
+    public void EndWave()
+    {
+        PawnStat.EndWaveEvent();
+        Managers.Game.Inven.SpendWaveCost(Define.EGoodsType.food, CharacterData.waveCost);
+    }
+
+    public void ReadyWave()
+    {
+        OnLive();
+    }
 }

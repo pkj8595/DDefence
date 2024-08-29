@@ -3,14 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using PixelHero = Assets.PixelFantasy.PixelHeroes.Common.Scripts.CharacterScripts;
 using System;
+using UnityEngine.U2D.Animation;
 
 public class PawnAnimationController : MonoBehaviour
 {
     public PixelHero.CharacterBuilder _pawnBuilder;
     public Define.EDamageType _attackType = Define.EDamageType.Melee;
-    private PawnBase _pawnBase;
     public Animator _animator;
 
+    private Define.EPawnAniState _state = Define.EPawnAniState.Idle;
+    private PawnBase _pawnBase;
+    [SerializeField] private UnityEngine.U2D.Animation.SpriteLibrary spriteLibrary;
+
+    public SpriteRenderer Body;
+    private static Material DefaultMaterial;
+    private static Material BlinkMaterial;
     //todo : particleManager 만들기
     //[SerializeField] private ParticleSystem _moveDust;
 
@@ -48,7 +55,6 @@ public class PawnAnimationController : MonoBehaviour
         Init(Managers.Data.CharacterDict[characterDataNum]);
     }
 
-    Define.EPawnAniState _state = Define.EPawnAniState.Idle;
     public void SetAniState(Define.EPawnAniState state)
     {
         if (_state != state)
@@ -72,9 +78,11 @@ public class PawnAnimationController : MonoBehaviour
         _pawnBase.EndAniAttack();
     }
 
-    public SpriteRenderer Body;
-    private static Material DefaultMaterial;
-    private static Material BlinkMaterial;
+    public Sprite GetIdleSprite()
+    {
+        return spriteLibrary.GetSprite("Idle", "0");
+    }
+
 
     public void Blink()
     {

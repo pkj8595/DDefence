@@ -10,6 +10,7 @@
       "upgradeRequireAmount": 0,
       "ignoreAttributeType": 0,
       "basicSkill": 400001001,
+      "waveCost": 10,
       "Head": "HumanShadow#FFFFFF/0:0:0",
       "Ears": "",
       "Eyes": "Human#FFFFFF/0:0:0",
@@ -40,6 +41,7 @@
       "upgradeRequireAmount": 0,
       "ignoreAttributeType": 0,
       "basicSkill": 400002001,
+      "waveCost": 10,
       "Head": "Skeleton#C7CFDD/0:0:0",
       "Ears": "Skeleton#C7CFDD/0:0:0",
       "Eyes": "Skeleton#FFFFFF/0:0:0",
@@ -757,7 +759,8 @@
       "productionTable": "",
       "upgradeNum": 202101001,
       "upgrade_goods": 301001001,
-      "upgrade_goods_amount": 100
+      "upgrade_goods_amount": 100,
+      "waveCost": 20
     },
     {
       "tableNum": 202101001,
@@ -774,7 +777,8 @@
       "productionTable": "",
       "upgradeNum": 202101002,
       "upgrade_goods": 301001001,
-      "upgrade_goods_amount": 100
+      "upgrade_goods_amount": 100,
+      "waveCost": 30
     },
     {
       "tableNum": 202101002,
@@ -791,7 +795,8 @@
       "productionTable": "",
       "upgradeNum": "",
       "upgrade_goods": "",
-      "upgrade_goods_amount": ""
+      "upgrade_goods_amount": "",
+      "waveCost": 40
     },
     {
       "tableNum": 202102000,
@@ -808,7 +813,8 @@
       "productionTable": "",
       "upgradeNum": 202101002,
       "upgrade_goods": 301001001,
-      "upgrade_goods_amount": 100
+      "upgrade_goods_amount": 100,
+      "waveCost": 20
     },
     {
       "tableNum": 202102001,
@@ -825,7 +831,8 @@
       "productionTable": "",
       "upgradeNum": "",
       "upgrade_goods": "",
-      "upgrade_goods_amount": ""
+      "upgrade_goods_amount": "",
+      "waveCost": 30
     },
     {
       "tableNum": 202200000,
@@ -842,7 +849,8 @@
       "productionTable": 402001001,
       "upgradeNum": 202200001,
       "upgrade_goods": 301001001,
-      "upgrade_goods_amount": 200
+      "upgrade_goods_amount": 200,
+      "waveCost": ""
     },
     {
       "tableNum": 202200001,
@@ -859,7 +867,8 @@
       "productionTable": 402001002,
       "upgradeNum": "",
       "upgrade_goods": "",
-      "upgrade_goods_amount": ""
+      "upgrade_goods_amount": "",
+      "waveCost": ""
     },
     {
       "tableNum": 202201000,
@@ -876,7 +885,8 @@
       "productionTable": 402001002,
       "upgradeNum": "",
       "upgrade_goods": "",
-      "upgrade_goods_amount": ""
+      "upgrade_goods_amount": "",
+      "waveCost": ""
     },
     {
       "tableNum": 202999000,
@@ -893,7 +903,8 @@
       "productionTable": 500001001,
       "upgradeNum": "",
       "upgrade_goods": "",
-      "upgrade_goods_amount": ""
+      "upgrade_goods_amount": "",
+      "waveCost": ""
     }
   ],
   "GoodsTable": [
@@ -1274,7 +1285,7 @@
       "name": "세금 1",
       "desc": "{0}턴간 {1}개의 금화를 획득합니다.",
       "itemNum": 301001001,
-      "itemAmount": 1,
+      "itemAmount": 100,
       "waveCount": 1
     },
     {
@@ -1282,7 +1293,7 @@
       "name": "수확 1",
       "desc": "{0}턴간 {1}개의 식량을 획득합니다.",
       "itemNum": 301001004,
-      "itemAmount": 1,
+      "itemAmount": 50,
       "waveCount": 1
     },
     {
@@ -1290,7 +1301,7 @@
       "name": "수확 2",
       "desc": "{0}턴간 {1}개의 식량을 획득합니다.",
       "itemNum": 301001004,
-      "itemAmount": 2,
+      "itemAmount": 70,
       "waveCount": 1
     }
   ]

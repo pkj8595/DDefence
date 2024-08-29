@@ -113,24 +113,32 @@ public partial class GameManager
 
 
     #region production
-    public HashSet<IProductionable> _productionList = new HashSet<IProductionable>();
+    public HashSet<IWaveEvent> _waveObjectList = new HashSet<IWaveEvent>();
 
-    public void RegisterProduction(IProductionable productionable)
+    public void RegisterWaveObject(IWaveEvent productionable)
     {
-        if (!_productionList.Contains(productionable))
-            _productionList.Add(productionable);
+        if (!_waveObjectList.Contains(productionable))
+            _waveObjectList.Add(productionable);
     }
 
-    public void RemoveProduction(IProductionable productionable)
+    public void RemoveWaveObject(IWaveEvent productionable)
     {
-        _productionList.Remove(productionable);
+        _waveObjectList.Remove(productionable);
     }
 
     public void RunEndWave()
     {
-        foreach(var production in _productionList)
+        foreach(var waveObj in _waveObjectList)
         {
-            production.EndWave();
+            waveObj.EndWave();
+        }
+    }
+
+    public void RunReadyWave()
+    {
+        foreach (var waveObj in _waveObjectList)
+        {
+            waveObj.ReadyWave();
         }
     }
     #endregion

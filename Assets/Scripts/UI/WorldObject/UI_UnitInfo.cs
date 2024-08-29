@@ -54,8 +54,7 @@ public class UI_UnitInfo : MonoBehaviour
 
     private void SetDescData(PawnBase data)
     {
-         var spriteLibrary = data.gameObject.GetComponentInChildren<UnityEngine.U2D.Animation.SpriteLibrary>();
-        _pawnIcon.sprite = spriteLibrary.GetSprite("Idle","0");
+        _pawnIcon.sprite = data.GetIdleSprite();
         _unitName.text = data.CharacterData.name;
         _unitDesc.text = data.CharacterData.desc;
     }
@@ -171,6 +170,7 @@ public class UI_UnitInfo : MonoBehaviour
             _upgrade.Name.text = string.Empty;
         }
     }
+
 
 }
 

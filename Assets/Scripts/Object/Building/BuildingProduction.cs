@@ -2,24 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IProductionable
+public interface IWaveEvent
 {
     public void EndWave();
+    public void ReadyWave();
 }
 
-public class BuildingProduction : MonoBehaviour, IProductionable
+public class BuildingProduction : MonoBehaviour, IWaveEvent
 {
     BuildingBase _buildingBase;
     Data.ProductionData _data;
 
     private void OnEnable()
     {
-        Managers.Game.RegisterProduction(this);
+        Managers.Game.RegisterWaveObject(this);
     }
 
     private void OnDisable()
     {
-        Managers.Game.RemoveProduction(this);
+        Managers.Game.RemoveWaveObject(this);
     }
 
     public void Init(int tableNum, BuildingBase buildingBase)
@@ -36,5 +37,8 @@ public class BuildingProduction : MonoBehaviour, IProductionable
         Managers.Game.Inven.AddItem(_data.itemNum, _data.itemAmount);
     }
 
-
+    public void ReadyWave()
+    {
+        
+    }
 }

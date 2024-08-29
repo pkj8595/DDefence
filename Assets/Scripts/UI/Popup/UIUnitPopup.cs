@@ -29,4 +29,13 @@ public class UIUnitPopup : UIPopup
         }
     }
 
+    public void OnClickUpgrade()
+    {
+        if (_unit.UpgradeUnit())
+        {
+            Managers.UI.ShowToastMessage("업그레이드 성공!");
+            UpdateUI();
+        }
+        
+    }
 }

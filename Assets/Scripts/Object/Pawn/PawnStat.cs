@@ -162,4 +162,13 @@ public class PawnStat : Stat
         Hp += _combatStat.hpRegeneration;
     }
 
+    public void EndWaveEvent()
+    {
+        WaveCount++;
+        if (!IsDead)
+        {
+            //Managers.Data.StatDict
+            //todo 
+        }
+    }
 }

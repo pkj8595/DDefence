@@ -168,6 +168,7 @@ namespace Data
         public Define.EAttributeType ignoreAttributeType;
         public int basicSkill;
         public int[] arr_rune = new int[3];
+        public int waveCost;
         public string Head;
         public string Ears;
         public string Eyes;
@@ -357,6 +358,7 @@ namespace Data
         public int upgradeNum;
         public int upgrade_goods;
         public int upgrade_goods_amount;
+        public int waveCost;
     }
     #endregion
 

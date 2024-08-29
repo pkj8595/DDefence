@@ -50,5 +50,5 @@ public interface IAttackable
 
 public class Unit : MonoBehaviour
 {
-
+    public virtual bool UpgradeUnit() { return false; }
 }
