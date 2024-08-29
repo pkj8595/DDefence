@@ -10,18 +10,18 @@ public class BuildingSkill : MonoBehaviour, IAttackable
     public IDamageable LockTarget;
     public IDetectComponent DetectComponent;
 
-    protected UnitSkill _skills = new UnitSkill();
+    public UnitSkill Skills { get; protected set; } = new UnitSkill();
     private BuildingBase _buildingBase;
     private bool isInit = false;
 
-    public float SearchRange => _skills.GetCurrentSkill().MaxRange;
+    public float SearchRange => Skills.GetCurrentSkill().MaxRange;
     public Define.ETeam Team => _buildingBase.Team;
 
     public void Init(BuildingBase buildingBase)
     {
         _buildingBase = buildingBase;
-        _skills.Init(_buildingBase.Stat.Mana);
-        _skills.SetBaseSkill(new Skill( buildingBase.BuildingData.baseSkill));
+        Skills.Init(_buildingBase.Stat.Mana);
+        Skills.SetBaseSkill(new Skill( buildingBase.BuildingData.baseSkill));
         DetectComponent = GetComponent<IDetectComponent>();
         isInit = true;
         StartSkillTask().Forget();
@@ -31,7 +31,7 @@ public class BuildingSkill : MonoBehaviour, IAttackable
     {
         while (true)
         {
-            Skill skill = _skills.GetCurrentSkill();
+            Skill skill = Skills.GetCurrentSkill();
             if (isInit && skill.IsReady(_buildingBase.Stat.Mana))
             {
                 Collider[] colliders = DetectComponent.DetectCollision();
@@ -62,9 +62,9 @@ public class BuildingSkill : MonoBehaviour, IAttackable
         }
         else
         {
-            if (_skills.ReadyCurrentSkill(_buildingBase.Stat))
+            if (Skills.ReadyCurrentSkill(_buildingBase.Stat))
             {
-                Skill skill = _skills.GetRunnigSkill();
+                Skill skill = Skills.GetRunnigSkill();
                 DamageMessage msg = new DamageMessage(_buildingBase.Stat,
                                                       Vector3.zero,
                                                       Vector3.zero,
@@ -73,7 +73,7 @@ public class BuildingSkill : MonoBehaviour, IAttackable
                 ProjectileBase projectileBase = skill.MakeProjectile();
                 projectileBase.Init(_shotTrans.transform,
                                     LockTarget.GetTransform(),
-                                    _skills.GetRunnigSkill().SplashRange,
+                                    Skills.GetRunnigSkill().SplashRange,
                                     msg);
                 EndSkill();
             }
@@ -85,9 +85,9 @@ public class BuildingSkill : MonoBehaviour, IAttackable
     /// </summary>
     public void BegineSkill()
     {
-        if (_skills.ReadyCurrentSkill(_buildingBase.Stat))
+        if (Skills.ReadyCurrentSkill(_buildingBase.Stat))
         {
-            Skill skill = _skills.GetRunnigSkill();
+            Skill skill = Skills.GetRunnigSkill();
             DamageMessage msg = new DamageMessage(_buildingBase.Stat,
                                                   Vector3.zero,
                                                   Vector3.zero,
@@ -103,7 +103,7 @@ public class BuildingSkill : MonoBehaviour, IAttackable
     public void EndSkill()
     {
         _buildingBase.Stat.IncreadMana();
-        _skills.ClearCurrentSkill();
+        Skills.ClearCurrentSkill();
     }
 
     /// <summary>

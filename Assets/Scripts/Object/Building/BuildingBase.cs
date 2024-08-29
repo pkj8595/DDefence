@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildingBase : MonoBehaviour, ISelectedable
+public class BuildingBase : Unit, ISelectedable
 {
     [SerializeField] public GameObject _model;
     [field: SerializeField] public Define.ETeam Team { get; set; } = Define.ETeam.Playable;
     public Define.WorldObject WorldObjectType { get; set; } = Define.WorldObject.Building;
 
     public Data.BuildingData BuildingData { get; private set; }
-    public  BuildingStat Stat { get; private set; }
     protected BuildingProduction _production;
-    protected BuildingSkill _skill;
     protected BuildingDamageable _damageable;
+    public  BuildingStat Stat { get; private set; }
+    public BuildingSkill Skill { get; protected set; }
 
     public int BuildingTableNum;
 
@@ -42,8 +42,8 @@ public class BuildingBase : MonoBehaviour, ISelectedable
 
         if (BuildingData.baseSkill != 0)
         {
-            _skill = gameObject.GetOrAddComponent<BuildingSkill>();
-            _skill.Init(this);
+            Skill = gameObject.GetOrAddComponent<BuildingSkill>();
+            Skill.Init(this);
         }
 
         if (data.isDamageable)
@@ -99,6 +99,8 @@ public class BuildingBase : MonoBehaviour, ISelectedable
     #region ISelectable
     public void OnSelect()
     {
+        UIData data = new UIUnitData { unitGameObject = this };
+        Managers.UI.ShowUIPopup<UIUnitPopup>(data);
     }
 
     public void OnDeSelect()

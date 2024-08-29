@@ -163,6 +163,8 @@ namespace Data
         public string desc;
         public int statDataNum;
         public int upgradeChar;
+        public int upgradeRequire;
+        public int upgradeRequireAmount;
         public Define.EAttributeType ignoreAttributeType;
         public int basicSkill;
         public int[] arr_rune = new int[3];
@@ -188,7 +190,7 @@ namespace Data
     public class StatData : TableBase
     {
         public const int Table = 102;
-
+        public string name;
         /// <summary>
         /// 건강
         /// </summary>

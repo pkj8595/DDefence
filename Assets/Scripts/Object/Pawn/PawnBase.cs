@@ -5,9 +5,9 @@ using UnityEngine;
 using UnityEngine.AI;
 using Cysharp.Threading.Tasks;
 
-public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAttackable
+public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable
 {
-    private Data.CharacterData _characterData;
+    public Data.CharacterData CharacterData { get; private set; }
 
     [field: SerializeField] public Define.ETeam Team { get; set; } = Define.ETeam.Playable;
     public Define.WorldObject WorldObjectType { get; set; } = Define.WorldObject.Pawn;
@@ -24,7 +24,7 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
     public UnitAI AI { get; } = new UnitAI();
 
     //룬 && 기벽
-    [SerializeField] protected List<Data.RuneData> _runeList = new(Define.Pawn_Rune_Limit_Count);
+    [field : SerializeField] public List<Data.RuneData> RuneList { get; private set; } = new(Define.Pawn_Rune_Limit_Count);
     [SerializeField] private bool _isSelected;
 
     //option
@@ -85,16 +85,16 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
         }
 
         //table data setting
-        _characterData = Managers.Data.CharacterDict[characterNum];
-        AniController.Init(_characterData);
-        PawnStat.Init(_characterData.statDataNum, OnDead, OnDeadTarget);
+        CharacterData = Managers.Data.CharacterDict[characterNum];
+        AniController.Init(CharacterData);
+        PawnStat.Init(CharacterData.statDataNum, OnDead, OnDeadTarget);
         AI.Init(this);
 
         _navAgent.enabled = true;
         _navAgent.speed = PawnStat.MoveSpeed;
         GetComponent<Collider>().enabled = true;
         PawnSkills.Init(PawnStat.Mana);
-        PawnSkills.SetBaseSkill(new Skill(_characterData.basicSkill));
+        PawnSkills.SetBaseSkill(new Skill(CharacterData.basicSkill));
         
 
         //stateBar setting
@@ -371,6 +371,8 @@ public abstract class PawnBase :MonoBehaviour, ISelectedable, IDamageable, IAtta
     {
         _isSelected = true;
         Debug.Log($"{gameObject.name} is Select");
+        UIData data = new UIUnitData { unitGameObject = this };
+        Managers.UI.ShowUIPopup<UIUnitPopup>(data);
     }
 
     public virtual void OnDeSelect()

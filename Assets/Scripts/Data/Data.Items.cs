@@ -42,9 +42,91 @@ public class ItemBase
         }
         Init(tableBase);
     }
+
+    public static ItemBase GetItem(int tableNum)
+    {
+        ItemBase ret = null;
+        switch (Utils.CalculateTableNum(tableNum))
+        {
+            case Data.CharacterData.Table:
+                ret = new CharacterItem(tableNum);
+                break;
+            case Data.TileBaseData.Table:
+                ret = new TileItem(tableNum);
+                break;
+            case Data.BuildingData.Table:
+                ret = new BuildingItem(tableNum);
+                break;
+            case Data.RuneData.Table:
+                ret = new RuneItem(tableNum);
+                break;
+            case Data.GoodsData.Table:
+                ret = new GoodsItem(tableNum);
+                break;
+            default:
+                Debug.LogError($"{tableNum} 식별되지 않은 케이스");
+                break;
+        }
+        return ret;
+    }
 }
 
-public class Rune : ItemBase
+
+
+
+public class CharacterItem : ItemBase
+{
+    private Data.CharacterData _charData;
+
+    public override string Name => _charData.name;
+    public override string Desc => _charData.desc;
+    //public override string ImgStr => _charData.imageStr;
+
+    protected override void Init(Data.TableBase tableBase)
+    {
+        base.Init(tableBase);
+        _charData = tableBase as Data.CharacterData;
+    }
+    public CharacterItem(int tableNum) : base(tableNum) { }
+
+}
+
+public class TileItem : ItemBase
+{
+    private Data.TileBaseData _data;
+
+    public override string Name => _data.name;
+    public override string Desc => _data.desc;
+    //public override string ImgStr => _charData.imageStr;
+
+    protected override void Init(Data.TableBase tableBase)
+    {
+        base.Init(tableBase);
+        _data = tableBase as Data.TileBaseData;
+    }
+    public TileItem(int tableNum) : base(tableNum) { }
+
+}
+
+
+public class BuildingItem : ItemBase
+{
+    private Data.BuildingData _data;
+
+    public override string Name => _data.name;
+    public override string Desc => _data.desc;
+    //public override string ImgStr => _charData.imageStr;
+
+    protected override void Init(Data.TableBase tableBase)
+    {
+        base.Init(tableBase);
+        _data = tableBase as Data.BuildingData;
+    }
+    public BuildingItem(int tableNum) : base(tableNum) { }
+
+}
+
+public class RuneItem : ItemBase
 {
     private Data.RuneData _runeData;
 
@@ -57,12 +139,12 @@ public class Rune : ItemBase
         base.Init(tableBase);
         _runeData = tableBase as Data.RuneData;
     }
-    public Rune(int tableNum) : base(tableNum) { }
+    public RuneItem(int tableNum) : base(tableNum) { }
 
 }
 
 
-public class Goods : ItemBase
+public class GoodsItem : ItemBase
 {
 
     private Data.GoodsData _goodsData;
@@ -75,6 +157,6 @@ public class Goods : ItemBase
         base.Init(tableBase);
         _goodsData = tableBase as GoodsData;
     }
-    public Goods(int tableNum) : base(tableNum) { }
+    public GoodsItem(int tableNum) : base(tableNum) { }
 
 }

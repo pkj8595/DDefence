@@ -6,7 +6,9 @@ using System;
 
 public class UI_UnitInfo : MonoBehaviour
 {
+    [SerializeField] private List<GameObject> _title;
     [SerializeField] private Image _unitIcon;
+    [SerializeField] private Image _pawnIcon;
     [SerializeField] private Text _unitName;
     [SerializeField] private Text _unitDesc;
     [SerializeField] private List<Text> _stat;
@@ -16,15 +18,160 @@ public class UI_UnitInfo : MonoBehaviour
     [SerializeField] private UI_ImageText _upgrade;
     [SerializeField] private Text _ignoreAttribute;
 
-    void Start()
+    public void SetPawnBase(PawnBase pawn)
     {
+        SetDescData(pawn);
+        SetStatData(pawn.PawnStat);
+        SetProperty(pawn.PawnStat);
+        SetSkillData(pawn.PawnSkills.SkillList);
+        SetRuneData(pawn.RuneList);
+        SetEtcData(pawn);
+
+        foreach (var item in _title)
+        {
+            item.SetActive(true);
+        }
+        _pawnIcon.gameObject.SetActive(true);
+        _unitIcon.gameObject.SetActive(false);
+    }
+
+    public void SetBuildingBase(BuildingBase buildingBase)
+    {
+        SetDescData(buildingBase.BuildingData);
+        SetStatData(buildingBase.Stat);
+        //SetProperty(buildingBase.PawnStat);
+        SetSkillData(buildingBase.Skill.Skills.SkillList);
+        //SetRuneData(buildingBase.RuneList);
+        SetEtcData(buildingBase);
+
+        foreach (var item in _title)
+        {
+            item.SetActive(false);
+        }
+        _pawnIcon.gameObject.SetActive(false);
+        _unitIcon.gameObject.SetActive(true);
+    }
+
+    private void SetDescData(PawnBase data)
+    {
+         var spriteLibrary = data.gameObject.GetComponentInChildren<UnityEngine.U2D.Animation.SpriteLibrary>();
+        _pawnIcon.sprite = spriteLibrary.GetSprite("Idle","0");
+        _unitName.text = data.CharacterData.name;
+        _unitDesc.text = data.CharacterData.desc;
+    }
+    private void SetDescData(Data.BuildingData data)
+    {
+        _unitName.text = data.name;
+        _unitDesc.text = data.desc;
+    }
+
+    private void SetStatData(Stat stat)
+    {
+        if (stat is PawnStat)
+        {
+            var data = stat as PawnStat;
+            _stat[0].text = $"vitality :{data.CurrentBaseStat.vitality}";
+            _stat[1].text = $"strength :{data.CurrentBaseStat.strength}";
+            _stat[2].text = $"agility :{data.CurrentBaseStat.agility}";
+            _stat[3].text = $"intelligence :{data.CurrentBaseStat.intelligence}";
+            _stat[4].text = $"willpower :{data.CurrentBaseStat.willpower}";
+            _stat[5].text = $"accuracy :{data.CurrentBaseStat.accuracy}";
+
+            _stat[5].gameObject.SetActive(true);
+        }
+        else
+        {
+            var data = stat as BuildingStat;
+            _stat[0].text = $"Hp :{data.Hp}/{data.MaxHp}";
+            _stat[1].text = $"Mana :{data.Mana}/{data.MaxMana}";
+            _stat[2].text = $"Damage :{data.DamageValue}";
+            _stat[3].text = $"Protection :{data.Protection}";
+            _stat[4].text = $"ManaRegen :{data.ManaRegeneration}";
+
+            _stat[5].gameObject.SetActive(false);
+        }
+    }
+
+    private void SetProperty(PawnStat stat)
+    {
+        for (int i = 0; i < _propertyName.Count; i++)
+        {
+            if (i < stat.PropertyStatList.Count)
+                _propertyName[i].text = stat.PropertyStatList[i].name;
+            else
+                _propertyName[i].gameObject.SetActive(false);
+        }
+    }
+
+    private void SetSkillData(List<Skill> datas)
+    {
+        for (int i = 0; i < _skill.Count; i++)
+        {
+            if (i < datas.Count)
+            {
+                _skill[i].Icon.sprite = Managers.Resource.Load<Sprite>($"{Define.Path.UIIcon}{datas[i].Icon}");
+                _skill[i].Name.text = datas[i].Name;
+            }
+            else
+            {
+                //_skill[i].Icon.sprite = null;
+                _skill[i].Name.text = string.Empty;
+            }
+        }
         
     }
 
-    void Update()
+    private void SetRuneData(List<Data.RuneData> datas)
     {
-        
+        for (int i = 0; i < _rune.Count; i++)
+        {
+            if (i < datas.Count)
+            {
+                _rune[i].Icon.sprite = Managers.Resource.Load<Sprite>($"{Define.Path.UIIcon}{datas[i].imageStr}");
+                _rune[i].Name.text = datas[i].name;
+            }
+            else
+            {
+                //_rune[i].Icon.sprite = null;
+                _rune[i].Name.text = string.Empty;
+            }
+        }
     }
+  
+    private void SetEtcData(PawnBase pawnBase)
+    {
+        if (pawnBase.CharacterData.upgradeChar != 0)
+        {
+            ItemBase itemBase = ItemBase.GetItem(pawnBase.CharacterData.upgradeRequire);
+            Data.CharacterData data = Managers.Data.CharacterDict[pawnBase.CharacterData.upgradeChar];
+            _upgrade.Name.text = $"Upgrade {data.name}\n{itemBase.Name} : {pawnBase.CharacterData.upgradeRequireAmount}";
+            _upgrade.Icon.gameObject.SetActive(true);
+        }
+        else
+        {
+            _upgrade.Icon.gameObject.SetActive(false);
+            _upgrade.Name.text = string.Empty;
+        }
+
+        _ignoreAttribute.text =$"Ignore Att\n{pawnBase.CharacterData.ignoreAttributeType.ToStr()}" ;
+    }
+
+    private void SetEtcData(BuildingBase building)
+    {
+        if (building.BuildingData.upgradeNum != 0)
+        {
+            ItemBase itemBase = ItemBase.GetItem(building.BuildingData.upgrade_goods);
+            var data = Managers.Data.BuildingDict[building.BuildingData.upgradeNum];
+            _upgrade.Name.text = $"{data.name}\n{itemBase.Name} : {building.BuildingData.upgrade_goods_amount}";
+            _upgrade.Icon.gameObject.SetActive(true);
+        }
+        else
+        {
+            _upgrade.Icon.gameObject.SetActive(false);
+            _upgrade.Name.text = string.Empty;
+        }
+    }
+
 }
 
 [Serializable]

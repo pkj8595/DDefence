@@ -13,8 +13,6 @@ public interface IDamageable
     public abstract bool IsDead();
     public IStat GetStat();
 
-
-
 }
 
 public interface IAttackable
@@ -50,3 +48,7 @@ public interface IAttackable
     }
 }
 
+public class Unit : MonoBehaviour
+{
+
+}

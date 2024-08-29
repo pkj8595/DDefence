@@ -1,3 +1,4 @@
+using Data;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,7 +18,7 @@ public class PawnStat : Stat
 
     private Data.StatData _baseStat;
     private readonly List<Data.StatData> _runeStatList = new List<Data.StatData>(Define.Rune_Count);
-    private readonly List<Data.StatData> _traitStatList = new List<Data.StatData>(Define.Trait_Count);
+    private readonly List<Data.StatData> _propertyStatList = new List<Data.StatData>(Define.Trait_Count);
 
     [field: SerializeField] public int KillCount { get; set; }
     [field: SerializeField] public int WaveCount { get; set; }
@@ -27,8 +28,10 @@ public class PawnStat : Stat
     public int EXP { get { return KillCount + (WaveCount * 10); }}
     public float MoveSpeed { get { return _combatStat.movementSpeed; } }
     public CombatStat CombatStat { get => _combatStat; set => _combatStat = value; }
+    public BaseStat CurrentBaseStat { get => _currentBaseStat; set => _currentBaseStat = value; }
 
-    
+    public List<StatData> PropertyStatList => _propertyStatList;
+
     public override void Init(int statDataNum, System.Action onDead, System.Action onDeadTarget)
     {
         base.Init(statDataNum, onDead, onDeadTarget);
@@ -65,16 +68,16 @@ public class PawnStat : Stat
 
     public void AddTraitStat(Data.StatData statData)
     {
-        if (_traitStatList.Count <= Define.Trait_Count)
+        if (_propertyStatList.Count <= Define.Trait_Count)
         {
-            _traitStatList.Add(statData);
+            _propertyStatList.Add(statData);
             CalculateCombatStat();
         }
     }
 
     public void RemoveTraitStat(Data.StatData statData)
     {
-        if (_traitStatList.Remove(statData))
+        if (_propertyStatList.Remove(statData))
         {
             CalculateCombatStat();
         }
@@ -89,10 +92,10 @@ public class PawnStat : Stat
             if (_runeStatList[i] != null)
                 _currentBaseStat += _runeStatList[i];
         }
-        for (int i = 0; i < _traitStatList.Count; i++)
+        for (int i = 0; i < _propertyStatList.Count; i++)
         {
-            if (_traitStatList[i] != null)
-                _currentBaseStat += _traitStatList[i];
+            if (_propertyStatList[i] != null)
+                _currentBaseStat += _propertyStatList[i];
         }
         _combatStat = CombatStat.ConvertStat(_currentBaseStat);
     }

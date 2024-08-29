@@ -177,6 +177,7 @@ public class Define
 
         public const string UI = "UI/UIBase/";
         public const string UIPopup = "UI/Popup/";
+        public const string UIIcon = "Sprites/UI/Icon/";
 
     }
 

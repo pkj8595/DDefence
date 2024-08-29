@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UnitSkill
 {
-    private List<Skill> _skillList = new(Define.Pawn_Rune_Limit_Count);
+    public List<Skill> SkillList { get; private set; } = new(Define.Pawn_Rune_Limit_Count);
     private Skill _currentSkill;
     float? _manaAmount;
     public  bool IsRunning { get; private set; } = false;
@@ -19,15 +19,15 @@ public class UnitSkill
 
     public void SetBaseSkill(Skill baseSkill)
     {
-        if (0 < _skillList.Count)
-            _skillList[0] = baseSkill;
+        if (0 < SkillList.Count)
+            SkillList[0] = baseSkill;
         else
-            _skillList.Add(baseSkill);
+            SkillList.Add(baseSkill);
     }
 
     public void SetSkill(Skill skill)
     {
-        _skillList.Add(skill);
+        SkillList.Add(skill);
     }
 
     public Skill GetCurrentSkill()
@@ -35,15 +35,15 @@ public class UnitSkill
         if (_currentSkill != null && _currentSkill.IsReady(_manaAmount.Value))
             return _currentSkill;
 
-        for (int i = 1; i < _skillList.Count; i++)
+        for (int i = 1; i < SkillList.Count; i++)
         {
-            if(!_skillList[i].IsReady(_manaAmount.Value))
+            if(!SkillList[i].IsReady(_manaAmount.Value))
             {
-                _currentSkill = _skillList[i];
+                _currentSkill = SkillList[i];
                 return _currentSkill;
             }
         }
-        _currentSkill = _skillList[0];
+        _currentSkill = SkillList[0];
         return _currentSkill;
     }
 

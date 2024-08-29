@@ -5,8 +5,8 @@ using UnityEngine;
 public class BuildingStat : Stat
 {
     private Data.BuildingData _data;
-    private float DamageValue => _data.damageValue;
-    private float ManaRegeneration => _data.manaRegeneration;
+    public float DamageValue => _data.damageValue;
+    public float ManaRegeneration => _data.manaRegeneration;
     public override float MaxHp => _data.maxHp;
     public override float MaxMana => _data.maxMana;
     public override float Protection => _data.protection;

@@ -5,8 +5,10 @@
       "name": "나이트",
       "desc": "나이트다",
       "statDataNum": 102001000,
-      "upgradeChar": -1,
-      "ignoreAffect": -1,
+      "upgradeChar": 0,
+      "upgradeRequire": 0,
+      "upgradeRequireAmount": 0,
+      "ignoreAttributeType": 0,
       "basicSkill": 400001001,
       "Head": "HumanShadow#FFFFFF/0:0:0",
       "Ears": "",
@@ -33,8 +35,10 @@
       "name": "해골 궁수",
       "desc": "허약해보인다. 활은 당길 수 있을까?",
       "statDataNum": 102002000,
-      "upgradeChar": -1,
-      "ignoreAffect": -1,
+      "upgradeChar": 0,
+      "upgradeRequire": 0,
+      "upgradeRequireAmount": 0,
+      "ignoreAttributeType": 0,
       "basicSkill": 400002001,
       "Head": "Skeleton#C7CFDD/0:0:0",
       "Ears": "Skeleton#C7CFDD/0:0:0",
@@ -60,6 +64,7 @@
   "StatTable": [
     {
       "tableNum": 102001000,
+      "name": "근거리",
       "vitality": 10,
       "strength": 10,
       "agility": 5,
@@ -69,6 +74,7 @@
     },
     {
       "tableNum": 102002000,
+      "name": "원거리",
       "vitality": 5,
       "strength": 5,
       "agility": 10,
@@ -78,6 +84,7 @@
     },
     {
       "tableNum": 102003000,
+      "name": "마법사",
       "vitality": 5,
       "strength": 2,
       "agility": 2,
@@ -87,6 +94,7 @@
     },
     {
       "tableNum": 102004000,
+      "name": "힐러",
       "vitality": 5,
       "strength": 2,
       "agility": 2,
@@ -96,6 +104,7 @@
     },
     {
       "tableNum": 102100000,
+      "name": "방패의 룬",
       "vitality": 1,
       "strength": 1,
       "agility": -1,
@@ -105,6 +114,7 @@
     },
     {
       "tableNum": 102100001,
+      "name": "활의 룬",
       "vitality": 0,
       "strength": -1,
       "agility": 1,
@@ -114,6 +124,7 @@
     },
     {
       "tableNum": 102200000,
+      "name": "힘쎈",
       "vitality": 0,
       "strength": 1,
       "agility": 0,
@@ -123,6 +134,7 @@
     },
     {
       "tableNum": 102200001,
+      "name": "반사 신경이 좋은",
       "vitality": 0,
       "strength": 0,
       "agility": 1,
@@ -132,6 +144,7 @@
     },
     {
       "tableNum": 102500001,
+      "name": "유물- 힘1",
       "vitality": 0,
       "strength": 1,
       "agility": 0,
@@ -1157,6 +1170,7 @@
     {
       "tableNum": 401001000,
       "affectType": 0,
+      "attributeType": 0,
       "damageType": 0,
       "targetType": 1,
       "effectStr": "",
@@ -1165,6 +1179,7 @@
     {
       "tableNum": 401001001,
       "affectType": 0,
+      "attributeType": 0,
       "damageType": 0,
       "targetType": 1,
       "effectStr": "",
@@ -1173,6 +1188,7 @@
     {
       "tableNum": 401001100,
       "affectType": 0,
+      "attributeType": 0,
       "damageType": 1,
       "targetType": 1,
       "effectStr": "",
@@ -1181,6 +1197,7 @@
     {
       "tableNum": 401001101,
       "affectType": 0,
+      "attributeType": 0,
       "damageType": 1,
       "targetType": 1,
       "effectStr": "",
@@ -1189,6 +1206,7 @@
     {
       "tableNum": 401001200,
       "affectType": 0,
+      "attributeType": 0,
       "damageType": 2,
       "targetType": 1,
       "effectStr": "",
@@ -1197,6 +1215,7 @@
     {
       "tableNum": 401002000,
       "affectType": 1,
+      "attributeType": 7,
       "damageType": 2,
       "targetType": 0,
       "effectStr": "",
@@ -1205,6 +1224,7 @@
     {
       "tableNum": 401003000,
       "affectType": 2,
+      "attributeType": 0,
       "damageType": 2,
       "targetType": 2,
       "effectStr": "",
@@ -1213,6 +1233,7 @@
     {
       "tableNum": 401004000,
       "affectType": 3,
+      "attributeType": 5,
       "damageType": 2,
       "targetType": 1,
       "effectStr": "eff_",
@@ -1221,6 +1242,7 @@
     {
       "tableNum": 401005000,
       "affectType": 4,
+      "attributeType": 4,
       "damageType": 2,
       "targetType": 1,
       "effectStr": "eff_poison",
@@ -1229,6 +1251,7 @@
     {
       "tableNum": 401006000,
       "affectType": 5,
+      "attributeType": 3,
       "damageType": 2,
       "targetType": 1,
       "effectStr": "eff_burn",

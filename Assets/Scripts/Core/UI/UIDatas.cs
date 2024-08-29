@@ -15,3 +15,7 @@ public class UIStoryData : UIData
     public int StoryDataNum { get; set; }
 }
 
+public class UIUnitData : UIData
+{
+    public Unit unitGameObject { get; set; }
+}
