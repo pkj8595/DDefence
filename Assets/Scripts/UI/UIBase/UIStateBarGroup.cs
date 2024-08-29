@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class UIStateBarGroup : UIBase
 {
-
     public Dictionary<IDamageable, UI_HPbar> _dicUnit = new(); // 체력바를 가진 오브젝트들
     public Queue<UI_HPbar> _stateBarPool = new(); // hp바 풀링
     public UI_HPbar _stateBarPrefab; //hp 프리팹

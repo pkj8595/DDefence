@@ -122,6 +122,18 @@ public class Define
         Buff,
     }
 
+    public enum EAttributeType
+    {
+        none,
+        Blow, //타격
+        Penetration,//관통
+        Fire,//불
+        Posison,//독
+        Ice,//얼음
+        Dark,//어둠
+        Light,//빛
+    }
+
     public enum ESkillType
     {
         one,

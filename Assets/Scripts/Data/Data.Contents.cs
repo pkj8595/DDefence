@@ -163,7 +163,7 @@ namespace Data
         public string desc;
         public int statDataNum;
         public int upgradeChar;
-        public int ignoreAffect;
+        public Define.EAttributeType ignoreAttributeType;
         public int basicSkill;
         public int[] arr_rune = new int[3];
         public string Head;
@@ -428,6 +428,7 @@ namespace Data
         public Define.EAffectType affectType;
         public Define.EDamageType damageType;
         public Define.ETargetType targetType;
+        public Define.EAttributeType attributeType;
         public string effectStr;
         public int value;
     }
