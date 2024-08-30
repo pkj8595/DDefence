@@ -29,6 +29,7 @@ public abstract class AffectBase
     public abstract void ApplyAffect(Stat attecker, Stat taker);
     public abstract void Remove();
     public abstract bool IsExpired();
+    public Define.EAttributeType AttributeType => _data.attributeType;
 }
 
 public abstract class TimedAffect : AffectBase

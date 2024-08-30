@@ -7,6 +7,8 @@ public class DataManager : ManagerBase
 {
     public Dictionary<int, Data.CharacterData> CharacterDict { get; private set; } = new ();
     public Dictionary<int, Data.StatData> StatDict { get; private set; } = new ();
+    public List<Data.StatData> PositivePropertyList { get; private set; } = new ();
+    public List<Data.StatData> NagativePropertyList { get; private set; } = new ();
     public Dictionary<int, Data.StatConversionData> StatConversionDict { get; private set; } = new ();
     public Dictionary<int, Data.WaveData> WaveDict { get; private set; } = new ();
     public Dictionary<int, Data.StoryData> StoryDict { get; private set; } = new ();
@@ -29,7 +31,7 @@ public class DataManager : ManagerBase
         Data.TableGroupData tableGroupData = JsonUtility.FromJson<Data.TableGroupData>(textAsset.text);
 
         tableGroupData.MakeTableData(CharacterDict);
-        tableGroupData.MakeTableData(StatDict);
+        tableGroupData.MakeTableData(StatDict, PositivePropertyList, NagativePropertyList);
         tableGroupData.MakeTableData(StatConversionDict);
         tableGroupData.MakeTableData(WaveDict);
         tableGroupData.MakeTableData(StoryDict);

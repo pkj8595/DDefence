@@ -125,7 +125,17 @@
       "accuracy": 1
     },
     {
-      "tableNum": 102200000,
+      "tableNum": 102200001,
+      "name": "유물- 힘1",
+      "vitality": 0,
+      "strength": 1,
+      "agility": 0,
+      "intelligence": 0,
+      "willpower": 0,
+      "accuracy": 0
+    },
+    {
+      "tableNum": 102300000,
       "name": "힘쎈",
       "vitality": 0,
       "strength": 1,
@@ -135,7 +145,7 @@
       "accuracy": 0
     },
     {
-      "tableNum": 102200001,
+      "tableNum": 102300001,
       "name": "반사 신경이 좋은",
       "vitality": 0,
       "strength": 0,
@@ -145,11 +155,21 @@
       "accuracy": 0
     },
     {
-      "tableNum": 102500001,
-      "name": "유물- 힘1",
+      "tableNum": 102301000,
+      "name": "힘이 약한",
       "vitality": 0,
       "strength": 1,
       "agility": 0,
+      "intelligence": 0,
+      "willpower": 0,
+      "accuracy": 0
+    },
+    {
+      "tableNum": 102301001,
+      "name": "굼뜬",
+      "vitality": 0,
+      "strength": 0,
+      "agility": -1,
       "intelligence": 0,
       "willpower": 0,
       "accuracy": 0
@@ -964,31 +984,105 @@
   "ShopTable": [
     {
       "tableNum": 303001001,
-      "name": "하급 랜덤 캐릭터 뽑기",
+      "name": "일반 랜덤 캐릭터 뽑기",
       "desc": "무슨 캐릭터가 나올까?",
-      "goods": 301001001,
-      "goods_amount": 100
+      "minTableRange": 101001001,
+      "maxTableRange": 101001002,
+      "arr_goods": [
+        301001001,
+        null,
+        null
+      ],
+      "arr_goods_amount": [
+        100,
+        null,
+        null
+      ]
     },
     {
       "tableNum": 303001002,
-      "name": "하급 랜덤 건물 뽑기",
+      "name": "희귀 랜덤 캐릭터 뽑기",
       "desc": "무슨 건물이 나올까?",
-      "goods": 301001001,
-      "goods_amount": 100
+      "minTableRange": 101001001,
+      "maxTableRange": 101001002,
+      "arr_goods": [
+        301001001,
+        null,
+        null
+      ],
+      "arr_goods_amount": [
+        200,
+        null,
+        null
+      ]
     },
     {
       "tableNum": 303001003,
-      "name": "하급 랜덤 유물 뽑기",
+      "name": "영웅 랜덤 캐릭터 뽑기",
       "desc": "무슨 유물이 나올까?",
-      "goods": 301001001,
-      "goods_amount": 100
+      "minTableRange": 101001001,
+      "maxTableRange": 101001002,
+      "arr_goods": [
+        301001001,
+        null,
+        null
+      ],
+      "arr_goods_amount": [
+        400,
+        null,
+        null
+      ]
     },
     {
       "tableNum": 303001004,
-      "name": "하급 랜덤 룬 뽑기",
+      "name": "일반 랜덤 룬 뽑기",
       "desc": "무슨 룬이 나올까?",
-      "goods": 301001001,
-      "goods_amount": 100
+      "minTableRange": 302001001,
+      "maxTableRange": 302001002,
+      "arr_goods": [
+        301001001,
+        301001002,
+        null
+      ],
+      "arr_goods_amount": [
+        60,
+        20,
+        null
+      ]
+    },
+    {
+      "tableNum": 303002001,
+      "name": "화살함정",
+      "desc": "화살함정",
+      "minTableRange": 202101000,
+      "maxTableRange": 202101000,
+      "arr_goods": [
+        301001001,
+        null,
+        null
+      ],
+      "arr_goods_amount": [
+        10,
+        null,
+        null
+      ]
+    },
+    {
+      "tableNum": 303002002,
+      "name": "창살함정",
+      "desc": "창살함정",
+      "minTableRange": 202102000,
+      "maxTableRange": 202102000,
+      "arr_goods": [
+        301001001,
+        null,
+        null
+      ],
+      "arr_goods_amount": [
+        10,
+        null,
+        null
+      ]
     }
   ],
   "SkillTable": [
@@ -999,7 +1093,7 @@
       "icon": "testIcon",
       "skillType": 0,
       "targetType": 1,
-      "manaAmount": 5,
+      "manaAmount": 0,
       "minRange": 0,
       "maxRange": 1,
       "splashRange": 0,
@@ -1022,7 +1116,7 @@
       "icon": "testIcon",
       "skillType": 0,
       "targetType": 1,
-      "manaAmount": 5,
+      "manaAmount": 0,
       "minRange": 2,
       "maxRange": 10,
       "splashRange": 0,
@@ -1045,7 +1139,7 @@
       "icon": "testIcon",
       "skillType": 0,
       "targetType": 1,
-      "manaAmount": 20,
+      "manaAmount": 0,
       "minRange": 2,
       "maxRange": 10,
       "splashRange": 0,
@@ -1114,7 +1208,7 @@
       "icon": "testIcon",
       "skillType": 0,
       "targetType": 1,
-      "manaAmount": 5,
+      "manaAmount": 0,
       "minRange": 2,
       "maxRange": 10,
       "splashRange": 0,
@@ -1137,7 +1231,7 @@
       "icon": "testIcon",
       "skillType": 0,
       "targetType": 1,
-      "manaAmount": 5,
+      "manaAmount": 0,
       "minRange": 2,
       "maxRange": 10,
       "splashRange": 0,
@@ -1160,7 +1254,7 @@
       "icon": "testIcon",
       "skillType": 0,
       "targetType": 1,
-      "manaAmount": 5,
+      "manaAmount": 0,
       "minRange": 2,
       "maxRange": 10,
       "splashRange": 2,

@@ -8,10 +8,7 @@ using UnityEngine.U2D.Animation;
 public class PawnAnimationController : MonoBehaviour
 {
     public PixelHero.CharacterBuilder _pawnBuilder;
-    public Define.EDamageType _attackType = Define.EDamageType.Melee;
     public Animator _animator;
-
-    private Define.EPawnAniState _state = Define.EPawnAniState.Idle;
     private PawnBase _pawnBase;
     [SerializeField] private UnityEngine.U2D.Animation.SpriteLibrary spriteLibrary;
 
@@ -57,10 +54,7 @@ public class PawnAnimationController : MonoBehaviour
 
     public void SetAniState(Define.EPawnAniState state)
     {
-        if (_state != state)
-        {
-            _animator.Play(state.ToStr());
-        }
+        _animator.Play(state.ToStr());
     }
 
     public void SetAniTrigger(Define.EPawnAniTriger trigger)

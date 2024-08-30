@@ -19,15 +19,20 @@ public class UnitSkill
 
     public void SetBaseSkill(Skill baseSkill)
     {
-        if (0 < SkillList.Count)
-            SkillList[0] = baseSkill;
-        else
+        if (0 == SkillList.Count)
             SkillList.Add(baseSkill);
+        else
+            SkillList[0] = baseSkill;
     }
 
     public void SetSkill(Skill skill)
     {
         SkillList.Add(skill);
+    }
+
+    public void RemoveSkill(Skill skill)
+    {
+        SkillList.Remove(skill);
     }
 
     public Skill GetCurrentSkill()

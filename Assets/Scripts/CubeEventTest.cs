@@ -15,18 +15,14 @@ public class CubeEventTest : MonoBehaviour
 
     public void Test()
     {
-        Destroy(this);
+        var data = Managers.Data.StatDict.GetEnumerator();
+        while (data.MoveNext())
+        {
+            Debug.Log(data.Current.Value.name);
+        }
 
     }
 
-    private void OnDisable()
-    {
-        Debug.Log("disable");
-    }
 
-    private void OnDestroy()
-    {
-        Debug.Log("destroy");
-    }
 
 }

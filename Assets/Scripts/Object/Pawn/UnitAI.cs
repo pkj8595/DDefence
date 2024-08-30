@@ -65,13 +65,12 @@ public class UnitAI
     public ReturnToBaseState GetReturnPosState() => _returnState;
 
     /// <summary>
-    /// 타겟이 범위 밖으로 나갔다면 target추적 중지 및 재 탐색
+    /// 타겟이 범위 밖으로 나갔다면 target추적 중지
     /// </summary>
     public bool CheckOutRangeTarget() 
     {
         if (SearchRange < Vector3.Distance(Pawn.LockTarget.GetTransform().position, Pawn.transform.position))
         {
-            Pawn.LockTarget = IAttackable.SearchTarget(Pawn, SearchRange, Pawn.PawnSkills.GetCurrentSkill().TargetType);
             SetState(GetIdleState());
             return true;
         }

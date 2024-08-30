@@ -94,7 +94,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         //table data setting
         CharacterData = Managers.Data.CharacterDict[characterNum];
         AniController.Init(CharacterData);
-        PawnStat.Init(CharacterData.statDataNum, OnDead, OnDeadTarget);
+        PawnStat.Init(CharacterData.statDataNum, OnDead, OnDeadTarget, CharacterData.ignoreAttributeType);
         AI.Init(this);
 
         _navAgent.enabled = true;
@@ -215,13 +215,23 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         LastCombatTime = Time.time;
 
         //공격 당했을때 공격의 대상이 공격 범위내의 적이라면 target를 수정 
-        if (message.attacker != null && message.attacker.TryGetComponent(out IDamageable damageable))
+        if (message.attacker != null && message.attacker.TryGetComponent(out IDamageable attacker))
         {
-            if (damageable.GetTargetType(Team) == Define.ETargetType.Enemy &&
-                !damageable.IsDead() &&
-                PawnSkills.GetCurrentSkill().MaxRange > Vector3.Distance(damageable.GetTransform().position,transform.position))
+            //때린 대상이 적이고 죽지 않았다면
+            if (attacker.GetTargetType(Team) == Define.ETargetType.Enemy &&
+                !attacker.IsDead())
             {
-                LockTarget = damageable;
+                //타겟이 없다면
+                if (!HasTarget)
+                {
+                    LockTarget = attacker;
+                }
+                //타겟이 있는데 범위 내에 없다면 타겟을 변경
+                else if (!(PawnSkills.GetCurrentSkill().MaxRange > 
+                           Vector3.Distance(LockTarget.GetTransform().position, transform.position)))
+                {
+                    LockTarget = attacker;
+                }
             }
         }
         return false;
@@ -252,6 +262,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
                     AI.SetState(AI.GetSkillState());
                     transform.LookAt(LockTarget.GetTransform());
                     Skill skill = PawnSkills.GetRunnigSkill();
+                    //모션 시간이 있다면 unitask 실행
                     if (skill.MotionDuration > 0)
                     {
                         //StartCoroutine(ExecuteSkill(skill));
@@ -368,11 +379,15 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
 
     private void OnLive()
     {
-        AI.SetState(AI.GetIdleState());
-        UIStateBarGroup uiStatebarGroup = Managers.UI.GetUI<UIStateBarGroup>() as UIStateBarGroup;
-        uiStatebarGroup.SetActive(this, true);
-        _navAgent.enabled = true;
-        GetComponent<Collider>().enabled = true;
+        if (IsDead())
+        {
+            PawnStat.OnLive();
+            AI.SetState(AI.GetIdleState());
+            UIStateBarGroup uiStatebarGroup = Managers.UI.GetUI<UIStateBarGroup>() as UIStateBarGroup;
+            uiStatebarGroup.SetActive(this, true);
+            _navAgent.enabled = true;
+            GetComponent<Collider>().enabled = true;
+        }
     }
 
     private void OnDeadTarget()
@@ -380,7 +395,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         LockTarget = IAttackable.SearchTarget(this, SearchRange, PawnSkills.GetCurrentSkill().TargetType);
         if (LockTarget == null)
         {
-            //_ai.SetState(_ai.GetReturnState());
+            AI.SetState(AI.GetIdleState());
         }
     }
 
@@ -438,7 +453,6 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
     public virtual void OnSelect()
     {
         _isSelected = true;
-        Debug.Log($"{gameObject.name} is Select");
         UIData data = new UIUnitData { unitGameObject = this };
         Managers.UI.ShowUIPopup<UIUnitPopup>(data);
     }
@@ -471,11 +485,17 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
     public void EndWave()
     {
         PawnStat.EndWaveEvent();
-        Managers.Game.Inven.SpendWaveCost(Define.EGoodsType.food, CharacterData.waveCost);
+
+        //소모에 실패하면 최대 체력의 20프로가 깍임
+        if (!Managers.Game.Inven.SpendItem((int)Define.EGoodsType.food, CharacterData.waveCost))
+        {
+            PawnStat.DontSpendCost();
+        }
     }
 
     public void ReadyWave()
     {
         OnLive();
+        PawnStat.Mana = 0;
     }
 }

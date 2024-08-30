@@ -19,13 +19,15 @@ public class PawnStat : Stat
     private Data.StatData _baseStat;
     private readonly List<Data.StatData> _runeStatList = new List<Data.StatData>(Define.Rune_Count);
     private readonly List<Data.StatData> _propertyStatList = new List<Data.StatData>(Define.Trait_Count);
+    private int LevelUpCount = 0;
+    private Define.EAttributeType ignoreAttributeType;
 
     [field: SerializeField] public int KillCount { get; set; }
     [field: SerializeField] public int WaveCount { get; set; }
     public override float MaxHp { get => _combatStat.maxHp; }
     public override float MaxMana { get => _combatStat.maxMana; }
     public override float Protection { get => _combatStat.protection;}
-    public int EXP { get { return KillCount + (WaveCount * 10); }}
+    public int EXP { get { return KillCount + (WaveCount * 10) + (-LevelUpCount * 100); }}
     public float MoveSpeed { get { return _combatStat.movementSpeed; } }
     public CombatStat CombatStat { get => _combatStat; set => _combatStat = value; }
     public BaseStat CurrentBaseStat { get => _currentBaseStat; set => _currentBaseStat = value; }
@@ -39,7 +41,13 @@ public class PawnStat : Stat
         SetBaseStat(Managers.Data.StatDict[statDataNum]);
         CalculateCombatStat();
         Hp = _combatStat.maxHp;
-        Mana = _combatStat.maxMana;
+        Mana = 0;
+    }
+
+    public void Init(int statDataNum, System.Action onDead, System.Action onDeadTarget, Define.EAttributeType eAttributeType)
+    {
+        Init(statDataNum, onDead, onDeadTarget);
+        ignoreAttributeType = eAttributeType;
     }
 
     #region ChangeStat
@@ -49,33 +57,54 @@ public class PawnStat : Stat
         CalculateCombatStat();
     }
 
-    public void AddRuneStat(Data.StatData statData)
+    public void AddRuneStat(Data.StatData statData,int index)
     {
-        if (_runeStatList.Count <= Define.Rune_Count)
+        if (_runeStatList.Count == 0)
         {
-            _runeStatList.Add(statData);
+            for (int i = 0; i < Define.Pawn_Rune_Limit_Count; i++)
+            {
+                _runeStatList.Add(null);
+            }
+        }
+
+        if (index < Define.Pawn_Rune_Limit_Count && index < _runeStatList.Count)
+        {
+            _runeStatList[index] = statData;
             CalculateCombatStat();
         }
     }
 
-    public void RemoveRuneStat(Data.StatData statData)
+    public void RemoveRuneStat(int index)
     {
-        if (_runeStatList.Remove(statData))
+        if (index < _runeStatList.Count)
         {
+            _runeStatList[index] = null;
             CalculateCombatStat();
         }
+        else
+            Debug.Log($"index : {index} _runeStatList.Count : {_runeStatList.Count}");
     }
 
-    public void AddTraitStat(Data.StatData statData)
+    public void AddPropertyStat(Data.StatData statData)
     {
-        if (_propertyStatList.Count <= Define.Trait_Count)
+        if (_propertyStatList.Count < Define.Trait_Count)
         {
             _propertyStatList.Add(statData);
             CalculateCombatStat();
         }
+        else
+        {
+            for (int i = 0; i < _propertyStatList.Count; i++)
+            {
+                if (_propertyStatList[i] == null)
+                {
+                    _propertyStatList[i] = statData;
+                }
+            }
+        }
     }
 
-    public void RemoveTraitStat(Data.StatData statData)
+    public void RemovePropertyStat(Data.StatData statData)
     {
         if (_propertyStatList.Remove(statData))
         {
@@ -149,6 +178,14 @@ public class PawnStat : Stat
             OnDead(attacker);
         }
     }
+    protected override void ApplyAffect(AffectBase[] affects, Stat attacker)
+    {
+        for (int i = 0; i < affects.Length; i++)
+        {
+            if (ignoreAttributeType == Define.EAttributeType.none || affects[i]?.AttributeType != ignoreAttributeType)
+                affects[i]?.ApplyAffect(attacker, this);
+        }
+    }
 
     public override void OnDeadTarget()
     {
@@ -164,11 +201,20 @@ public class PawnStat : Stat
 
     public void EndWaveEvent()
     {
-        WaveCount++;
         if (!IsDead)
         {
-            //Managers.Data.StatDict
-            //todo 
+            WaveCount++;
+            if (EXP >= 100)
+            {
+                LevelUpCount++;
+                AddPositiveProperty();
+            }
         }
+    }
+
+    private void AddPositiveProperty()
+    {
+        var data = Managers.Data.PositivePropertyList;
+        AddPropertyStat(data[Random.Range(0, data.Count - 1)]);
     }
 }

@@ -145,4 +145,20 @@ public abstract class Stat : MonoBehaviour, IStat
 
     }
 
+    public void OnLive()
+    {
+        Hp += MaxHp * 0.5f;
+        IsDead = false;
+    }
+
+    public virtual void DontSpendCost()
+    {
+        Hp -= MaxHp * 0.2f;
+        if (Hp < 0)
+        {
+            Hp = 0;
+            OnDead(null);
+        }
+    }
+
 }

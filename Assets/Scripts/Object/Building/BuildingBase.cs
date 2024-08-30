@@ -37,13 +37,21 @@ public class BuildingBase : Unit, ISelectedable, IWaveEvent
         if (BuildingData.productionTable != 0)
         {
             _production = gameObject.GetOrAddComponent<BuildingProduction>();
-            _production.Init(BuildingData.productionTable, this);
+            _production.Init(data.productionTable, this);
+        }
+        else
+        {
+            DestroyComponent<BuildingProduction>();
         }
 
         if (BuildingData.baseSkill != 0)
         {
             Skill = gameObject.GetOrAddComponent<BuildingSkill>();
             Skill.Init(this);
+        }
+        else
+        {
+            DestroyComponent<BuildingSkill>();
         }
 
         if (data.isDamageable)
@@ -54,8 +62,27 @@ public class BuildingBase : Unit, ISelectedable, IWaveEvent
             UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
             uiStatebarGroup.AddUnit(_damageable);
         }
+        else
+        {
+            var skill = GetComponent<BuildingDamageable>();
+            if (skill != null)
+            {
+                UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
+                uiStatebarGroup.RemoveUnit(_damageable);
+                Destroy(skill);
+            }
+        }
 
         
+    }
+
+    private void DestroyComponent<T>() where T : MonoBehaviour
+    {
+        var skill = GetComponent<T>();
+        if (skill != null)
+        {
+            Destroy(skill);
+        }
     }
 
     public override bool UpgradeUnit()
@@ -121,12 +148,15 @@ public class BuildingBase : Unit, ISelectedable, IWaveEvent
 
     public void EndWave()
     {
-        Managers.Game.Inven.SpendWaveCost(Define.EGoodsType.gold, BuildingData.waveCost);
+        if (!Managers.Game.Inven.SpendItem((int)Define.EGoodsType.gold, BuildingData.waveCost))
+        {
+            Stat.DontSpendCost();
+        }
     }
 
     public void ReadyWave()
     {
-        
+        Stat.Mana = 0;
     }
     #endregion
 

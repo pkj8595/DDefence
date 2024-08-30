@@ -40,11 +40,17 @@ namespace Data
             }
         }
 
-        public void MakeTableData(Dictionary<int, StatData> tableData)
+        public void MakeTableData(Dictionary<int, StatData> tableData, List<StatData> PositivePropertyList, List<StatData> NagativePropertyList)
         {
             for (int i = 0; i < StatTable.Length; i++)
             {
-                tableData.Add(StatTable[i].tableNum, StatTable[i]);
+                if (Utils.CalculateCategory(StatTable[i].tableNum) == 300)
+                    PositivePropertyList.Add(StatTable[i]);
+                else if(Utils.CalculateCategory(StatTable[i].tableNum) == 301)
+                    NagativePropertyList.Add(StatTable[i]);
+                else
+                    tableData.Add(StatTable[i].tableNum, StatTable[i]);
+
             }
         }
 
@@ -397,8 +403,10 @@ namespace Data
 
         public string name;
         public string desc;
-        public int goods;
-        public int goods_amount;
+        public int minTableRange;
+        public int maxTableRange;
+        public int[] arr_goods = new int[3];
+        public int[] arr_goods_amount = new int[3];
     }
 
     [Serializable]

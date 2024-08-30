@@ -16,8 +16,8 @@ public class BuildingStat : Stat
     {
         base.Init(statDataNum, onDead, onDeadTarget);
         _data = Managers.Data.BuildingDict[statDataNum];
-        Mana = MaxMana;
         Hp = MaxHp;
+        Mana = 0;
     }
 
     public override float GetAttackValue(Define.EDamageType damageType)
