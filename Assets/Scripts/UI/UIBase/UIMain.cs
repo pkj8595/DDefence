@@ -6,11 +6,12 @@ using UnityEngine.UI;
 public class UIMain : UIBase
 {
     [SerializeField] private GameObject _btnNextPhase;
+    [SerializeField] private Transform _relicParent;
 
-    public override void SetUIBaseData()
-    {
-        base.SetUIBaseData();
-    }
+    [SerializeField] private UI_RelicDesc _relicDesc;       //유물 설명 UI
+
+    [Header("prefab")]
+    [SerializeField] private UI_Relic _relicPrefab;
 
     public override void Init(UIData uiData)
     {
@@ -21,7 +22,9 @@ public class UIMain : UIBase
     public override void UpdateUI()
     {
         base.UpdateUI();
+       
     }
+
     public override void Close()
     {
         base.Close();
@@ -36,6 +39,12 @@ public class UIMain : UIBase
     public void ShowBtnNextPhase()
     {
         _btnNextPhase.SetActive(true);
+    }
+
+
+    public void SetRelicUI()
+    {
+
     }
 
 }

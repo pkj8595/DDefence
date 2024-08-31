@@ -54,5 +54,12 @@ public abstract class NodeBase : MonoBehaviour
     {
 
     }
+    /// <summary>
+    /// 설치 성공시 건물 셋팅 시작
+    /// </summary>
+    public virtual void InstallationSuccess()
+    {
+
+    }
 
 }

@@ -16,7 +16,12 @@ public class BuildingBase : Unit, ISelectedable, IWaveEvent
 
     public int BuildingTableNum;
 
-    public void Start()
+    /*public void Start()
+    {
+        //Init(BuildingTableNum);
+    }*/
+
+    public void Init()
     {
         Init(BuildingTableNum);
     }
@@ -113,7 +118,7 @@ public class BuildingBase : Unit, ISelectedable, IWaveEvent
     {
         if (_damageable != null)
         {
-            UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
+            UIStateBarGroup uiStatebarGroup = Managers.UI.GetUI<UIStateBarGroup>() as UIStateBarGroup;
             uiStatebarGroup.RemoveUnit(_damageable);
         }
     }
@@ -128,6 +133,12 @@ public class BuildingBase : Unit, ISelectedable, IWaveEvent
 
         Managers.Effect.PlayAniEffect("SmallStingHit", transform.position);
         gameObject.SetActive(false);
+        if (gameObject.name == "GodTower")
+        {
+            Debug.Log("<color=red>타워가 파괴되었습니다. 게임오버</color>");
+        }
+
+        BoardManager.Instance.RemoveNode(GetComponent<NodeBase>());
     }
 
     #region ISelectable

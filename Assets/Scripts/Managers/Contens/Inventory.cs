@@ -2,12 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
+using Data;
 
 public class Inventory 
 {
-    public Dictionary<int, int> _itemDic = new Dictionary<int, int>();
+    private readonly Dictionary<int, int> _itemDic = new Dictionary<int, int>();
+    private readonly List<Data.ShopData> _cardDataList = new List<Data.ShopData>();
     public Action<int> OnItemAmountChanged { get; set; }
+    public List<ShopData> GetCardDataList => _cardDataList;
+
+    private UICardList uiCardList;
+    public void AddCard(Data.ShopData data)
+    {
+        if (uiCardList == null)
+        {
+            uiCardList = Managers.UI.ShowUI<UICardList>() as UICardList;
+        }
+
+        _cardDataList.Add(data);
+        uiCardList.AddCard(data);
+    }
+
 
     public void Init()
     {
@@ -84,7 +99,6 @@ public class Inventory
         _itemDic[(int)goodsType] -= itemAmount;
         OnItemAmountChanged?.Invoke((int)goodsType);
     }
-
 
 
 }

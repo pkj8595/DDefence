@@ -22,13 +22,14 @@ public class BoardManager : MonoSingleton<BoardManager>
     private bool _isEditMode = false;
     private bool _isSelectNode = false;
     private int _selectedNodeIndex = -1;
+    private bool _isCard = false;
 
     [SerializeField] private NodeBase _previewNode;
     [SerializeField] private Material _previewMaterial_Green;
     [SerializeField] private Material _previewMaterial_Red;
 
     private (Vector3Int position, Vector3 normal) _beforeMousePosition;
-
+    private string _cardItemPath;
 
     private void Start()
     {
@@ -56,7 +57,7 @@ public class BoardManager : MonoSingleton<BoardManager>
 
     void Update()
     {
-        if (_isEditMode && _isSelectNode)
+        if (_isEditMode && _isSelectNode || _isCard)
         {
             //프리뷰 노드 보여주기
             (Vector3Int position, Vector3 normal) nodeMouse = GetCellPositionToMouse();
@@ -176,8 +177,9 @@ public class BoardManager : MonoSingleton<BoardManager>
         if (node == null)
             return;
 
-        RemoveBuildingNode(node);
+        RemoveNode(node);
     }
+
     #endregion
 
     private NodeBase GetNodeToMouse()
@@ -215,20 +217,36 @@ public class BoardManager : MonoSingleton<BoardManager>
         return (Vector3Int.zero, Vector3.zero);
     }
 
-    private void AddBuildingNode(NodeBase previewNode, GameObject nodePrefab)
+    private bool AddBuildingNode(NodeBase previewNode)
+    {
+        GameObject nodeprefab = Managers.Resource.Instantiate(_cardItemPath, this.transform);
+        nodeprefab.SetActive(false);
+        return AddBuildingNode(previewNode, nodeprefab, true);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="previewNode"></param>
+    /// <param name="nodePrefab"></param>
+    private bool AddBuildingNode(NodeBase previewNode, GameObject nodePrefab, bool isCard = false)
     {
         NodeBase node = nodePrefab.GetComponent<NodeBase>();
         if (node == null)
         {
+            if (isCard)
+                Destroy(node.gameObject);
             Debug.Log($"{previewNode.name}이 없습니다.");
-            return;
+            return false;
         }
 
         Vector3Int gridPosition = previewNode.Position;
         if (!CanPlaceBuilding(gridPosition, node.NodeSize, previewNode))
         {
+            if (isCard)
+                Destroy(node.gameObject);
             Debug.Log("이미 설치된 위치입니다.");
-            return;
+            return false;
         }
 
         // 차지하는 공간을 nodes 딕셔너리에 추가
@@ -246,8 +264,14 @@ public class BoardManager : MonoSingleton<BoardManager>
             }
         }
 
+        NodeBase nodeObject;
+        // 생성
+        if (isCard)
+            nodeObject = node;
+        else
+            nodeObject = Managers.Resource.Instantiate(node.gameObject).GetComponent<NodeBase>();
+
         // node 생성 및 초기화
-        NodeBase nodeObject = Managers.Resource.Instantiate(node.gameObject).GetComponent<NodeBase>();
         nodeObject.Init(gridPosition);
         nodeObject.SetActive(true);
         nodeObject.transform.position = previewNode.transform.position;
@@ -261,7 +285,9 @@ public class BoardManager : MonoSingleton<BoardManager>
             nodeObject.transform.SetParent(_nodeGroup.transform);
             nodeObject.transform.rotation = previewNode.transform.rotation;
         }
-
+        //설치 성공시 실행
+        nodeObject.InstallationSuccess();
+        return true;
     }
 
     private static Vector3 ComputeNodeScalePosition(NodeBase node, Vector3Int gridPosition)
@@ -270,7 +296,7 @@ public class BoardManager : MonoSingleton<BoardManager>
     }
 
     // 건물 노드 제거
-    private void RemoveBuildingNode(NodeBase node)
+    public void RemoveNode(NodeBase node)
     {
         // building 일 경우 리스트에서 삭제
         if( node is BuildingNode)
@@ -465,6 +491,10 @@ public class BoardManager : MonoSingleton<BoardManager>
     }
     #endregion
 
+    /// <summary>
+    /// 보드 UI에서 생성 
+    /// </summary>
+    /// <param name="index"></param>
     public void SetNodeIndex(int index)
     {
         if (!_isEditMode)
@@ -485,6 +515,40 @@ public class BoardManager : MonoSingleton<BoardManager>
 
     }
 
+    
+    /// <summary>
+    /// 카드에서 생성
+    /// </summary>
+    /// <param name="itemBase"></param>
+    public void ExcuteCardBuilding(ItemBase itemBase)
+    {
+        ClearPreviewNode();
+
+        _cardItemPath = $"Building/{Managers.Data.BuildingDict[itemBase.GetTableNum].prefab}";
+        _previewNode = Managers.Resource.Instantiate(_cardItemPath, this.transform)
+                                        .GetComponent<NodeBase>();
+        _previewNode.gameObject.layer = 0;
+        _previewNode.gameObject.name = "PreviewNode";
+        ChangeMaterialPreviewNode(false);
+        _previewNode.SetActive(true);
+        _isSelectNode = true;
+        _isCard = true;
+    }
+
+    /// <summary>
+    /// 카드를 놓았을때 실행
+    /// </summary>
+    /// <param name="itemBase"></param>
+    public bool CompleteCardBuilding()
+    {
+        bool isBuilding = AddBuildingNode(_previewNode);
+        ClearPreviewNode();
+        _isSelectNode = false;
+        _isCard = false;
+        _cardItemPath = string.Empty;
+        return isBuilding;
+    }
+
     public void OnCancelSelectedNode()
     {
         ClearPreviewNode();
@@ -503,7 +567,7 @@ public class BoardManager : MonoSingleton<BoardManager>
     private void ClearPreviewNode()
     {
         if (_previewNode != null)
-            Managers.Resource.Destroy(_previewNode.gameObject);
+           Destroy(_previewNode.gameObject);
         _previewNode = null;
     }
 

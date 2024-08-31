@@ -15,11 +15,15 @@ public class CubeEventTest : MonoBehaviour
 
     public void Test()
     {
-        var data = Managers.Data.StatDict.GetEnumerator();
-        while (data.MoveNext())
-        {
-            Debug.Log(data.Current.Value.name);
-        }
+        int[] arr = { 303001001,
+                        303001002,
+                        303001003,
+                        303001004,
+                        303002001,
+                        303002002
+        };
+
+        Managers.Game.Inven.AddCard(Managers.Data.ShopDict[arr[Random.Range(0, arr.Length - 1)]]);
 
     }
 
