@@ -23,7 +23,7 @@ public class CubeEventTest : MonoBehaviour
                         303002002
         };
 
-        Managers.Game.Inven.AddCard(Managers.Data.ShopDict[arr[Random.Range(0, arr.Length - 1)]]);
+        Managers.Game.Inven.AddCard(Managers.Data.ShopDict[arr[Random.Range(4, 6)]]);
 
     }
 

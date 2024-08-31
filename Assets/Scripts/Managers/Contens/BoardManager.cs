@@ -4,6 +4,13 @@ using UnityEngine.AI;
 
 public class BoardManager : MonoSingleton<BoardManager>
 {
+    enum EBuildingStep
+    {
+        None,
+        PositionStep,
+        RotationStep,
+    }
+
     private MeshFilter mergedMeshFilter;
     private MeshRenderer mergedMeshRenderer;
     private MeshCollider mergedMeshCollider;
@@ -22,7 +29,7 @@ public class BoardManager : MonoSingleton<BoardManager>
     private bool _isEditMode = false;
     private bool _isSelectNode = false;
     private int _selectedNodeIndex = -1;
-    private bool _isCard = false;
+    private EBuildingStep _cardBuildingStep = EBuildingStep.None;
 
     [SerializeField] private NodeBase _previewNode;
     [SerializeField] private Material _previewMaterial_Green;
@@ -57,7 +64,7 @@ public class BoardManager : MonoSingleton<BoardManager>
 
     void Update()
     {
-        if (_isEditMode && _isSelectNode || _isCard)
+        if (_isEditMode && _isSelectNode || _cardBuildingStep == EBuildingStep.PositionStep)
         {
             //프리뷰 노드 보여주기
             (Vector3Int position, Vector3 normal) nodeMouse = GetCellPositionToMouse();
@@ -72,9 +79,38 @@ public class BoardManager : MonoSingleton<BoardManager>
 
             _previewNode.transform.position = ComputeNodeScalePosition(_previewNode, nodeMouse.position);
             _previewNode.Position = nodeMouse.position;
-            _previewNode.SetNodeRotation(nodeMouse.normal);
+            //_previewNode.SetNodeRotation(nodeMouse.normal);
 
             ChangeMaterialPreviewNode(CanPlaceBuilding(nodeMouse.position, _previewNode.NodeSize, _previewNode));
+        }
+        else if(_cardBuildingStep == EBuildingStep.RotationStep)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
+            {
+                Vector3 worldMousePosition = hit.point;
+                Vector3 direction = worldMousePosition - _previewNode.transform.position;
+                direction.y = 0;
+
+                if (direction != Vector3.zero)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(direction);
+                    float snappedYRotation = Mathf.Round(targetRotation.eulerAngles.y / 90f) * 90f;
+                    _previewNode.transform.rotation = Quaternion.Euler(0, snappedYRotation, 0);
+                }
+            }
+
+            //회전 상태에서 
+            if (Input.GetMouseButtonDown(0))
+            {
+                _card.UseComplete(CompleteCardBuilding());
+            }
+            //오른쪽 마우스 클릭 -> 캔슬
+            else if (Input.GetMouseButtonDown(1))
+            {
+                _card.UseComplete(false);
+                OnCancelCard();
+            }
         }
     }
 
@@ -275,6 +311,8 @@ public class BoardManager : MonoSingleton<BoardManager>
         nodeObject.Init(gridPosition);
         nodeObject.SetActive(true);
         nodeObject.transform.position = previewNode.transform.position;
+        nodeObject.transform.rotation = previewNode.transform.rotation;
+
         if (nodeObject is BuildingNode)
         {
             nodeObject.transform.SetParent(_buildingGroup.transform);
@@ -283,7 +321,6 @@ public class BoardManager : MonoSingleton<BoardManager>
         else
         {
             nodeObject.transform.SetParent(_nodeGroup.transform);
-            nodeObject.transform.rotation = previewNode.transform.rotation;
         }
         //설치 성공시 실행
         nodeObject.InstallationSuccess();
@@ -531,8 +568,21 @@ public class BoardManager : MonoSingleton<BoardManager>
         _previewNode.gameObject.name = "PreviewNode";
         ChangeMaterialPreviewNode(false);
         _previewNode.SetActive(true);
-        _isSelectNode = true;
-        _isCard = true;
+        _cardBuildingStep = EBuildingStep.PositionStep;
+    }
+
+    UICard _card;
+    public bool RotationStep(UICard card)
+    {
+        if (CanPlaceBuilding(_beforeMousePosition.position, _previewNode.NodeSize, _previewNode))
+        {
+            _cardBuildingStep = EBuildingStep.RotationStep;
+            _card = card;
+            return true;
+        }
+        ClearPreviewNode();
+        ClearCard();
+        return false;
     }
 
     /// <summary>
@@ -543,10 +593,21 @@ public class BoardManager : MonoSingleton<BoardManager>
     {
         bool isBuilding = AddBuildingNode(_previewNode);
         ClearPreviewNode();
-        _isSelectNode = false;
-        _isCard = false;
-        _cardItemPath = string.Empty;
+        ClearCard();
         return isBuilding;
+    }
+
+    private void ClearCard()
+    {
+        _card = null;
+        _cardBuildingStep = EBuildingStep.None;
+        _cardItemPath = string.Empty;
+    }
+
+    public void OnCancelCard()
+    {
+        ClearPreviewNode();
+        ClearCard();
     }
 
     public void OnCancelSelectedNode()

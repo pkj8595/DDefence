@@ -11,10 +11,12 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     public Image _imgMain;
     public Image _imgBack;
 
-
     [SerializeField] private RectTransform _rect;
     private Vector3 originalPosition;
+    private Vector3 startDragPosition;
     private float originalScale;
+    private bool isDragging = false;
+
     public RectTransform Rect => _rect;
     public CanvasGroup canvasGroup;
 
@@ -72,21 +74,57 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     {
         _rect.DOAnchorPosY(originalPosition.y + 30f, 0.2f).SetEase(Ease.OutQuad);
         _rect.DOScale(originalScale + 0.1f, 0.2f).SetEase(Ease.OutQuad);
+
+        if (isDragging && Input.GetMouseButton(0))
+        {
+            CancelDrag();
+        }
     }
 
-    // 마우스가 카드에서 벗어날 때 호출되는 함수
     public void OnPointerExit(PointerEventData eventData)
     {
         _rect.DOAnchorPosY(originalPosition.y, 0.2f).SetEase(Ease.OutQuad);
         _rect.DOScale(originalScale, 0.2f).SetEase(Ease.OutQuad);
+
+        if (!isDragging && Input.GetMouseButton(0))
+        {
+            StartDrag();
+        }
     }
 
-    // 드래그 시작 시 호출되는 함수
     public void OnBeginDrag(PointerEventData eventData)
     {
-        // 드래그 중에는 카드가 투명해지고 레이캐스트가 무시되도록 설정
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        if (isDragging)
+        {
+            EndDrag();
+        }
+    }
+
+   
+    public void UseComplete(bool isSuccess)
+    {
+        if(isSuccess)
+            _OnUseAction?.Invoke(this);
+
+        canvasGroup.alpha = 1f;
+        canvasGroup.blocksRaycasts = true;
+    }
+
+    private void StartDrag()
+    {
+        isDragging = true;
+        startDragPosition = _rect.anchoredPosition;
         canvasGroup.alpha = 0.6f;
         canvasGroup.blocksRaycasts = false;
+
         switch (_item)
         {
             case CharacterItem:
@@ -99,43 +137,60 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         }
     }
 
-    // 드래그 중 호출되는 함수
-    public void OnDrag(PointerEventData eventData)
+    private void EndDrag()
     {
-        
-    }
-
-    // 드래그 종료 시 호출되는 함수
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        // 드래그 종료 후 카드의 투명도를 원래대로 돌리고 레이캐스트 활성화
+        isDragging = false;
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
-
         switch (_item)
         {
             case CharacterItem:
+                {
+                    canvasGroup.alpha = 1f;
+                    canvasGroup.blocksRaycasts = true;
+                }
                 break;
             case BuildingItem:
-                if (BoardManager.Instance.CompleteCardBuilding())
+                if (!BoardManager.Instance.RotationStep(this))
                 {
-                    _OnUseAction?.Invoke(this);
+                    canvasGroup.alpha = 1f;
+                    canvasGroup.blocksRaycasts = true;
                 }
                 break;
             case RuneItem:
+                {
+                    canvasGroup.alpha = 1f;
+                    canvasGroup.blocksRaycasts = true;
+                }
                 break;
         }
     }
 
-    // 카드의 현재 World Position을 가져오는 함수
-    private Vector3 GetWorldPosition()
+    private void CancelDrag()
     {
-        // RectTransform의 위치를 World Position으로 변환
-        return Camera.main.ScreenToWorldPoint(_rect.position);
-    }
+        isDragging = false;
+        _rect.anchoredPosition = startDragPosition;
+        canvasGroup.alpha = 1f;
+        canvasGroup.blocksRaycasts = true;
 
-    private void ExcuteBuildingItems()
-    {
-        
+
+        switch (_item)
+        {
+            case CharacterItem:
+                {
+                   
+                }
+                break;
+            case BuildingItem:
+                {
+                    BoardManager.Instance.OnCancelCard();
+                }
+                break;
+            case RuneItem:
+                {
+                   
+                }
+                break;
+        }
     }
 }
