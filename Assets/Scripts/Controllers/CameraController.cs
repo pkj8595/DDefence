@@ -29,7 +29,7 @@ public class CameraController : MonoBehaviour
 
         if (cameraSnap == null)
         {
-            cameraSnap = GetComponent<ProPixelizer.CameraSnapSRP>();
+            //cameraSnap = GetComponent<ProPixelizer.CameraSnapSRP>();
         }
     }
 
