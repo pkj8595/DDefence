@@ -159,8 +159,7 @@ public class Define
         gold = 301001001,
         manaStone = 301001002,
         wood = 301001003,
-        stone = 301001004,
-        food = 301001005,
+        food = 301001004,
     }
 
     

@@ -46,7 +46,7 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
             switch (_item) 
             {
                 case CharacterItem:
-                    _imgMain.sprite = Managers.Resource.Load<Sprite>(Define.Path.UIIcon + "IconRandomChar");
+                    _imgMain.sprite = Managers.Resource.Load<Sprite>(Define.Path.UIIcon + "IconRandomPawn");
                     break;
                 case BuildingItem:
                     _imgMain.sprite = Managers.Resource.Load<Sprite>(Define.Path.UIIcon + "IconRandomBuilding");

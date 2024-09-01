@@ -938,25 +938,19 @@
       "tableNum": 301001002,
       "name": "마석",
       "desc": "무언가 느껴진다.",
-      "imageStr": "testImg"
+      "imageStr": "img_manaStone"
     },
     {
       "tableNum": 301001003,
       "name": "목재",
       "desc": "나무다. 필요한 곳이 있을 것이다.",
-      "imageStr": "testImg"
+      "imageStr": "img_wood"
     },
     {
       "tableNum": 301001004,
-      "name": "석재",
-      "desc": "돌이다. 필요한 곳이 있을 것이다.",
-      "imageStr": "testImg"
-    },
-    {
-      "tableNum": 301001005,
       "name": "식량",
       "desc": "먹어야 살 수 있다.",
-      "imageStr": "testImg"
+      "imageStr": "img_food"
     }
   ],
   "RuneTable": [
@@ -1053,7 +1047,7 @@
     {
       "tableNum": 303002001,
       "name": "화살함정",
-      "desc": "화살함정",
+      "desc": "화살을 쏘는 함정 설치할 위치에 드래그 해보자",
       "minTableRange": 202101000,
       "maxTableRange": 202101000,
       "arr_goods": [

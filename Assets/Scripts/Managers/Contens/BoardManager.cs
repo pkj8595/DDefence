@@ -31,6 +31,8 @@ public class BoardManager : MonoSingleton<BoardManager>
     private int _selectedNodeIndex = -1;
     private EBuildingStep _cardBuildingStep = EBuildingStep.None;
 
+    [SerializeField] private LineRenderer _lineRender;
+
     [SerializeField] private NodeBase _previewNode;
     [SerializeField] private Material _previewMaterial_Green;
     [SerializeField] private Material _previewMaterial_Red;
@@ -98,7 +100,11 @@ public class BoardManager : MonoSingleton<BoardManager>
                     float snappedYRotation = Mathf.Round(targetRotation.eulerAngles.y / 90f) * 90f;
                     _previewNode.transform.rotation = Quaternion.Euler(0, snappedYRotation, 0);
                 }
+
+                Vector3[] arrLine = { _previewNode.transform.position, new Vector3(worldMousePosition.x,_previewNode.transform.position.y,worldMousePosition.z) };
+                _lineRender.SetPositions(arrLine);
             }
+
 
             //회전 상태에서 
             if (Input.GetMouseButtonDown(0))
@@ -138,8 +144,11 @@ public class BoardManager : MonoSingleton<BoardManager>
         if (_isEditMode)
         {
             UnmergeMeshes();
-            var uiBoard = Managers.UI.ShowUI<UIBoard>();
-            uiBoard.SetActive(_isEditMode);
+            if (_isSelectNode)
+            {
+                var uiBoard = Managers.UI.ShowUI<UIBoard>();
+                uiBoard.SetActive(_isEditMode);
+            }
         }
         else
         {
@@ -147,7 +156,8 @@ public class BoardManager : MonoSingleton<BoardManager>
             _selectedNodeIndex = -1;
             ClearPreviewNode();
             MergeAllMeshes();
-            Managers.UI.ColseUI<UIBoard>();
+            if (_isSelectNode)
+                Managers.UI.ColseUI<UIBoard>();
         }
     }
 
@@ -551,7 +561,6 @@ public class BoardManager : MonoSingleton<BoardManager>
         _isSelectNode = true;
 
     }
-
     
     /// <summary>
     /// 카드에서 생성
@@ -578,10 +587,11 @@ public class BoardManager : MonoSingleton<BoardManager>
         {
             _cardBuildingStep = EBuildingStep.RotationStep;
             _card = card;
+            _lineRender.enabled = true;
             return true;
         }
-        ClearPreviewNode();
-        ClearCard();
+        OnCancelCard();
+
         return false;
     }
 
@@ -592,8 +602,7 @@ public class BoardManager : MonoSingleton<BoardManager>
     public bool CompleteCardBuilding()
     {
         bool isBuilding = AddBuildingNode(_previewNode);
-        ClearPreviewNode();
-        ClearCard();
+        OnCancelCard();
         return isBuilding;
     }
 
@@ -602,6 +611,7 @@ public class BoardManager : MonoSingleton<BoardManager>
         _card = null;
         _cardBuildingStep = EBuildingStep.None;
         _cardItemPath = string.Empty;
+        _lineRender.enabled = false;
     }
 
     public void OnCancelCard()
