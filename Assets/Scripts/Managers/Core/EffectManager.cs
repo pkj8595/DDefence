@@ -5,12 +5,17 @@ using UnityEngine;
 
 public class EffectManager : ManagerBase
 {
+    List<EffectAniController> _aniEffectList = new List<EffectAniController>(10);
+
     public override void Init()
     {
         base.Init();
 
     }
-    public override void Clear() { }
+    public override void Clear() 
+    {
+        _aniEffectList.Clear();
+    }
 
 
     /// <summary>
@@ -42,7 +47,6 @@ public class EffectManager : ManagerBase
         return gameObj.GetComponent<ParticleSystem>();
     }
 
-    List<EffectAniController> _aniEffectList = new List<EffectAniController>(10);
     public EffectAniController PlayAniEffect(string name, Transform parent = null, int sortingOrder = 200)
     {
         EffectAniController ret = GetPoolAniEffect();

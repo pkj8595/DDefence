@@ -34,6 +34,8 @@ public class Managers : MonoBehaviour
     public static EffectManager Effect { get => Instance._effect; }
     #endregion
 
+    static bool _isFirstInit = false;
+
     private void Awake()
     {
         
@@ -51,8 +53,9 @@ public class Managers : MonoBehaviour
 
     public static void InitManagers()
     {
-        if(s_Instance == null)
+        if(s_Instance == null && !_isFirstInit)
         {
+            _isFirstInit = true;
             GameObject go = GameObject.Find("@Managers");
             if (go == null)
             {
@@ -80,11 +83,15 @@ public class Managers : MonoBehaviour
 
     public static void Clear()
     {
+        Scene.Clear();
+        Data.Clear();
+        Resource.Clear();
         Input.Clear();
         Sound.Clear();
-        Scene.Clear();
         UI.Clear();
         Pool.Clear();
+        Effect.Clear();
+        UI.Clear();
         Effect.Clear();
     }
 

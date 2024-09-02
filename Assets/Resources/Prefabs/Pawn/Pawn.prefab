@@ -242,7 +242,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pawnBuilder: {fileID: 6623756326569235258}
-  _attackType: 0
   _animator: {fileID: 6623756326569235261}
   spriteLibrary: {fileID: 6623756325375741245}
   Body: {fileID: 6623756325375741244}

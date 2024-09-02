@@ -23,6 +23,8 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     private Action<UICard> _OnUseAction;
     private ItemBase _item;
 
+    static bool _isAlreayStart = false;
+
     private void Start()
     {
         originalPosition = _rect.anchoredPosition;
@@ -72,6 +74,9 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (_isAlreayStart)
+            return;
+
         _rect.DOAnchorPosY(originalPosition.y + 30f, 0.2f).SetEase(Ease.OutQuad);
         _rect.DOScale(originalScale + 0.1f, 0.2f).SetEase(Ease.OutQuad);
 
@@ -83,6 +88,9 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (_isAlreayStart)
+            return;
+
         _rect.DOAnchorPosY(originalPosition.y, 0.2f).SetEase(Ease.OutQuad);
         _rect.DOScale(originalScale, 0.2f).SetEase(Ease.OutQuad);
 
@@ -120,6 +128,7 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     private void StartDrag()
     {
+        _isAlreayStart = true;
         isDragging = true;
         startDragPosition = _rect.anchoredPosition;
         canvasGroup.alpha = 0.6f;
@@ -139,15 +148,15 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     private void EndDrag()
     {
+        _isAlreayStart = false;
         isDragging = false;
-        canvasGroup.alpha = 1f;
-        canvasGroup.blocksRaycasts = true;
         switch (_item)
         {
             case CharacterItem:
                 {
                     canvasGroup.alpha = 1f;
                     canvasGroup.blocksRaycasts = true;
+                    UseComplete(true);
                 }
                 break;
             case BuildingItem:
@@ -161,6 +170,7 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
                 {
                     canvasGroup.alpha = 1f;
                     canvasGroup.blocksRaycasts = true;
+                    UseComplete(true);
                 }
                 break;
         }
@@ -168,11 +178,11 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     private void CancelDrag()
     {
+        _isAlreayStart = false;
         isDragging = false;
         _rect.anchoredPosition = startDragPosition;
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
-
 
         switch (_item)
         {

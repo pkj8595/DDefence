@@ -129,4 +129,12 @@ public class UIManager : ManagerBase
         var toast = ShowUIPopup<UIToastMessage>() as UIToastMessage;
         toast.SetMessage(message);
     }
+
+    public override void Clear()
+    {
+        base.Clear();
+
+        GameObject.Destroy(_uiRoot);
+        _uiStack.Clear();
+    }
 }

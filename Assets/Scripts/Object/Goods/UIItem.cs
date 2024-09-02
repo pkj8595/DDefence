@@ -10,10 +10,16 @@ public class UIItem : MonoBehaviour
 
     public void Init(int itemNum, int amount)
     {
+        if(itemNum == 0 || amount == 0)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+        
         var item = ItemBase.GetItem(itemNum);
-
         _imgItem.sprite = Managers.Resource.Load<Sprite>($"Sprites/UI/Icon/{item.ImgStr}");
-        _txtAmount.text = Managers.Game.Inven.GetItem(amount).ToString();
+        _txtAmount.text = amount.ToString();
+        gameObject.SetActive(true);
     }
 
 }

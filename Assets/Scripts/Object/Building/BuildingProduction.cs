@@ -12,21 +12,13 @@ public class BuildingProduction : MonoBehaviour, IWaveEvent
 {
     BuildingBase _buildingBase;
     Data.ProductionData _data;
-
-    private void OnEnable()
-    {
-        Managers.Game.RegisterWaveObject(this);
-    }
-
-    private void OnDisable()
-    {
-        Managers.Game.RemoveWaveObject(this);
-    }
+    int _waveCount;
 
     public void Init(int tableNum, BuildingBase buildingBase)
     {
         _buildingBase = buildingBase;
         _data = Managers.Data.ProductionDict[tableNum];
+        _waveCount = 0;
     }
 
     public void EndWave()
@@ -34,7 +26,13 @@ public class BuildingProduction : MonoBehaviour, IWaveEvent
         if (_buildingBase.Stat.IsDead)
             return;
 
-        Managers.Game.Inven.AddItem(_data.itemNum, _data.itemAmount);
+        _waveCount++;
+
+        if (_data.waveCount <= _waveCount)
+        {
+            _waveCount -= _data.waveCount;
+            Managers.Game.Inven.AddItem(_data.itemNum, _data.itemAmount);
+        }
     }
 
     public void ReadyWave()

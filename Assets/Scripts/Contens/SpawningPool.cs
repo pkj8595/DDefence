@@ -49,7 +49,7 @@ public class SpawningPool
         {
             _monsterCount++;
             PawnBase obj = Managers.Game.SpawnPawn(_enemyQueue.Dequeue(), Define.ETeam.Enemy);
-            int gateIndex = Utils.Round(UnityEngine.Random.Range(0, _gateList.Count - 1));
+            int gateIndex = Utils.Round(UnityEngine.Random.Range(0, _gateList.Count));
             obj.transform.position = _gateList[gateIndex].transform.position;
 
             await UniTask.Delay(1000);

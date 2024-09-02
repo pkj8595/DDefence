@@ -118,6 +118,10 @@ public class UIStoryBook : UIBase
         {
             Managers.Scene.LoadScene(Define.Scene.Ending);
         }
+        else if (Utils.CalculateCategory(_storyDataNum) == 900)
+        {
+            Managers.UI.ShowUI<UIPopupShop>();
+        }
 
         Managers.Game.NextPhase();
     }

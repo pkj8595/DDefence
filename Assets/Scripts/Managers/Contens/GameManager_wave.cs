@@ -23,7 +23,9 @@ public partial class GameManager
     public PriorityQueue<Data.StoryData> StoryStack { get; set; } = new();
 
     private EGamePhase GamePhase { get; set; } = EGamePhase.Stroy;
-    public int _waveCount = 0;
+    public int WaveCount { get => _waveCount; private set => _waveCount = value; }
+
+    private int _waveCount = 0;
     private readonly SpawningPool _pool = new SpawningPool();
 
     IPhase _phase;
@@ -123,7 +125,8 @@ public partial class GameManager
 
     public void RemoveWaveObject(IWaveEvent productionable)
     {
-        _waveObjectList.Remove(productionable);
+        if (_waveObjectList.Contains(productionable))
+            _waveObjectList.Remove(productionable);
     }
 
     public void RunEndWave()

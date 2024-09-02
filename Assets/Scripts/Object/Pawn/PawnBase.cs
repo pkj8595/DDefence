@@ -12,7 +12,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
     [field: SerializeField] public Define.ETeam Team { get; set; } = Define.ETeam.Playable;
     public Define.WorldObject WorldObjectType { get; set; } = Define.WorldObject.Pawn;
     [SerializeField] protected Define.EPawnAniState _state = Define.EPawnAniState.Idle;
-    [field : SerializeField] protected Vector3 _destPos { get; set; }
+    [field : SerializeField] protected Vector3 DestPos { get; set; }
     [SerializeField] protected Transform _projectileTrans;
 
 
@@ -167,7 +167,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
             case NavMeshPathStatus.PathPartial:
                 Debug.Log("일부만 생성.");
                 if (_navAgent.path.corners != null)
-                    _destPos = _navAgent.path.corners[_navAgent.path.corners.Length - 1];
+                    DestPos = _navAgent.path.corners[_navAgent.path.corners.Length - 1];
                 break;
             case NavMeshPathStatus.PathInvalid:
                 //Debug.Log("유효하지 않는 경로");
@@ -178,7 +178,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         }
 
         //naviAgent가 이동을 마쳤을 경우 idle로 돌아감
-        if (_navAgent.velocity == Vector3.zero && Vector3.Distance(_destPos, transform.position) < 0.2f)
+        if (_navAgent.velocity == Vector3.zero && Vector3.Distance(DestPos, transform.position) < 0.2f)
         {
             //State = _lockTarget == null ? Define.EPawnAniState.Idle : Define.EPawnAniState.Ready;
             AI.SetState(AI.GetIdleState());
@@ -401,7 +401,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
 
     public void SetDestination(Vector3 position)
     {
-        if (_destPos == position)
+        if (DestPos == position)
             return;
         if (BoardManager.Instance.GetMoveablePosition(position, out Vector3 moveablePosition))
         {
@@ -411,10 +411,10 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
 
     protected virtual void OnMove(Vector3 destPosition)
     {
-        if (_destPos == destPosition)
+        if (DestPos == destPosition)
             return;
-        _destPos = destPosition;
-        _navAgent.SetDestination(_destPos);
+        DestPos = destPosition;
+        _navAgent.SetDestination(DestPos);
         AI.SetState(AI.GetMoveState());
     }
 
@@ -423,7 +423,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
     /// </summary>
     public void OnMoveStop()
     {
-        _destPos = gameObject.transform.position;
+        DestPos = gameObject.transform.position;
         _navAgent.ResetPath();
     }
 

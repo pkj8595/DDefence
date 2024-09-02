@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: -8599587920035702432}
   - component: {fileID: 7890377245433850760}
   - component: {fileID: 1624833846437887981}
-  - component: {fileID: 5045033756416970575}
+  - component: {fileID: 5384005428185734856}
   m_Layer: 8
   m_Name: ArrowTrab
   m_TagString: Untagged
@@ -161,7 +161,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5045033756416970575
+--- !u!114 &5384005428185734856
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -170,14 +170,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 6162374489451764278}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cf243ab6c211f540b5786ba7d19a2eb, type: 3}
+  m_Script: {fileID: 11500000, guid: 1634b190cd6da2d479449c9953fb0332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rayDistance: 10
-  rayDirection: {x: 0, y: 0, z: 1}
+  boxSize: {x: 1, y: 1, z: 10}
+  boxCenterOffset: {x: 0, y: 0, z: 5.6}
   collisionLayers:
     serializedVersion: 2
     m_Bits: 512
+  boxOrientation: {x: 0, y: 0, z: 0.008726535, w: 0.9999619}
 --- !u!1 &8103111821424232524
 GameObject:
   m_ObjectHideFlags: 0

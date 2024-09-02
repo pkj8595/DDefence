@@ -77,9 +77,8 @@ public class BuildingBase : Unit, ISelectedable, IWaveEvent
                 Destroy(skill);
             }
         }
-
-        
     }
+
 
     private void DestroyComponent<T>() where T : MonoBehaviour
     {
@@ -163,12 +162,30 @@ public class BuildingBase : Unit, ISelectedable, IWaveEvent
         {
             Stat.DontSpendCost();
         }
+
+        if(_production != null)
+        {
+            _production.EndWave();
+        }
     }
 
     public void ReadyWave()
     {
         Stat.Mana = 0;
+
+        if (_production != null)
+        {
+            _production.ReadyWave();
+        }
     }
     #endregion
+    private void OnEnable()
+    {
+        Managers.Game.RegisterWaveObject(this);
+    }
 
+    private void OnDisable()
+    {
+        Managers.Game.RemoveWaveObject(this);
+    }
 }

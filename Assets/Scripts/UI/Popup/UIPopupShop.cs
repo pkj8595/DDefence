@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
 
 public class UIPopupShop : UIPopup
 {
-    private GameObject _prefabShopCard;
+    public List<UIShopCard> _shopCardList;
 
     public override void Init(UIData uiData)
     {
@@ -17,11 +16,22 @@ public class UIPopupShop : UIPopup
     {
         base.UpdateUI();
 
+        List<Data.ShopData> shopDataList = new List<Data.ShopData>();
+        var iter = Managers.Data.ShopDict.GetEnumerator();
+        while (iter.MoveNext()) 
+        {
+            shopDataList.Add(iter.Current.Value);
+        }
+
+        for (int i = 0; i < 12; i++)
+        {
+            int randomIndex = Random.Range(0, shopDataList.Count);
+            _shopCardList[i].Init(shopDataList[randomIndex]);
+        }
+
+
     }
 
-    public void OnClickUpgrade()
-    {
-        
-        
-    }
+
+
 }

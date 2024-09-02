@@ -15,8 +15,14 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float _rotateSpeed = 46f;
     [SerializeField] private float _moveSpeed = 10f;
     [SerializeField] private float _mouseWheelScale = 0.01f;
-    public ProPixelizer.CameraSnapSRP cameraSnap;
+    //public ProPixelizer.CameraSnapSRP cameraSnap;
+    private Camera _camera;
 
+    private void Awake()
+    {
+        if (_camera == null)
+            _camera = Camera.main;
+    }
     private void Start()
     {
         Managers.Input.KeyAction -= MoveWASD;
@@ -27,18 +33,18 @@ public class CameraController : MonoBehaviour
                                          Quaternion.Euler(_offsetRorationFormTarget));
         _cameraTarget.transform.Rotate(0f, 45f, 0f);
 
-        if (cameraSnap == null)
-        {
-            //cameraSnap = GetComponent<ProPixelizer.CameraSnapSRP>();
-        }
+       
     }
 
     public void Update()
     {
-        //마우스
+        /*//마우스
         float scrollInput = Input.GetAxis("Mouse ScrollWheel");
         float clampSize = cameraSnap.PixelSize - scrollInput * _mouseWheelScale;
-        cameraSnap.PixelSize = Mathf.Clamp(clampSize, 0.007f, 0.039f);
+        cameraSnap.PixelSize = Mathf.Clamp(clampSize, 0.007f, 0.039f);*/
+        float scrollInput = Input.GetAxis("Mouse ScrollWheel");
+        float clampSize = _camera.orthographicSize - scrollInput * _mouseWheelScale;
+        _camera.orthographicSize = Mathf.Clamp(clampSize, 3.0f, 14f);
     }
 
     public void MoveWASD()
@@ -46,9 +52,9 @@ public class CameraController : MonoBehaviour
         //카메라 이동로직
         Vector3 moveValue = Vector3.zero;
         int rotateValue = 0;
-        if (Input.GetKey(KeyCode.E))
+        if (Input.GetKey(KeyCode.Q))
             rotateValue = 1;
-        else if (Input.GetKey(KeyCode.Q))
+        else if (Input.GetKey(KeyCode.E))
             rotateValue = -1;
 
         moveValue.z = Input.GetAxis("Vertical");

@@ -6,6 +6,12 @@ public class StoryPhase : IPhase
 {
     public void EnterPhase()
     {
+        int shopCount = Managers.Game.WaveCount % 2;
+        if (shopCount == 0)
+        {
+            Managers.Game.StoryStack.Enqueue(Managers.Data.StoryDict[111900001], Managers.Data.StoryDict[111900001].priority);
+        }
+
         Data.StoryData storyData;
         if (!Managers.Game.StoryStack.IsEmpty())
         {

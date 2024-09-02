@@ -17,6 +17,7 @@ public class UI_UnitInfo : MonoBehaviour
     [SerializeField] private List<UI_ImageText> _rune;
     [SerializeField] private UI_ImageText _upgrade;
     [SerializeField] private Text _ignoreAttribute;
+    [SerializeField] private UIItem _costAmount;
 
     public void SetPawnBase(PawnBase pawn)
     {
@@ -26,6 +27,7 @@ public class UI_UnitInfo : MonoBehaviour
         SetSkillData(pawn.PawnSkills.SkillList);
         SetRuneData(pawn.RuneList);
         SetEtcData(pawn);
+        SetCostItem(pawn);
 
         foreach (var item in _title)
         {
@@ -43,6 +45,7 @@ public class UI_UnitInfo : MonoBehaviour
         SetSkillData(buildingBase.Skill.Skills.SkillList);
         //SetRuneData(buildingBase.RuneList);
         SetEtcData(buildingBase);
+        SetCostItem(buildingBase);
 
         foreach (var item in _title)
         {
@@ -152,7 +155,7 @@ public class UI_UnitInfo : MonoBehaviour
             _upgrade.Name.text = string.Empty;
         }
 
-        _ignoreAttribute.text =$"Ignore Att\n{pawnBase.CharacterData.ignoreAttributeType.ToStr()}" ;
+        _ignoreAttribute.text =$"Ignore Att : {pawnBase.CharacterData.ignoreAttributeType.ToStr()}" ;
     }
 
     private void SetEtcData(BuildingBase building)
@@ -169,6 +172,21 @@ public class UI_UnitInfo : MonoBehaviour
             _upgrade.Icon.gameObject.SetActive(false);
             _upgrade.Name.text = string.Empty;
         }
+    }
+
+    private void SetCostItem(Unit unit)
+    {
+        if (unit is PawnBase)
+        {
+            PawnBase temp = unit as PawnBase;
+            _costAmount.Init(Define.EGoodsType.food.ToInt(), temp.CharacterData.waveCost);
+        }
+        else
+        {
+            BuildingBase temp = unit as BuildingBase;
+            _costAmount.Init(Define.EGoodsType.gold.ToInt(), temp.BuildingData.waveCost);
+        }
+        
     }
 
 

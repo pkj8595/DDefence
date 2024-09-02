@@ -12,14 +12,16 @@ public class DetectOverlapBox : MonoBehaviour, IDetectComponent
 
     public Collider[] DetectCollision()
     {
-        Vector3 boxCenter = transform.position + boxCenterOffset;
-        Collider[] hitColliders = Physics.OverlapBox(boxCenter, boxSize / 2, boxOrientation, collisionLayers);
+        Vector3 boxCenter = transform.TransformPoint(boxCenterOffset);
+        Quaternion finalOrientation = transform.rotation * boxOrientation;
+        Collider[] hitColliders = Physics.OverlapBox(boxCenter, boxSize / 2, finalOrientation, collisionLayers);
         return hitColliders;
     }
 
     void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireCube(transform.position + boxCenterOffset, boxSize);
+        Gizmos.matrix = Matrix4x4.TRS(transform.position , transform.rotation, Vector3.one);
+        Gizmos.DrawWireCube(boxCenterOffset, boxSize); 
     }
 }

@@ -144,11 +144,9 @@ public class BoardManager : MonoSingleton<BoardManager>
         if (_isEditMode)
         {
             UnmergeMeshes();
-            if (_isSelectNode)
-            {
-                var uiBoard = Managers.UI.ShowUI<UIBoard>();
-                uiBoard.SetActive(_isEditMode);
-            }
+            var uiBoard = Managers.UI.ShowUI<UIBoard>();
+            uiBoard.SetActive(_isEditMode);
+           
         }
         else
         {
@@ -156,8 +154,7 @@ public class BoardManager : MonoSingleton<BoardManager>
             _selectedNodeIndex = -1;
             ClearPreviewNode();
             MergeAllMeshes();
-            if (_isSelectNode)
-                Managers.UI.ColseUI<UIBoard>();
+            Managers.UI.ColseUI<UIBoard>();
         }
     }
 
@@ -198,10 +195,45 @@ public class BoardManager : MonoSingleton<BoardManager>
                 _dirNodes.Add(coor, node);
             }
         }
-        MergeAllMeshes();
 
+        var buildingNodes = _buildingGroup.GetComponentsInChildren<NodeBase>();
+        for (int i = 0; i < buildingNodes.Length; i++)
+        {
+            SetNodeInDic(buildingNodes[i]);
+        }
+
+
+        MergeAllMeshes();
     }
     #endregion
+
+    private void SetNodeInDic(NodeBase node)
+    {
+        //todo
+        int xOffset = Utils.Round((node.NodeSize.x - 1) * 0.5f);
+        int zOffset = Utils.Round((node.NodeSize.z - 1) * 0.5f);
+        int startX = Utils.Round(node.transform.position.x) - xOffset;
+        int startZ = Utils.Round(node.transform.position.z) - zOffset;
+        int startY = Utils.Round(node.transform.position.y);
+
+        for (int y = 0; y < node.NodeSize.y; y++)
+        {
+            for (int x = 0; x < node.NodeSize.x; x++)
+            {
+                for (int z = 0; z < node.NodeSize.z; z++)
+                {
+                    Vector3Int nodePosition = new Vector3Int(startX + x,
+                                                             startY + y,
+                                                             startZ + z);
+                    _dirNodes.Add(nodePosition, node);
+                    
+                }
+            }
+        }
+        node.Init(new Vector3Int(startX, startY, startZ));
+        node.InstallationSuccess();
+
+    }
 
 
     #region create & remove
@@ -371,6 +403,8 @@ public class BoardManager : MonoSingleton<BoardManager>
 
     private bool CanPlaceBuilding(Vector3Int gridPosition, Vector3Int size, NodeBase node)
     {
+        //GameView.Instance.GateList
+
         //블록노드의 경우 y가 0이 아니라면 아래 blocknode를 찾는다.
         if(node is BlockNode)
         {

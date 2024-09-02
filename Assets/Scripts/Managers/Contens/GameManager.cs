@@ -17,6 +17,12 @@ public partial class GameManager
         Inven.Init();
         InitWave();
     }
+    public void Clear()
+    {
+        _enumyPawnGroup.Clear();
+        _pawnGroup.Clear();
+
+    }
 
     public PawnBase SpawnPawn(int tableNum, Define.ETeam team)
     {

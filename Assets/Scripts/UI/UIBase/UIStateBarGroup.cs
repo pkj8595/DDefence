@@ -90,9 +90,12 @@ public class UIStateBarGroup : UIBase
 
     private void DeActiveStatebar(UI_HPbar stateBar)
     {
-        stateBar.Clear();
-        stateBar.gameObject.SetActive(false);
-        _stateBarPool.Enqueue(stateBar);
+        if(stateBar != null)
+        {
+            stateBar.Clear();
+            stateBar.gameObject.SetActive(false);
+            _stateBarPool.Enqueue(stateBar);
+        }
     }
 
 

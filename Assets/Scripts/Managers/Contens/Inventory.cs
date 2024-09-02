@@ -30,7 +30,12 @@ public class Inventory
         {
             _itemDic.Add(data.Key, 0);
         }
-        
+    }
+
+    public void Clear()
+    {
+        _itemDic.Clear();
+        _cardDataList.Clear();
     }
 
     public void AddItem(int itemNum, int amount)
