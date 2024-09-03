@@ -6,24 +6,24 @@ using System;
 
 public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public Text _txtTitle;
-    public Text _txtDesc;
-    public Image _imgMain;
-    public Image _imgBack;
-
-    [SerializeField] private RectTransform _rect;
+    private static bool _isAlreadyStart = false;
+    private Action<UICard> _OnUseAction;
+    private ItemBase _item;
     private Vector3 originalPosition;
     private Vector3 startDragPosition;
     private float originalScale;
     private bool isDragging = false;
 
-    public RectTransform Rect => _rect;
+    [SerializeField] private RectTransform _rect;
+    public Text _txtTitle;
+    public Text _txtDesc;
+    public Image _imgMain;
+    public Image _imgBack;
     public CanvasGroup canvasGroup;
+    public Image _imgCopyMain;
 
-    private Action<UICard> _OnUseAction;
-    private ItemBase _item;
-
-    static bool _isAlreayStart = false;
+    public RectTransform Rect => _rect;
+    public ItemBase Item { get => _item; set => _item = value; }
 
     private void Start()
     {
@@ -38,28 +38,21 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         _txtDesc.text = data.desc;
         _OnUseAction = onUseAction;
 
-        _item = ItemBase.GetItem(data.minTableRange);
         if (data.minTableRange == data.maxTableRange)
         {
-            _imgMain.sprite = Managers.Resource.Load<Sprite>(Define.Path.UIIcon + _item.ImgStr);
+            _item = ItemBase.GetItem(data.minTableRange);
         }
         else
         {
-            switch (_item) 
-            {
-                case CharacterItem:
-                    _imgMain.sprite = Managers.Resource.Load<Sprite>(Define.Path.UIIcon + "IconRandomPawn");
-                    break;
-                case BuildingItem:
-                    _imgMain.sprite = Managers.Resource.Load<Sprite>(Define.Path.UIIcon + "IconRandomBuilding");
-                    break;
-                case RuneItem:
-                    _imgMain.sprite = Managers.Resource.Load<Sprite>(Define.Path.UIIcon + "IconRandomRune");
-                    break;
-            }
-
+            _item = ItemBase.GetItem(data.tableNum);
         }
+        _imgMain.sprite = Managers.Resource.Load<Sprite>(Define.Path.UIIcon + _item.ImgStr);
+        _imgCopyMain.sprite = _imgMain.sprite;
+
+        ResetCopyImage();
     }
+
+ 
 
     public void Clear()
     {
@@ -74,7 +67,7 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (_isAlreayStart)
+        if (_isAlreadyStart)
             return;
 
         _rect.DOAnchorPosY(originalPosition.y + 30f, 0.2f).SetEase(Ease.OutQuad);
@@ -88,7 +81,7 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (_isAlreayStart)
+        if (_isAlreadyStart)
             return;
 
         _rect.DOAnchorPosY(originalPosition.y, 0.2f).SetEase(Ease.OutQuad);
@@ -106,13 +99,30 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (isDragging)
+        {
+            switch (_item)
+            {
+                case CharacterItem:
+                    _imgCopyMain.transform.position = eventData.position;
+                    break;
+                case BuildingItem:
+                    break;
+                case RuneItem:
+                    
+                    _imgCopyMain.transform.position = eventData.position;
+                    break;
+                case ShopItem:
+                    break;
+            }
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         if (isDragging)
         {
-            EndDrag();
+            EndDrag(eventData);
         }
     }
 
@@ -124,11 +134,13 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
+        _isAlreadyStart = false;
+        ResetCopyImage();
     }
 
     private void StartDrag()
     {
-        _isAlreayStart = true;
+        _isAlreadyStart = true;
         isDragging = true;
         startDragPosition = _rect.anchoredPosition;
         canvasGroup.alpha = 0.6f;
@@ -137,18 +149,22 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         switch (_item)
         {
             case CharacterItem:
+                _imgCopyMain.gameObject.SetActive(true);
                 break;
             case BuildingItem:
                 BoardManager.Instance.ExcuteCardBuilding(_item);
                 break;
             case RuneItem:
+                _imgCopyMain.gameObject.SetActive(true);
+                _imgCopyMain.canvas.sortingOrder = 10000;
+                break;
+            case ShopItem:
                 break;
         }
     }
 
-    private void EndDrag()
+    private void EndDrag(PointerEventData eventData)
     {
-        _isAlreayStart = false;
         isDragging = false;
         switch (_item)
         {
@@ -170,6 +186,18 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
                 {
                     canvasGroup.alpha = 1f;
                     canvasGroup.blocksRaycasts = true;
+                    UseComplete(false);
+                }
+                break;
+            case ShopItem:
+                {
+                    canvasGroup.alpha = 1f;
+                    canvasGroup.blocksRaycasts = true;
+
+                    var data = Managers.Data.ShopDict[_item.GetTableNum];
+                    var cardData = UnityEngine.Random.Range(data.minTableRange, data.maxTableRange + 1);
+                    Managers.Game.Inven.AddCard(Managers.Data.ShopDict[cardData]);
+
                     UseComplete(true);
                 }
                 break;
@@ -178,7 +206,7 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     private void CancelDrag()
     {
-        _isAlreayStart = false;
+        _isAlreadyStart = false;
         isDragging = false;
         _rect.anchoredPosition = startDragPosition;
         canvasGroup.alpha = 1f;
@@ -188,7 +216,7 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         {
             case CharacterItem:
                 {
-                   
+                    ResetCopyImage();
                 }
                 break;
             case BuildingItem:
@@ -198,9 +226,20 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
                 break;
             case RuneItem:
                 {
-                   
+                    ResetCopyImage();
+                }
+                break;
+            case ShopItem:
+                {
+
                 }
                 break;
         }
+    }
+
+    private void ResetCopyImage()
+    {
+        _imgCopyMain.gameObject.SetActive(false);
+        _imgCopyMain.rectTransform.anchoredPosition = _imgMain.rectTransform.anchoredPosition;
     }
 }

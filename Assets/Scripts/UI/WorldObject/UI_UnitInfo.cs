@@ -14,7 +14,8 @@ public class UI_UnitInfo : MonoBehaviour
     [SerializeField] private List<Text> _stat;
     [SerializeField] private List<Text> _propertyName;
     [SerializeField] private List<UI_ImageText> _skill;
-    [SerializeField] private List<UI_ImageText> _rune;
+    //[SerializeField] private List<UI_ImageText> _rune;
+    [SerializeField] private List<UI_RuneSlot> _rune;
     [SerializeField] private UI_ImageText _upgrade;
     [SerializeField] private Text _ignoreAttribute;
     [SerializeField] private UIItem _costAmount;
@@ -25,7 +26,7 @@ public class UI_UnitInfo : MonoBehaviour
         SetStatData(pawn.PawnStat);
         SetProperty(pawn.PawnStat);
         SetSkillData(pawn.PawnSkills.SkillList);
-        SetRuneData(pawn.RuneList);
+        SetRuneData(pawn);
         SetEtcData(pawn);
         SetCostItem(pawn);
 
@@ -113,30 +114,22 @@ public class UI_UnitInfo : MonoBehaviour
             {
                 _skill[i].Icon.sprite = Managers.Resource.Load<Sprite>($"{Define.Path.UIIcon}{datas[i].Icon}");
                 _skill[i].Name.text = datas[i].Name;
+                _skill[i].Icon.gameObject.SetActive(true);
             }
             else
             {
-                //_skill[i].Icon.sprite = null;
                 _skill[i].Name.text = string.Empty;
+                _skill[i].Icon.gameObject.SetActive(false);
             }
         }
         
     }
 
-    private void SetRuneData(List<Data.RuneData> datas)
+    private void SetRuneData(PawnBase pawn)
     {
         for (int i = 0; i < _rune.Count; i++)
         {
-            if (i < datas.Count)
-            {
-                _rune[i].Icon.sprite = Managers.Resource.Load<Sprite>($"{Define.Path.UIIcon}{datas[i].imageStr}");
-                _rune[i].Name.text = datas[i].name;
-            }
-            else
-            {
-                //_rune[i].Icon.sprite = null;
-                _rune[i].Name.text = string.Empty;
-            }
+            _rune[i].Init(pawn, i);
         }
     }
   

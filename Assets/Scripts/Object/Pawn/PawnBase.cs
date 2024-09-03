@@ -105,9 +105,8 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
 
         for (int i = 0; i < CharacterData.arr_rune.Length; i++)
         {
-            if (CharacterData.arr_rune[i] == 0)
-                continue;
-            SetRuneData(Managers.Data.RuneDict[CharacterData.arr_rune[i]], i);
+            if (CharacterData.arr_rune[i] != 0)
+                SetRuneData(Managers.Data.RuneDict[CharacterData.arr_rune[i]], i);
         }
 
         //stateBar setting
@@ -133,7 +132,6 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         else
         {
             EnemyFindTarget enemyFindTarget = gameObject.GetComponent<EnemyFindTarget>();
-            if(enemyFindTarget != null)
             if(enemyFindTarget != null)
             {
                 enemyFindTarget.enabled = false;
@@ -293,7 +291,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
     {
         if (RuneList.Count == 0)
         {
-            for (int i = 0; i < Define.Pawn_Rune_Limit_Count; i++)
+            for (int i = RuneList.Count; i < Define.Pawn_Rune_Limit_Count; i++)
             {
                 RuneList.Add(null);
             }
@@ -302,11 +300,21 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         if (index < Define.Pawn_Rune_Limit_Count && index < RuneList.Count)
         {
             RuneList[index] = data;
+            if (data.statTableNum != 0)
+            {
+                PawnStat.AddRuneStat(Managers.Data.StatDict[data.statTableNum], index);
+            }
+            if (data.skillTableNum != 0)
+            {
+                PawnSkills.SetSkill(new Skill(data.skillTableNum));
+            }
+            
         }
         else
         {
-            Debug.LogError($"인덱스의 범위가 넘어갔습니다. : {index}");
+            Debug.LogError($"인덱스의 크기가 범위를 넘었습니다.. : {index}");
         }
+
     }
 
 
@@ -363,6 +371,16 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         _navAgent.enabled = false;
         GetComponent<Collider>().enabled = false;
         OnDeadEnemy().Forget();
+
+        //사용하고 있는 pawn이 죽으면 20프로 확률로 부정기벽 획득
+        if (Team == Define.ETeam.Playable)
+        {
+            float randomRange = UnityEngine.Random.value;
+            if (randomRange < 0.5f)
+            {
+                PawnStat.AddNagativeProperty();
+            }
+        }
     }
 
     async UniTaskVoid OnDeadEnemy()

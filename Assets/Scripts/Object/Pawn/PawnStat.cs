@@ -99,6 +99,7 @@ public class PawnStat : Stat
                 if (_propertyStatList[i] == null)
                 {
                     _propertyStatList[i] = statData;
+                    CalculateCombatStat();
                 }
             }
         }
@@ -212,9 +213,17 @@ public class PawnStat : Stat
         }
     }
 
-    private void AddPositiveProperty()
+    public void AddPositiveProperty()
     {
         var data = Managers.Data.PositivePropertyList;
-        AddPropertyStat(data[Random.Range(0, data.Count - 1)]);
+        AddPropertyStat(data[Random.Range(0, data.Count)]);
     }
+
+    public void AddNagativeProperty()
+    {
+        var data = Managers.Data.NagativePropertyList;
+        AddPropertyStat(data[Random.Range(0, data.Count)]);
+    }
+
+    
 }

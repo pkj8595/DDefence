@@ -7,6 +7,7 @@ public class UIShopCard : MonoBehaviour
     public UICard _uiCard;
     public List<UIItem> _goodsList;
     private Data.ShopData _data;
+    public GameObject _soldOut;
 
     public void Init(Data.ShopData data)
     {
@@ -22,6 +23,7 @@ public class UIShopCard : MonoBehaviour
             else
                 _goodsList[i].gameObject.SetActive(false);
         }
+        _soldOut.SetActive(false);
     }
 
     public void OnClickPurchase()
@@ -50,6 +52,7 @@ public class UIShopCard : MonoBehaviour
 
             Managers.Game.Inven.AddCard(_data);
             Managers.UI.ShowToastMessage("구매 성공!");
+            _soldOut.SetActive(true);
         }
         else
         {

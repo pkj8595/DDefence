@@ -25,8 +25,7 @@
       "Mask": "",
       "Horns": "",
       "arr_rune": [
-        null,
-        null,
+        302001001,
         null,
         null
       ]
@@ -56,8 +55,7 @@
       "Mask": "",
       "Horns": "",
       "arr_rune": [
-        null,
-        null,
+        302001002,
         null,
         null
       ]
@@ -561,7 +559,7 @@
       "eventType": 1,
       "name": "떠돌이 상인",
       "desc": "떠돌아 상인과 만났습니다. 그에게는 알 수 없는 기세가 느껴집니다.  그는 당신에게 거래를 제안합니다.",
-      "priority": 1,
+      "priority": 50,
       "arr_choice": [
         null,
         null,
@@ -569,7 +567,7 @@
       ]
     },
     {
-      "tableNum": 111900002,
+      "tableNum": 111901002,
       "eventType": 2,
       "name": "길에 누워있는 사람",
       "desc": "당신은 오늘도 산뜻한 아침을 시작합니다. 마당을 쓸러 밖으로 나갔는데 누군가 바닥에 쓰러져 있네요",
@@ -584,7 +582,7 @@
       "tableNum": 111999999,
       "eventType": 2,
       "name": "끝!",
-      "desc": "즐거운 게임이 되셨나요? \n저는 당신이 이 게임을 이 곳까지 도달했음에 감사함을 느낍니다.\n\n그저 당신이 이 게임을 하면서 즐거우셨다면 좋겠습니다.\n아직 여정을 끝나지 않았을지도 모릅니다!\n\n다른 부족의 영지를 처들어갈 수도 있고\n드래곤을 길들이거나 사악한 리치가 될 수도 있겠죠! \n\n아직 여정은 무한합니다.\n비록 그게 지금은 아닐지라도 \n\n즐거운 게임이 되셨기를 바라며 이만 줄이겠습니다.\n플레이 해주셔서 감사합니다.",
+      "desc": "즐거운 게임이 되셨나요? \n저는 당신이 이 게임을 이 곳까지 도달했음에 감사함을 느낍니다.\n\n그저 당신이 이 게임을 하면서 즐거우셨다면 좋겠습니다.\n아직 여정을 끝나지 않았을지도 모릅니다!\n\n다른 영지를 처들어갈 수도 있고\n드래곤을 길들이거나 사악한 리치가 될 수도 있겠죠! \n\n아직 여정은 무한합니다.\n비록 그게 지금은 아닐지라도 \n\n즐거운 게임이 되셨기를 바라며 이만 줄이겠습니다.\n플레이 해주셔서 감사합니다.",
       "priority": 0,
       "arr_choice": [
         null,
@@ -750,17 +748,13 @@
       "tableNum": 201000001,
       "tileType": 0,
       "name": "땅",
-      "desc": "그냥 땅이다.",
-      "goods": 301001001,
-      "amount": 20
+      "desc": "그냥 땅이다."
     },
     {
       "tableNum": 201001001,
       "tileType": 1,
       "name": "계단",
-      "desc": "그냥 계단이다.",
-      "goods": 301001001,
-      "amount": 20
+      "desc": "그냥 계단이다."
     }
   ],
   "BuildingTable": [
@@ -996,7 +990,7 @@
     {
       "tableNum": 303001002,
       "name": "희귀 랜덤 캐릭터 뽑기",
-      "desc": "무슨 건물이 나올까?",
+      "desc": "무슨 캐릭터가 나올까?",
       "minTableRange": 101001001,
       "maxTableRange": 101001002,
       "arr_goods": [
@@ -1013,7 +1007,7 @@
     {
       "tableNum": 303001003,
       "name": "영웅 랜덤 캐릭터 뽑기",
-      "desc": "무슨 유물이 나올까?",
+      "desc": "무슨 캐릭터가 나올까?",
       "minTableRange": 101001001,
       "maxTableRange": 101001002,
       "arr_goods": [
@@ -1031,8 +1025,8 @@
       "tableNum": 303001004,
       "name": "일반 랜덤 룬 뽑기",
       "desc": "무슨 룬이 나올까?",
-      "minTableRange": 302001001,
-      "maxTableRange": 302001002,
+      "minTableRange": 303003001,
+      "maxTableRange": 303003002,
       "arr_goods": [
         301001001,
         301001002,
@@ -1067,6 +1061,40 @@
       "desc": "창살함정",
       "minTableRange": 202102000,
       "maxTableRange": 202102000,
+      "arr_goods": [
+        301001001,
+        null,
+        null
+      ],
+      "arr_goods_amount": [
+        10,
+        null,
+        null
+      ]
+    },
+    {
+      "tableNum": 303003001,
+      "name": "하급 방패의 룬 조각",
+      "desc": "방패의 형상이 떠오르는 돌이다.",
+      "minTableRange": 302001001,
+      "maxTableRange": 302001001,
+      "arr_goods": [
+        301001001,
+        null,
+        null
+      ],
+      "arr_goods_amount": [
+        10,
+        null,
+        null
+      ]
+    },
+    {
+      "tableNum": 303003002,
+      "name": "하급 활의 룬 조각",
+      "desc": "활의 형상이 느껴지는 돌이다.",
+      "minTableRange": 302001002,
+      "maxTableRange": 302001002,
       "arr_goods": [
         301001001,
         null,

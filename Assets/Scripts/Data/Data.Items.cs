@@ -6,12 +6,13 @@ using UnityEngine;
 public class ItemBase
 {
     Data.TableBase tableBase;
-
     public int GetTableNum => tableBase.tableNum;
     public virtual string Name { get; }
     public virtual string Desc { get; }
     public virtual string ImgStr { get; }
     public int Amount { get; set; }
+    public TableBase TableBase { get => tableBase; set => tableBase = value; }
+
     protected virtual void Init(Data.TableBase tableBase)
     {
 
@@ -35,6 +36,9 @@ public class ItemBase
                 break;
             case Data.GoodsData.Table:
                 tableBase = Managers.Data.GoodsDict[tableNum];
+                break;
+            case Data.ShopData.Table:
+                tableBase = Managers.Data.ShopDict[tableNum];
                 break;
             default:
                 Debug.LogError($"{tableNum} 식별되지 않은 케이스");
@@ -62,6 +66,9 @@ public class ItemBase
                 break;
             case Data.GoodsData.Table:
                 ret = new GoodsItem(tableNum);
+                break;
+            case Data.ShopData.Table:
+                ret = new ShopItem(tableNum);
                 break;
             default:
                 Debug.LogError($"{tableNum} 식별되지 않은 케이스");
@@ -158,5 +165,41 @@ public class GoodsItem : ItemBase
         _goodsData = tableBase as GoodsData;
     }
     public GoodsItem(int tableNum) : base(tableNum) { }
+
+}
+
+
+public class ShopItem : ItemBase
+{
+
+    private Data.ShopData _goodsData;
+    public override string Name => _goodsData.name;
+    public override string Desc => _goodsData.desc;
+    public override string ImgStr => GetImg();
+
+    protected override void Init(TableBase tableBase)
+    {
+        base.Init(tableBase);
+        _goodsData = tableBase as ShopData;
+    }
+    public ShopItem(int tableNum) : base(tableNum) { }
+
+    private string GetImg()
+    {
+        string ret = string.Empty;
+        switch (Utils.CalculateTableNum(_goodsData.minTableRange))
+        {
+            case Data.CharacterData.Table:
+                ret = "IconRandomPawn";
+                break;
+            case Data.BuildingData.Table:
+                ret = "IconRandomBuilding";
+                break;
+            case Data.RuneData.Table:
+                ret = "IconRandomRune";
+                break;
+        }
+        return ret;
+    }
 
 }

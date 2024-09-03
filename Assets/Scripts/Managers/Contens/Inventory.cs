@@ -12,6 +12,7 @@ public class Inventory
     public List<ShopData> GetCardDataList => _cardDataList;
 
     private UICardList uiCardList;
+
     public void AddCard(Data.ShopData data)
     {
         if (uiCardList == null)
@@ -28,7 +29,7 @@ public class Inventory
     {
         foreach (var data in Managers.Data.GoodsDict)
         {
-            _itemDic.Add(data.Key, 0);
+            _itemDic.Add(data.Key, 100);
         }
     }
 

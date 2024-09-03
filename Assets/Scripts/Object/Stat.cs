@@ -128,12 +128,13 @@ public abstract class Stat : MonoBehaviour, IStat
         }
     }
 
-    protected void OnDead(Stat attacker)
+    protected virtual void OnDead(Stat attacker)
     {
         if (attacker != null)
         {
             attacker.OnDeadTarget();
         }
+
         IsDead = true;
         _OnDeadEvent?.Invoke();
     }

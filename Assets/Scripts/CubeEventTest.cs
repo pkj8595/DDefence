@@ -19,15 +19,17 @@ public class CubeEventTest : MonoBehaviour
 
     public void Test()
     {
-        int[] arr = { 303001001,
+        int[] arr = { /*303001001,
                         303001002,
-                        303001003,
+                        303001003,*/
                         303001004,
                         303002001,
-                        303002002
+                        303002002,
+                        303003001,
+                        303003002
         };
 
-        Managers.Game.Inven.AddCard(Managers.Data.ShopDict[arr[Random.Range(0, 6)]]);
+        Managers.Game.Inven.AddCard(Managers.Data.ShopDict[arr[Random.Range(0, arr.Length)]]);
 
     }
 

@@ -57,9 +57,9 @@ public class UnitSkill
         return _currentSkill;
     }
 
-    public bool ReadyCurrentSkill(IStat _pawnStat)
+    public bool ReadyCurrentSkill(IStat pawnStat)
     {
-        bool isReady = GetCurrentSkill().ReadySkill(_pawnStat);
+        bool isReady = GetCurrentSkill().ReadySkill(pawnStat);
         if (isReady)
             IsRunning = true;
         return isReady;
