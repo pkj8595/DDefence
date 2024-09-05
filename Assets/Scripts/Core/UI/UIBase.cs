@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public abstract class UIBase : MonoBehaviour
 {
-    public Canvas canvas;
+    [SerializeField] protected Canvas canvas;
 
     public string UIName { get; set; }
 

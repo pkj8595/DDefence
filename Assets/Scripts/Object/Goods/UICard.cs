@@ -12,6 +12,7 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     private Vector3 originalPosition;
     private Vector3 startDragPosition;
     private float originalScale;
+    private int originSortingOrder;
     private bool isDragging = false;
 
     [SerializeField] private RectTransform _rect;
@@ -48,10 +49,8 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         }
         _imgMain.sprite = Managers.Resource.Load<Sprite>(Define.Path.UIIcon + _item.ImgStr);
         _imgCopyMain.sprite = _imgMain.sprite;
-
-        ResetCopyImage();
+        originSortingOrder = _imgCopyMain.canvas.sortingOrder;
     }
-
  
 
     public void Clear()
@@ -107,9 +106,9 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
                     _imgCopyMain.transform.position = eventData.position;
                     break;
                 case BuildingItem:
+                case TileItem:
                     break;
                 case RuneItem:
-                    
                     _imgCopyMain.transform.position = eventData.position;
                     break;
                 case ShopItem:
@@ -152,10 +151,12 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
                 _imgCopyMain.gameObject.SetActive(true);
                 break;
             case BuildingItem:
+            case TileItem:
                 BoardManager.Instance.ExcuteCardBuilding(_item);
                 break;
             case RuneItem:
                 _imgCopyMain.gameObject.SetActive(true);
+                originSortingOrder = _imgCopyMain.canvas.sortingOrder;
                 _imgCopyMain.canvas.sortingOrder = 10000;
                 break;
             case ShopItem:
@@ -176,10 +177,12 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
                 }
                 break;
             case BuildingItem:
+            case TileItem:
                 if (!BoardManager.Instance.RotationStep(this))
                 {
                     canvasGroup.alpha = 1f;
                     canvasGroup.blocksRaycasts = true;
+                    UseComplete(false);
                 }
                 break;
             case RuneItem:
@@ -220,6 +223,7 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
                 }
                 break;
             case BuildingItem:
+            case TileItem:
                 {
                     BoardManager.Instance.OnCancelCard();
                 }
@@ -241,5 +245,6 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     {
         _imgCopyMain.gameObject.SetActive(false);
         _imgCopyMain.rectTransform.anchoredPosition = _imgMain.rectTransform.anchoredPosition;
+        _imgCopyMain.canvas.sortingOrder = originSortingOrder;
     }
 }

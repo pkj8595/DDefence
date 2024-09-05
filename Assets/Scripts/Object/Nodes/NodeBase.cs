@@ -15,6 +15,7 @@ public abstract class NodeBase : MonoBehaviour
     public Vector3Int Position { get => _tilePosition; set => _tilePosition = value; }
     public Vector3Int NodeSize { get => _tileSize; set => _tileSize = value; }
     private static Vector3 StartSize = new(0.1f, 0.1f, 0.1f);
+    private System.Action CompleteAction;
 
     public void Init(Vector3Int tilePosition)
     {
@@ -32,7 +33,13 @@ public abstract class NodeBase : MonoBehaviour
     private void OnActive()
     {
         gameObject.SetActive(true);
-        transform.DOScale(Vector3.one, aniDuration).From(StartSize).SetEase(Ease.InOutBack);
+        transform.DOScale(Vector3.one, aniDuration)
+            .From(StartSize)
+            .SetEase(Ease.InOutBack)
+            .OnComplete(() => { 
+                CompleteAction?.Invoke();
+                CompleteAction = null;
+            });
     }
 
     private void OnDeActive()
@@ -60,6 +67,11 @@ public abstract class NodeBase : MonoBehaviour
     public virtual void InstallationSuccess()
     {
 
+    }
+
+    public void SetActiveCompleteAction(System.Action ActiveCompleteAction)
+    {
+        CompleteAction = ActiveCompleteAction;
     }
 
 }

@@ -291,7 +291,7 @@ Canvas:
   m_OverrideSorting: 1
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -327,7 +327,7 @@ MonoBehaviour:
   canvas: {fileID: 1771056122}
   _btnNextPhase: {fileID: 4981444952425979280}
   _relicParent: {fileID: 6039430541043580972}
-  _relicDesc: {fileID: 0}
+  _relicDesc: {fileID: 4694392178660286457}
   _relicPrefab: {fileID: 5212264276308076165}
 --- !u!1 &2392814264074577424
 GameObject:

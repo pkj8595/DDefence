@@ -6,7 +6,7 @@ public class UIManager : ManagerBase
 {
     private Transform _uiRoot;
     //List지만 stack처럼 활용한다.
-    private List<UIBase> _uiStack = new List<UIBase>();
+    private LinkedList<UIBase> _uiStack = new ();
 
     public int baseSortingOrder = 0;
     public int sortingOrderAddValue = 100;
@@ -32,17 +32,17 @@ public class UIManager : ManagerBase
             ui = Managers.Resource.LoadUI<T>(_uiRoot);
             if (ui == null)
                 return null;
-            _uiStack.Add(ui);
+            _uiStack.AddLast(ui);
         }
         else
         {
             _uiStack.Remove(ui);
-            _uiStack.Add(ui);
+            _uiStack.AddLast(ui);
         }
 
-        UpdateSortingOrder();
         ui.SetUIBaseData();
         ui.Init(uiData);
+        UpdateSortingOrder();
         ui.UpdateUI();
         return ui;
     }
@@ -57,16 +57,16 @@ public class UIManager : ManagerBase
             ui = Managers.Resource.LoadUIPopup<T>(_uiRoot);
             if (ui == null)
                 return null;
-            _uiStack.Add(ui);
+            _uiStack.AddLast(ui);
         }
         else
         {
             _uiStack.Remove(ui);
-            _uiStack.Add(ui);
+            _uiStack.AddLast(ui);
         }
-        UpdateSortingOrder();
         ui.SetUIBaseData();
         ui.Init(uiData);
+        UpdateSortingOrder();
         ui.UpdateUI();
         return ui;
     }
@@ -77,17 +77,19 @@ public class UIManager : ManagerBase
     public void UpdateSortingOrder()
     {
         int activeCount = 0;
-        for (int i = 0; i < _uiStack.Count; i++)
+
+        foreach(var ui in _uiStack)
         {
-            if (_uiStack[i].isActiveAndEnabled)
+            if (ui.isActiveAndEnabled)
             {
                 activeCount++;
-                _uiStack[i].SetSortingOrder(baseSortingOrder + (activeCount * sortingOrderAddValue));
+                ui.SetSortingOrder(baseSortingOrder + (activeCount * sortingOrderAddValue));
             }
         }
+
     }
 
-    public void ColseUI<T>() where T : UIBase
+    public void CloseUI<T>() where T : UIBase
     {
         UIBase targetUI = GetUI<T>();
         targetUI.Close();
@@ -95,10 +97,10 @@ public class UIManager : ManagerBase
 
     public UIBase GetUI(string uiName)
     {
-        for (int i = 0; i < _uiStack.Count; i++)
+        foreach (var ui in _uiStack)
         {
-            if (_uiStack[i].UIName == uiName)
-                return _uiStack[i];
+            if (ui.UIName == uiName)
+                return ui;
         }
 
         return null;
@@ -106,10 +108,12 @@ public class UIManager : ManagerBase
 
     public UIBase GetUI<T>() where T : UIBase
     {
-        for (int i = 0; i < _uiStack.Count; i++)
+        foreach (var ui in _uiStack)
         {
-            if (_uiStack[i] is T)
-                return _uiStack[i];
+            if (ui is T)
+            {
+                return ui;
+            }
         }
 
         return null;
@@ -118,7 +122,7 @@ public class UIManager : ManagerBase
     public UIBase GetTopUI()
     {
         if (0 < _uiStack.Count)
-            return _uiStack[_uiStack.Count - 1];
+            return _uiStack.Last.Value;
         else
             return null;
     }

@@ -57,11 +57,6 @@ public class BoardManager : MonoSingleton<BoardManager>
         mergedMeshCollider = _combineMeshObject.GetOrAddComponent<MeshCollider>();
 
         LoadBoard();
-
-        Managers.Input.KeyAction -= OnKeyAction;
-        Managers.Input.KeyAction += OnKeyAction;
-        Managers.Input.MouseAction -= OnMouseAction;
-        Managers.Input.MouseAction += OnMouseAction;
     }
 
     void Update()
@@ -77,9 +72,9 @@ public class BoardManager : MonoSingleton<BoardManager>
                 return;
             _beforeMousePosition = nodeMouse;
 
-
-
+            //스케일 비례 포지션 
             _previewNode.transform.position = ComputeNodeScalePosition(_previewNode, nodeMouse.position);
+            //node 포지션
             _previewNode.Position = nodeMouse.position;
             //_previewNode.SetNodeRotation(nodeMouse.normal);
 
@@ -101,7 +96,10 @@ public class BoardManager : MonoSingleton<BoardManager>
                     _previewNode.transform.rotation = Quaternion.Euler(0, snappedYRotation, 0);
                 }
 
-                Vector3[] arrLine = { _previewNode.transform.position, new Vector3(worldMousePosition.x,_previewNode.transform.position.y,worldMousePosition.z) };
+                Vector3[] arrLine = { _previewNode.transform.position, 
+                                    new Vector3(worldMousePosition.x,
+                                                _previewNode.transform.position.y,
+                                                worldMousePosition.z) };
                 _lineRender.SetPositions(arrLine);
             }
 
@@ -154,7 +152,7 @@ public class BoardManager : MonoSingleton<BoardManager>
             _selectedNodeIndex = -1;
             ClearPreviewNode();
             MergeAllMeshes();
-            Managers.UI.ColseUI<UIBoard>();
+            Managers.UI.CloseUI<UIBoard>();
         }
     }
 
@@ -171,29 +169,7 @@ public class BoardManager : MonoSingleton<BoardManager>
         var nodes = _nodeGroup.GetComponentsInChildren<NodeBase>();
         for (int i = 0; i < nodes.Length; i++)
         {
-
-            int nodeListIndex = _nodeList.FindIndex((x) =>
-            {
-                return nodes[i].gameObject.name.Contains(x.gameObject.name);
-            });
-
-            if (nodeListIndex != -1)
-            {
-                nodes[i].gameObject.name = _nodeList[nodeListIndex].name;
-            }
-            else
-            {
-                Debug.LogError($"bloadManager에 등록되지않은 NodeList입니다. :{nodes[i].name}");
-                return;
-            }
-
-            Vector3Int coor = WorldToGrid(nodes[i].transform.position, Vector3.zero);
-            if (!_dirNodes.ContainsKey(coor))
-            {
-                var node = nodes[i].GetComponent<NodeBase>();
-                node.Init(coor);
-                _dirNodes.Add(coor, node);
-            }
+            SetNodeInDic(nodes[i]);
         }
 
         var buildingNodes = _buildingGroup.GetComponentsInChildren<NodeBase>();
@@ -202,19 +178,23 @@ public class BoardManager : MonoSingleton<BoardManager>
             SetNodeInDic(buildingNodes[i]);
         }
 
-
         MergeAllMeshes();
     }
     #endregion
 
     private void SetNodeInDic(NodeBase node)
     {
+        if (node is BuildingNode)
+        {
+            _constructedBuildingList.Add(node as BuildingNode);
+        }
+
         //todo
-        int xOffset = Utils.Round((node.NodeSize.x - 1) * 0.5f);
-        int zOffset = Utils.Round((node.NodeSize.z - 1) * 0.5f);
-        int startX = Utils.Round(node.transform.position.x) - xOffset;
-        int startZ = Utils.Round(node.transform.position.z) - zOffset;
-        int startY = Utils.Round(node.transform.position.y);
+        int xOffset = Mathf.RoundToInt((node.NodeSize.x - 1) * 0.5f);
+        int zOffset = Mathf.RoundToInt((node.NodeSize.z - 1) * 0.5f);
+        int startX = Mathf.RoundToInt(node.transform.position.x) - xOffset;
+        int startZ = Mathf.RoundToInt(node.transform.position.z) - zOffset;
+        int startY = Mathf.RoundToInt(node.transform.position.y);
 
         for (int y = 0; y < node.NodeSize.y; y++)
         {
@@ -233,6 +213,17 @@ public class BoardManager : MonoSingleton<BoardManager>
         node.Init(new Vector3Int(startX, startY, startZ));
         node.InstallationSuccess();
 
+    }
+
+    [ContextMenu("ShowNodeDic")]
+    public void ShowNodeDic()
+    {
+        System.Text.StringBuilder stringBuilder = new();
+        foreach(var item in _dirNodes)
+        {
+            stringBuilder.Append($"{item.Key} {item.Value.name}\n" );
+        }
+        Debug.Log(stringBuilder.ToString());
     }
 
 
@@ -351,7 +342,7 @@ public class BoardManager : MonoSingleton<BoardManager>
 
         // node 생성 및 초기화
         nodeObject.Init(gridPosition);
-        nodeObject.SetActive(true);
+        
         nodeObject.transform.position = previewNode.transform.position;
         nodeObject.transform.rotation = previewNode.transform.rotation;
 
@@ -362,8 +353,13 @@ public class BoardManager : MonoSingleton<BoardManager>
         }
         else
         {
-            nodeObject.transform.SetParent(_nodeGroup.transform);
+            nodeObject.SetActiveCompleteAction(() => { 
+                AddMesh(nodeObject.GetComponentsInChildren<MeshFilter>()); 
+                nodeObject.transform.SetParent(_nodeGroup.transform);
+            });
         }
+
+        nodeObject.SetActive(true);
         //설치 성공시 실행
         nodeObject.InstallationSuccess();
         return true;
@@ -403,7 +399,6 @@ public class BoardManager : MonoSingleton<BoardManager>
 
     private bool CanPlaceBuilding(Vector3Int gridPosition, Vector3Int size, NodeBase node)
     {
-        //GameView.Instance.GateList
 
         //블록노드의 경우 y가 0이 아니라면 아래 blocknode를 찾는다.
         if(node is BlockNode)
@@ -462,31 +457,21 @@ public class BoardManager : MonoSingleton<BoardManager>
         return true; // 모든 위치가 비어있으면 건물을 지을 수 있음
     }
 
-    /// <summary>
-    /// 그리드 좌표를 월드 좌표로 변환
-    /// </summary>
-    /// <param name="gridPosition"></param>
-    /// <returns></returns>
-    public Vector3 GridToWorld(Vector3Int gridPosition)
+    // 회전된 좌표 계산 (90도 단위로 처리) + 회전 오프셋 적용
+    private Vector3Int GetRotatedPosition(Vector3Int origin, int x, int z, int rotation, Vector3Int offset)
     {
-        float x = gridPosition.x * tileSize.x;
-        float y = gridPosition.y * tileSize.y;
-        float z = gridPosition.z * tileSize.z;
-        return new Vector3(x, y, z);
-    }
-
-    /// <summary>
-    /// 월드 좌표를 그리드 좌표로 변환
-    /// </summary>
-    /// <param name="point"></param>
-    /// <returns></returns>
-    public Vector3 SnapPosition(Vector3 point)
-    {
-        float snappedX = Mathf.Round(point.x / tileSize.x) * tileSize.x;
-        float snappedZ = Mathf.Round(point.z / tileSize.z) * tileSize.z;
-        float snappedY = Mathf.Round(point.y / tileSize.y) * tileSize.y;
-
-        return new Vector3(snappedX, snappedY, snappedZ);
+        rotation = rotation % 360;
+        switch (rotation)
+        {
+            case 90:
+                return new Vector3Int(origin.x - z - offset.z, origin.y, origin.z + x - offset.x);
+            case 180:
+                return new Vector3Int(origin.x - x - offset.x, origin.y, origin.z - z - offset.z);
+            case 270:
+                return new Vector3Int(origin.x + z - offset.z, origin.y, origin.z - x - offset.x);
+            default:
+                return new Vector3Int(origin.x + x - offset.x, origin.y, origin.z + z - offset.z); // 0도 (front)
+        }
     }
 
     /// <summary>
@@ -544,14 +529,37 @@ public class BoardManager : MonoSingleton<BoardManager>
         mergedMeshFilter.mesh = combinedMesh;
         mergedMeshCollider.sharedMesh = combinedMesh;
 
-        // 병합 후 개별 메쉬 오브젝트 비활성화
-        _nodeGroup.gameObject.SetActive(false);
-
         // 병합된 메쉬의 재질 설정 (첫 번째 메쉬의 재질 사용)
         if (meshFilters.Length > 0)
         {
             mergedMeshRenderer.sharedMaterial = meshFilters[0].GetComponent<MeshRenderer>().sharedMaterial;
         }
+
+        // 병합 후 node group 비활성화
+        _nodeGroup.gameObject.SetActive(false);
+        navSurface.BuildNavMesh();
+    }
+
+    private void AddMesh(MeshFilter[] meshFilters)
+    {
+        CombineInstance[] combine = new CombineInstance[meshFilters.Length + 1];
+        
+        for (int i = 0; i < meshFilters.Length; i++)
+        {
+            combine[i].mesh = meshFilters[i].sharedMesh;
+            combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+        }
+        combine[meshFilters.Length].mesh = mergedMeshFilter.sharedMesh;
+        combine[meshFilters.Length].transform = mergedMeshFilter.transform.localToWorldMatrix;
+
+        Mesh combinedMesh = new Mesh();
+        combinedMesh.CombineMeshes(combine, true);
+
+        mergedMeshFilter.mesh = combinedMesh;
+        mergedMeshCollider.sharedMesh = combinedMesh;
+        mergedMeshRenderer.sharedMaterial = mergedMeshFilter.GetComponent<MeshRenderer>().sharedMaterial;
+
+        _nodeGroup.gameObject.SetActive(false);
         navSurface.BuildNavMesh();
     }
 
@@ -590,7 +598,7 @@ public class BoardManager : MonoSingleton<BoardManager>
         _previewNode.gameObject.layer = 0;
         _previewNode.gameObject.name = "PreviewNode";
         ChangeMaterialPreviewNode(false);
-        _previewNode.SetActive(true);
+        _previewNode.gameObject.SetActive(true);
 
         _isSelectNode = true;
 
@@ -603,8 +611,11 @@ public class BoardManager : MonoSingleton<BoardManager>
     public void ExcuteCardBuilding(ItemBase itemBase)
     {
         ClearPreviewNode();
+        if (itemBase is BuildingItem)
+            _cardItemPath = $"Building/{Managers.Data.BuildingDict[itemBase.GetTableNum].prefab}";
+        else if(itemBase is TileItem)
+            _cardItemPath = $"Node/{Managers.Data.TileBaseDict[itemBase.GetTableNum].prefab}";
 
-        _cardItemPath = $"Building/{Managers.Data.BuildingDict[itemBase.GetTableNum].prefab}";
         _previewNode = Managers.Resource.Instantiate(_cardItemPath, this.transform)
                                         .GetComponent<NodeBase>();
         _previewNode.gameObject.layer = 0;
@@ -617,10 +628,10 @@ public class BoardManager : MonoSingleton<BoardManager>
     UICard _card;
     public bool RotationStep(UICard card)
     {
+        _card = card;
         if (CanPlaceBuilding(_beforeMousePosition.position, _previewNode.NodeSize, _previewNode))
         {
             _cardBuildingStep = EBuildingStep.RotationStep;
-            _card = card;
             _lineRender.enabled = true;
             return true;
         }
@@ -636,7 +647,8 @@ public class BoardManager : MonoSingleton<BoardManager>
     public bool CompleteCardBuilding()
     {
         bool isBuilding = AddBuildingNode(_previewNode);
-        OnCancelCard();
+        ClearPreviewNode();
+        ClearCard();
         return isBuilding;
     }
 
@@ -650,6 +662,7 @@ public class BoardManager : MonoSingleton<BoardManager>
 
     public void OnCancelCard()
     {
+        _card.UseComplete(false);
         ClearPreviewNode();
         ClearCard();
     }

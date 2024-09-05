@@ -105,7 +105,14 @@ public static class Utils
     /// <returns></returns>
     public static int Round(float value)
     {
-        return (int)(value + 0.5f);
+        if (value < 0)
+        {
+            return (int)(value - 0.5f); // 음수일 때는 -0.5를 더해줌
+        }
+        else
+        {
+            return (int)(value + 0.5f); // 양수일 때는 +0.5로 처리
+        }
     }
 
     /// <summary>

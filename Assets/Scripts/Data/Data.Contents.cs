@@ -336,11 +336,9 @@ namespace Data
     {
         public const int Table = 201;
 
-        public int tileType;
         public string name;
         public string desc;
-        public int goods;
-        public int amount;
+        public string prefab;
     }
     #endregion
 

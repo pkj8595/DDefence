@@ -746,15 +746,39 @@
   "TileBaseTable": [
     {
       "tableNum": 201000001,
-      "tileType": 0,
-      "name": "땅",
-      "desc": "그냥 땅이다."
+      "name": "2x2 땅",
+      "desc": "그냥 땅이다.",
+      "prefab": "BaseNode2x2"
+    },
+    {
+      "tableNum": 201000002,
+      "name": "3x3 땅",
+      "desc": "그냥 땅이다.",
+      "prefab": "BaseNode3x3"
+    },
+    {
+      "tableNum": 201000003,
+      "name": "4x4 땅",
+      "desc": "그냥 땅이다.",
+      "prefab": "BaseNode4x4"
+    },
+    {
+      "tableNum": 201000004,
+      "name": "5x5 땅",
+      "desc": "그냥 땅이다.",
+      "prefab": "BaseNode5x5"
+    },
+    {
+      "tableNum": 201000005,
+      "name": "6x6 땅",
+      "desc": "그냥 땅이다.",
+      "prefab": "BaseNode6x6"
     },
     {
       "tableNum": 201001001,
-      "tileType": 1,
       "name": "계단",
-      "desc": "그냥 계단이다."
+      "desc": "그냥 계단이다.",
+      "prefab": "StairwayNode3x1"
     }
   ],
   "BuildingTable": [
@@ -1039,40 +1063,6 @@
       ]
     },
     {
-      "tableNum": 303002001,
-      "name": "화살함정",
-      "desc": "화살을 쏘는 함정 설치할 위치에 드래그 해보자",
-      "minTableRange": 202101000,
-      "maxTableRange": 202101000,
-      "arr_goods": [
-        301001001,
-        null,
-        null
-      ],
-      "arr_goods_amount": [
-        10,
-        null,
-        null
-      ]
-    },
-    {
-      "tableNum": 303002002,
-      "name": "창살함정",
-      "desc": "창살함정",
-      "minTableRange": 202102000,
-      "maxTableRange": 202102000,
-      "arr_goods": [
-        301001001,
-        null,
-        null
-      ],
-      "arr_goods_amount": [
-        10,
-        null,
-        null
-      ]
-    },
-    {
       "tableNum": 303003001,
       "name": "하급 방패의 룬 조각",
       "desc": "방패의 형상이 떠오르는 돌이다.",
@@ -1095,6 +1085,142 @@
       "desc": "활의 형상이 느껴지는 돌이다.",
       "minTableRange": 302001002,
       "maxTableRange": 302001002,
+      "arr_goods": [
+        301001001,
+        null,
+        null
+      ],
+      "arr_goods_amount": [
+        10,
+        null,
+        null
+      ]
+    },
+    {
+      "tableNum": 303100001,
+      "name": "2x2 땅",
+      "desc": "그냥 땅이다.",
+      "minTableRange": 201000001,
+      "maxTableRange": 201000001,
+      "arr_goods": [
+        301001001,
+        null,
+        null
+      ],
+      "arr_goods_amount": [
+        10,
+        null,
+        null
+      ]
+    },
+    {
+      "tableNum": 303100002,
+      "name": "3x3 땅",
+      "desc": "그냥 땅이다.",
+      "minTableRange": 201000002,
+      "maxTableRange": 201000002,
+      "arr_goods": [
+        301001001,
+        null,
+        null
+      ],
+      "arr_goods_amount": [
+        10,
+        null,
+        null
+      ]
+    },
+    {
+      "tableNum": 303100003,
+      "name": "4x4 땅",
+      "desc": "그냥 땅이다.",
+      "minTableRange": 201000003,
+      "maxTableRange": 201000003,
+      "arr_goods": [
+        301001001,
+        null,
+        null
+      ],
+      "arr_goods_amount": [
+        10,
+        null,
+        null
+      ]
+    },
+    {
+      "tableNum": 303100004,
+      "name": "5x5 땅",
+      "desc": "그냥 땅이다.",
+      "minTableRange": 201000004,
+      "maxTableRange": 201000004,
+      "arr_goods": [
+        301001001,
+        null,
+        null
+      ],
+      "arr_goods_amount": [
+        10,
+        null,
+        null
+      ]
+    },
+    {
+      "tableNum": 303100005,
+      "name": "6x6 땅",
+      "desc": "그냥 땅이다.",
+      "minTableRange": 201000005,
+      "maxTableRange": 201000005,
+      "arr_goods": [
+        301001001,
+        null,
+        null
+      ],
+      "arr_goods_amount": [
+        10,
+        null,
+        null
+      ]
+    },
+    {
+      "tableNum": 303101001,
+      "name": "계단",
+      "desc": "그냥 계단이다.",
+      "minTableRange": 201001001,
+      "maxTableRange": 201001001,
+      "arr_goods": [
+        301001001,
+        null,
+        null
+      ],
+      "arr_goods_amount": [
+        10,
+        null,
+        null
+      ]
+    },
+    {
+      "tableNum": 303002001,
+      "name": "화살함정",
+      "desc": "화살을 쏘는 함정 설치할 위치에 드래그 해보자",
+      "minTableRange": 202101000,
+      "maxTableRange": 202101000,
+      "arr_goods": [
+        301001001,
+        null,
+        null
+      ],
+      "arr_goods_amount": [
+        10,
+        null,
+        null
+      ]
+    },
+    {
+      "tableNum": 303002002,
+      "name": "창살함정",
+      "desc": "창살함정",
+      "minTableRange": 202102000,
+      "maxTableRange": 202102000,
       "arr_goods": [
         301001001,
         null,
