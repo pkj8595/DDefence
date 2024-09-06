@@ -10,6 +10,7 @@ public class UI_HPbar : MonoBehaviour
     [SerializeField] private Image imgHpSecond;
     [SerializeField] private Image imgMpSecond;
     [SerializeField] private RectTransform rectTransform;
+    [SerializeField] private Text txtHp;
     public IDamageable Unit { get; private set; }
     float _hpSecondPercent = 0f;
     float _mpSecondPercent = 0f;
@@ -40,7 +41,7 @@ public class UI_HPbar : MonoBehaviour
         float mpPercent = Utils.Percent(Unit.GetStat().Mana, Unit.GetStat().MaxMana);
         imgHp.rectTransform.localScale = new Vector2(hpPercent, 1f);
         imgMp.rectTransform.localScale = new Vector2(mpPercent, 1f);
-
+        txtHp.text = ((int)Unit.GetStat().Hp).ToString();
 
         UpdateSecondBar(imgHpSecond.rectTransform, ref _hpSecondPercent, hpPercent);
         UpdateSecondBar(imgMpSecond.rectTransform, ref _mpSecondPercent, mpPercent);

@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 1443441196790136632}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6162374489451764274}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 5076989472987393939}
   - component: {fileID: 3342152687596155140}
   m_Layer: 6
-  m_Name: StairwayNode3x1
+  m_Name: StairwayNode1x1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tilePosition: {x: 0, y: 0, z: 0}
-  _tileSize: {x: 3, y: 1, z: 1}
+  _tileSize: {x: 1, y: 1, z: 1}
   aniDuration: 0.5
 --- !u!65 &3342152687596155140
 BoxCollider:
@@ -157,5 +157,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3, y: 1, z: 1}
+  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}

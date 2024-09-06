@@ -45,7 +45,6 @@ GameObject:
   - component: {fileID: 4376576879332331230}
   - component: {fileID: 5297004198221278137}
   - component: {fileID: 3536839411619439670}
-  - component: {fileID: 7573197974215081815}
   m_Layer: 0
   m_Name: Cube_002
   m_TagString: Untagged
@@ -118,19 +117,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &7573197974215081815
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 707628639061292942}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1735161168374157423
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,8 +214,8 @@ GameObject:
   - component: {fileID: -10731941016048283}
   - component: {fileID: -8599587920035702432}
   - component: {fileID: 7890377245433850760}
-  - component: {fileID: 1624833846437887981}
   - component: {fileID: 6436881811508699651}
+  - component: {fileID: 753242987865129658}
   m_Layer: 8
   m_Name: GodTower
   m_TagString: Untagged
@@ -309,8 +295,8 @@ NavMeshObstacle:
   m_GameObject: {fileID: 6162374489451764278}
   m_Enabled: 1
   serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 1.5, y: 0.5, z: 1.5}
+  m_Shape: 0
+  m_Extents: {x: 1.5, y: 2.5, z: 1.5}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
@@ -330,19 +316,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _shotTrans: {fileID: 6554819347763557113}
   _animator: {fileID: 0}
---- !u!65 &1624833846437887981
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6162374489451764278}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 3, y: 2, z: 3}
-  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!114 &6436881811508699651
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -360,6 +333,20 @@ MonoBehaviour:
   collisionLayers:
     serializedVersion: 2
     m_Bits: 512
+--- !u!136 &753242987865129658
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6162374489451764278}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 1.5
+  m_Height: 5
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6816083063174919987
 GameObject:
   m_ObjectHideFlags: 0

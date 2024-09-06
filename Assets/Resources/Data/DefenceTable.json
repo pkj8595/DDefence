@@ -778,7 +778,7 @@
       "tableNum": 201001001,
       "name": "계단",
       "desc": "그냥 계단이다.",
-      "prefab": "StairwayNode3x1"
+      "prefab": "StairwayNode1x1"
     }
   ],
   "BuildingTable": [

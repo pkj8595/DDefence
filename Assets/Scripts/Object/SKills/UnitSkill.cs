@@ -42,7 +42,7 @@ public class UnitSkill
 
         for (int i = 1; i < SkillList.Count; i++)
         {
-            if(!SkillList[i].IsReady(_manaAmount.Value))
+            if (SkillList[i].IsReady(_manaAmount.Value))
             {
                 _currentSkill = SkillList[i];
                 return _currentSkill;

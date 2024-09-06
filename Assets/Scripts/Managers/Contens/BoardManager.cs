@@ -103,18 +103,32 @@ public class BoardManager : MonoSingleton<BoardManager>
                 _lineRender.SetPositions(arrLine);
             }
 
-
-            //회전 상태에서 
-            if (Input.GetMouseButtonDown(0))
+            if (CanPlaceBuilding(_previewNode.Position, _previewNode.NodeSize, _previewNode))
             {
-                _card.UseComplete(CompleteCardBuilding());
+                ChangeMaterialPreviewNode(true);
+                //회전 상태에서 
+                if (Input.GetMouseButtonDown(0))
+                {
+                    _card.UseComplete(CompleteCardBuilding());
+                }
             }
+            else
+            {
+                ChangeMaterialPreviewNode(false);
+            }
+
+
             //오른쪽 마우스 클릭 -> 캔슬
-            else if (Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonDown(1))
             {
                 _card.UseComplete(false);
                 OnCancelCard();
             }
+        }
+
+        if (Input.GetKey(KeyCode.LeftControl) && Input.GetMouseButtonDown(0))
+        {
+            Debug.Log($"{GetCellPositionToMouse()}");
         }
     }
 
@@ -458,19 +472,19 @@ public class BoardManager : MonoSingleton<BoardManager>
     }
 
     // 회전된 좌표 계산 (90도 단위로 처리) + 회전 오프셋 적용
-    private Vector3Int GetRotatedPosition(Vector3Int origin, int x, int z, int rotation, Vector3Int offset)
+    private Vector3Int GetRotatedPosition(Vector3Int origin, int x, int y, int z, int rotation)
     {
-        rotation = rotation % 360;
+        rotation = (rotation + 360) % 360;
         switch (rotation)
         {
             case 90:
-                return new Vector3Int(origin.x - z - offset.z, origin.y, origin.z + x - offset.x);
+                return new Vector3Int(origin.x - z, origin.y + y, origin.z + x);
             case 180:
-                return new Vector3Int(origin.x - x - offset.x, origin.y, origin.z - z - offset.z);
+                return new Vector3Int(origin.x - x, origin.y + y, origin.z - z);
             case 270:
-                return new Vector3Int(origin.x + z - offset.z, origin.y, origin.z - x - offset.x);
+                return new Vector3Int(origin.x + z, origin.y + y, origin.z - x);
             default:
-                return new Vector3Int(origin.x + x - offset.x, origin.y, origin.z + z - offset.z); // 0도 (front)
+                return new Vector3Int(origin.x + x, origin.y + y, origin.z + z); // 0도 (front)
         }
     }
 
