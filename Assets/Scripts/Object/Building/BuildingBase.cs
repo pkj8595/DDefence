@@ -14,6 +14,8 @@ public class BuildingBase : Unit, ISelectedable, IWaveEvent
     public BuildingStat Stat { get; private set; }
     public BuildingSkill Skill { get; protected set; }
     public Collider Collider { get => _collider; set => _collider = value; }
+    public bool IsSelected { get; set; }
+
     public int BuildingTableNum;
 
     public void Init()
@@ -140,17 +142,14 @@ public class BuildingBase : Unit, ISelectedable, IWaveEvent
     #region ISelectable
     public void OnSelect()
     {
+        IsSelected = true;
         UIData data = new UIUnitData { unitGameObject = this };
         Managers.UI.ShowUIPopup<UIUnitPopup>(data);
     }
 
     public void OnDeSelect()
     {
-    }
-
-    public bool IsSelected()
-    {
-        return false;
+        IsSelected = false;
     }
 
     public void EndWave()

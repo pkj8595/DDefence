@@ -4,22 +4,13 @@ using UnityEngine;
 
 public interface ICommand 
 {
-    void Execute(Unit unit);
-}
+    bool CanMove();
+    bool CanAttack();
+    bool CanBuild();
+    bool CanGather();
 
-public class MoveCommand : ICommand
-{
-    private Vector3 targetPosition;
-
-    public MoveCommand SetPosition(Vector3 position)
-    {
-        targetPosition = position;
-        return this;
-    }
-
-    public void Execute(Unit unit)
-    {
-        PawnBase pawn = unit as PawnBase;
-        pawn.SetDestination(targetPosition);
-    }
+    void MoveTo(Vector3 targetPosition);
+    void Attack(Vector3 targetPosition);
+    void Build(Vector3 targetPosition);
+    void GatherResource(Vector3 targetPosition);
 }

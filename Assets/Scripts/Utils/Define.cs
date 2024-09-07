@@ -71,10 +71,14 @@ public class Define
 
     public enum MouseEvent
     {
-        Press,
-        PointerDown,
-        PointerUp,
-        Click,
+        LPress,
+        LPointerDown,
+        LPointerUp,
+        LClick,
+        RPress,
+        RPointerDown,
+        RPointerUp,
+        RClick,
     }
 
     public enum Tags

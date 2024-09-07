@@ -6,7 +6,7 @@ public interface ISelectedable
 {
     public void OnSelect();
     public void OnDeSelect();
-    public bool IsSelected();
+    public bool IsSelected { get; set; }
 }
 
 public class SelectedManager : MonoBehaviour
@@ -20,10 +20,24 @@ public class SelectedManager : MonoBehaviour
         Managers.Input.MouseAction += SelectMouseAction;
     }
 
-    public void Update()
+    private void SelectMouseAction(Define.MouseEvent mouse)
     {
+        if (mouse == Define.MouseEvent.LClick)
+        {
+            //if(Input.GetMouseButton)
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            int layerMask = (int)Define.Layer.Pawn | (int)Define.Layer.Building;
+            if (Physics.Raycast(ray, out RaycastHit hit, 100f, layerMask))
+            {
+                if (hit.collider.TryGetComponent(out ISelectedable selectedable))
+                {
+                    SelectObject(selectedable);
+                }
+            }
+        }
+
         // 마우스 우클릭으로 유닛 명령 (이동)
-        if (Input.GetMouseButtonDown(1) && _selectedObjectList.Count > 0)
+        if (mouse == Define.MouseEvent.RClick && _selectedObjectList.Count > 0)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             int layerMask = (int)Define.Layer.Ground;
@@ -39,25 +53,6 @@ public class SelectedManager : MonoBehaviour
                 }
             }
             DeselectAllObject();
-        }
-        
-
-    }
-
-    private void SelectMouseAction(Define.MouseEvent mouse)
-    {
-        if (mouse == Define.MouseEvent.Click)
-        {
-            //if(Input.GetMouseButton)
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            int layerMask = (int)Define.Layer.Pawn | (int)Define.Layer.Building;
-            if (Physics.Raycast(ray, out RaycastHit hit, 100f, layerMask))
-            {
-                if (hit.collider.TryGetComponent(out ISelectedable selectedable))
-                {
-                    SelectObject(selectedable);
-                }
-            }
         }
 
     }

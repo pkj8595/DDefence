@@ -143,7 +143,7 @@ public class BoardManager : MonoSingleton<BoardManager>
 
     private void OnMouseAction(Define.MouseEvent evt)
     {
-        if (Define.MouseEvent.PointerDown == evt && _isEditMode && _isSelectNode)
+        if (Define.MouseEvent.LPointerDown == evt && _isEditMode && _isSelectNode)
         {
             CreateNode_List(_selectedNodeIndex);
         }

@@ -860,7 +860,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6834267158829301281, guid: 7657a8781fe88e34ea518eb20f7f1020, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8088009069966384495, guid: 7657a8781fe88e34ea518eb20f7f1020, type: 3}
       propertyPath: m_Enabled
@@ -1722,61 +1722,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1471428784}
   m_CullTransparentMesh: 1
---- !u!1 &1519305542
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1519305544}
-  - component: {fileID: 1519305543}
-  m_Layer: 0
-  m_Name: decal
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1519305543
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1519305542}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0777d029ed3dffa4692f417d4aba19ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: 17b7375f522db934ab052c794dc17dc0, type: 2}
-  m_DrawDistance: 1000
-  m_FadeScale: 1
-  m_StartAngleFade: 180
-  m_EndAngleFade: 180
-  m_UVScale: {x: 1, y: 1}
-  m_UVBias: {x: 0, y: 0}
-  m_ScaleMode: 0
-  m_Offset: {x: 0, y: 0, z: 0}
-  m_Size: {x: 5, y: 5, z: 0.5}
-  m_FadeFactor: 0.519
---- !u!4 &1519305544
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1519305542}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.27, z: 5.01}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 13
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &1557766947
 GameObject:
   m_ObjectHideFlags: 0
@@ -1929,6 +1874,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29f09fa2d2ddd1b4ba1979757071d6a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  size: 1
 --- !u!4 &1817357089
 Transform:
   m_ObjectHideFlags: 0
@@ -2036,7 +1982,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6834267158829301281, guid: 7657a8781fe88e34ea518eb20f7f1020, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9092994966572238061, guid: 7657a8781fe88e34ea518eb20f7f1020, type: 3}
       propertyPath: _testCharacterNum
@@ -2257,7 +2203,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6834267158829301281, guid: 7657a8781fe88e34ea518eb20f7f1020, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9092994966572238061, guid: 7657a8781fe88e34ea518eb20f7f1020, type: 3}
       propertyPath: _testCharacterNum
@@ -2287,11 +2233,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6834267158829301280, guid: 7657a8781fe88e34ea518eb20f7f1020, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.73
       objectReference: {fileID: 0}
     - target: {fileID: 6834267158829301280, guid: 7657a8781fe88e34ea518eb20f7f1020, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.17
+      value: 6.67
       objectReference: {fileID: 0}
     - target: {fileID: 6834267158829301280, guid: 7657a8781fe88e34ea518eb20f7f1020, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2324,10 +2270,6 @@ PrefabInstance:
     - target: {fileID: 6834267158829301281, guid: 7657a8781fe88e34ea518eb20f7f1020, type: 3}
       propertyPath: m_Name
       value: PawnBase
-      objectReference: {fileID: 0}
-    - target: {fileID: 6834267158829301281, guid: 7657a8781fe88e34ea518eb20f7f1020, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7657a8781fe88e34ea518eb20f7f1020, type: 3}

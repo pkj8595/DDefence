@@ -11,6 +11,9 @@ public class InputManager : ManagerBase
     bool _pressed = false;
     float _pressedTime = 0;
 
+    bool _rPressed = false;
+    float _rPressedTime1 = 0;
+
     public void Init(GameObject managerObj)
     {
         base.Init();
@@ -39,10 +42,10 @@ public class InputManager : ManagerBase
             {
                 if (!_pressed)
                 {
-                    MouseAction.Invoke(Define.MouseEvent.PointerDown);
+                    MouseAction.Invoke(Define.MouseEvent.LPointerDown);
                     _pressedTime = Time.time;
                 }
-                MouseAction.Invoke(Define.MouseEvent.Press);
+                MouseAction.Invoke(Define.MouseEvent.LPress);
                 _pressed = true;
             }
             else
@@ -50,11 +53,33 @@ public class InputManager : ManagerBase
                 if (_pressed)
                 {
                     if(Time.time < _pressedTime + 0.2f)
-                        MouseAction.Invoke(Define.MouseEvent.Click);
-                    MouseAction.Invoke(Define.MouseEvent.PointerUp);
+                        MouseAction.Invoke(Define.MouseEvent.LClick);
+                    MouseAction.Invoke(Define.MouseEvent.LPointerUp);
                 }
                 _pressed = false;
                 _pressedTime = 0;
+            }
+
+            if (Input.GetMouseButton(1))
+            {
+                if (!_rPressed)
+                {
+                    MouseAction.Invoke(Define.MouseEvent.RPointerDown);
+                    _rPressedTime1 = Time.time;
+                }
+                MouseAction.Invoke(Define.MouseEvent.RPress);
+                _rPressed = true;
+            }
+            else
+            {
+                if (_rPressed)
+                {
+                    if (Time.time < _rPressedTime1 + 0.2f)
+                        MouseAction.Invoke(Define.MouseEvent.RClick);
+                    MouseAction.Invoke(Define.MouseEvent.RPointerUp);
+                }
+                _rPressed = false;
+                _rPressedTime1 = 0;
             }
         }
     }

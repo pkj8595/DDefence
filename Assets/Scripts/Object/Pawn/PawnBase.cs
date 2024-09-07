@@ -7,25 +7,26 @@ using Cysharp.Threading.Tasks;
 
 public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, IWaveEvent
 {
+    //data
     public Data.CharacterData CharacterData { get; private set; }
 
+    //설정
     [field: SerializeField] public Define.ETeam Team { get; set; } = Define.ETeam.Playable;
     public Define.WorldObject WorldObjectType { get; set; } = Define.WorldObject.Pawn;
     [SerializeField] protected Define.EPawnAniState _state = Define.EPawnAniState.Idle;
     [field : SerializeField] protected Vector3 DestPos { get; set; }
     [SerializeField] protected Transform _projectileTrans;
 
-
-    ///pawn 기능
+    //pawn 기능
     [HideInInspector] public NavMeshAgent _navAgent;
     [field : SerializeField] public PawnAnimationController AniController { get; private set; }
-    public PawnStat PawnStat { get; protected set; }
-    public UnitSkill PawnSkills { get; } = new UnitSkill();
-    public UnitAI AI { get; } = new UnitAI();
+
 
     //룬 && 기벽
     [field : SerializeField] public List<Data.RuneData> RuneList { get; private set; } = new(Define.Pawn_Rune_Limit_Count);
-    [SerializeField] private bool _isSelected;
+    public PawnStat PawnStat { get; protected set; }
+    public UnitSkill PawnSkills { get; } = new UnitSkill();
+    public UnitAI AI { get; } = new UnitAI();
 
     //option
     [field : SerializeField] public IDamageable LockTarget { get; set; }
@@ -35,10 +36,12 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
     public Action OnDeadAction { get; set; }
     public Vector3 StateBarOffset => Vector3.up * 1.2f;
 
-    public Collider _collider;
-
+    //component
+    [SerializeField] private Collider _collider;
     [field: SerializeField] public string AIStateStr { get; set; }
+    [field: SerializeField] public SkillRangeView SkillRangeView { get; set; }
 
+    public bool IsSelected { get; set; }
     public virtual Define.EPawnAniState State
     {
         get { return _state; }
@@ -105,7 +108,6 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
 
         _navAgent.enabled = true;
         _navAgent.speed = PawnStat.MoveSpeed;
-        
         _collider.enabled = true;
         PawnSkills.Init(PawnStat.Mana);
         PawnSkills.SetBaseSkill(new Skill(CharacterData.basicSkill));
@@ -468,6 +470,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         AI.SetState(AI.GetMoveState());
     }
 
+
     /// <summary>
     /// 길찾기 종료
     /// </summary>
@@ -502,20 +505,21 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
 
     public virtual void OnSelect()
     {
-        _isSelected = true;
+        IsSelected = true;
         UIData data = new UIUnitData { unitGameObject = this };
         Managers.UI.ShowUIPopup<UIUnitPopup>(data);
+
+        Skill skill = PawnSkills.GetCurrentSkill();
+        SkillRangeView.SetRange(skill.MinRange, skill.MaxRange);
+        SkillRangeView.SetActive(true);
     }
 
     public virtual void OnDeSelect()
     {
-        _isSelected = false;
+        IsSelected = false;
+        SkillRangeView.SetActive(false);
     }
 
-    public virtual bool IsSelected()
-    {
-        return _isSelected;
-    }
 
     public Transform GetTransform()
     {
