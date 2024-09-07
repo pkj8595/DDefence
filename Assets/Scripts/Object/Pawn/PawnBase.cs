@@ -35,6 +35,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
     public Action OnDeadAction { get; set; }
     public Vector3 StateBarOffset => Vector3.up * 1.2f;
 
+    public Collider _collider;
 
     [field: SerializeField] public string AIStateStr { get; set; }
 
@@ -91,6 +92,11 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
             _navAgent.updateUpAxis = false;
         }
 
+        if (_collider == null)
+        {
+            _collider = GetComponent<Collider>();
+        }
+
         //table data setting
         CharacterData = Managers.Data.CharacterDict[characterNum];
         AniController.Init(CharacterData);
@@ -99,7 +105,8 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
 
         _navAgent.enabled = true;
         _navAgent.speed = PawnStat.MoveSpeed;
-        GetComponent<Collider>().enabled = true;
+        
+        _collider.enabled = true;
         PawnSkills.Init(PawnStat.Mana);
         PawnSkills.SetBaseSkill(new Skill(CharacterData.basicSkill));
 
@@ -246,8 +253,22 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
     /// </summary>
     public void TrackingAndAttackTarget()
     {
+        //collider에서 현재 캐릭터의 위치를 계산
+        Vector3 targetPosition;
+        Collider targetColl = LockTarget.GetCollider();
+        if (targetColl == null)
+        {
+            targetPosition = LockTarget.GetTransform().position;
+        }
+        else
+        {
+            targetPosition = targetColl.ClosestPoint(transform.position);
+        }
+        float targetDistance = Vector3.Distance(transform.position, targetPosition);
+
+        //distanceType 계산
         Define.ESkillDistanceType distanceType = PawnSkills.GetCurrentSkill().
-            IsExecuteableRange(Vector3.Distance(transform.position, LockTarget.GetTransform().position));
+            IsExecuteableRange(targetDistance);
        
         switch (distanceType)
         {
@@ -268,7 +289,6 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
                     //모션 시간이 있다면 unitask 실행
                     if (skill.MotionDuration > 0)
                     {
-                        //StartCoroutine(ExecuteSkill(skill));
                         TaskExecuteSkill(skill).Forget();
                     }
                     else
@@ -279,7 +299,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
                 break;
 
             case Define.ESkillDistanceType.MoreMax:
-                SetDestination(LockTarget.GetTransform().position);
+                SetDestination(targetPosition);
                 break;
         }
     }
@@ -381,7 +401,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         UIStateBarGroup uiStatebarGroup = Managers.UI.GetUI<UIStateBarGroup>() as UIStateBarGroup;
         uiStatebarGroup.SetActive(this, false);
         _navAgent.enabled = false;
-        GetComponent<Collider>().enabled = false;
+        _collider.enabled = false;
         OnDeadEnemy().Forget();
 
         //사용하고 있는 pawn이 죽으면 20프로 확률로 부정기벽 획득
@@ -416,7 +436,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
             UIStateBarGroup uiStatebarGroup = Managers.UI.GetUI<UIStateBarGroup>() as UIStateBarGroup;
             uiStatebarGroup.SetActive(this, true);
             _navAgent.enabled = true;
-            GetComponent<Collider>().enabled = true;
+            _collider.enabled = true;
         }
     }
 
@@ -527,5 +547,10 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
     {
         OnLive();
         PawnStat.Mana = 0;
+    }
+
+    public Collider GetCollider()
+    {
+        return _collider;
     }
 }

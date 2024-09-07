@@ -253,6 +253,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _model: {fileID: 515594434536406636}
+  _collider: {fileID: 753242987865129658}
   <Team>k__BackingField: 0
   BuildingTableNum: 202999000
 --- !u!114 &7395971038977926994
@@ -296,7 +297,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 0
-  m_Extents: {x: 1.5, y: 2.5, z: 1.5}
+  m_Extents: {x: 1.5, y: 2, z: 1.5}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
@@ -344,7 +345,7 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 1.5
-  m_Height: 5
+  m_Height: 4
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6816083063174919987

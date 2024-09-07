@@ -5,21 +5,16 @@ using UnityEngine;
 public class BuildingBase : Unit, ISelectedable, IWaveEvent
 {
     [SerializeField] public GameObject _model;
+    [SerializeField] private Collider _collider;
     [field: SerializeField] public Define.ETeam Team { get; set; } = Define.ETeam.Playable;
     public Define.WorldObject WorldObjectType { get; set; } = Define.WorldObject.Building;
-
     public Data.BuildingData BuildingData { get; private set; }
     protected BuildingProduction _production;
     protected BuildingDamageable _damageable;
-    public  BuildingStat Stat { get; private set; }
+    public BuildingStat Stat { get; private set; }
     public BuildingSkill Skill { get; protected set; }
-
+    public Collider Collider { get => _collider; set => _collider = value; }
     public int BuildingTableNum;
-
-    /*public void Start()
-    {
-        //Init(BuildingTableNum);
-    }*/
 
     public void Init()
     {
@@ -61,6 +56,8 @@ public class BuildingBase : Unit, ISelectedable, IWaveEvent
 
         if (data.isDamageable)
         {
+            if (_collider == null)
+                _collider = GetComponent<Collider>();
             _damageable = gameObject.GetOrAddComponent<BuildingDamageable>();
             _damageable.Init(this);
 

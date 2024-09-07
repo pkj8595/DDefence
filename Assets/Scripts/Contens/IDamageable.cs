@@ -10,6 +10,7 @@ public interface IDamageable
 
     public abstract bool ApplyTakeDamage(DamageMessage message);
     public abstract Transform GetTransform();
+    public abstract Collider GetCollider();
     public abstract bool IsDead();
     public IStat GetStat();
 

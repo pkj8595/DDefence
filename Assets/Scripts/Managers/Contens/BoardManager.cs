@@ -643,7 +643,8 @@ public class BoardManager : MonoSingleton<BoardManager>
     public bool RotationStep(UICard card)
     {
         _card = card;
-        if (CanPlaceBuilding(_beforeMousePosition.position, _previewNode.NodeSize, _previewNode))
+        
+        if (_previewNode != null && CanPlaceBuilding(_beforeMousePosition.position, _previewNode.NodeSize, _previewNode))
         {
             _cardBuildingStep = EBuildingStep.RotationStep;
             _lineRender.enabled = true;

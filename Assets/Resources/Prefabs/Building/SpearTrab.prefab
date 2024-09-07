@@ -571,6 +571,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _model: {fileID: 515594434536406636}
+  _collider: {fileID: 2418727387432282400}
   <Team>k__BackingField: 0
   BuildingTableNum: 202102000
 --- !u!114 &7395971038977926994
