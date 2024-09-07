@@ -50,6 +50,15 @@ public class PawnStat : Stat
         ignoreAttributeType = eAttributeType;
     }
 
+
+    public void ClearPropertyAndRune()
+    {
+        _propertyStatList.Clear();
+        _runeStatList.Clear();
+        CalculateCombatStat();
+    }
+
+
     #region ChangeStat
     private void SetBaseStat(Data.StatData statData)
     {
@@ -59,9 +68,9 @@ public class PawnStat : Stat
 
     public void AddRuneStat(Data.StatData statData,int index)
     {
-        if (_runeStatList.Count == 0)
+        if (_runeStatList.Count < Define.Pawn_Rune_Limit_Count)
         {
-            for (int i = 0; i < Define.Pawn_Rune_Limit_Count; i++)
+            for (int i = _runeStatList.Count; i < Define.Pawn_Rune_Limit_Count; i++)
             {
                 _runeStatList.Add(null);
             }
@@ -90,7 +99,6 @@ public class PawnStat : Stat
         if (_propertyStatList.Count < Define.Trait_Count)
         {
             _propertyStatList.Add(statData);
-            CalculateCombatStat();
         }
         else
         {
@@ -99,10 +107,11 @@ public class PawnStat : Stat
                 if (_propertyStatList[i] == null)
                 {
                     _propertyStatList[i] = statData;
-                    CalculateCombatStat();
                 }
             }
         }
+
+        CalculateCombatStat();
     }
 
     public void RemovePropertyStat(Data.StatData statData)
@@ -129,6 +138,8 @@ public class PawnStat : Stat
         }
         _combatStat = CombatStat.ConvertStat(_currentBaseStat);
     }
+
+    
     #endregion
 
 

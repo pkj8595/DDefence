@@ -9,6 +9,12 @@ public interface IPhase
     public void EndPhase();
 }
 
+public interface IWaveEvent
+{
+    public void EndWave();
+    public void ReadyWave();
+}
+
 public partial class GameManager
 {
     public enum EGamePhase

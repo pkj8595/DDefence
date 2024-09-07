@@ -609,7 +609,7 @@ public class BoardManager : MonoSingleton<BoardManager>
         _selectedNodeIndex = index;
         _previewNode = Managers.Resource.Instantiate(_nodeList[_selectedNodeIndex], this.transform)
                                         .GetComponent<NodeBase>();
-        _previewNode.gameObject.layer = 0;
+        _previewNode.gameObject.layer = 2;
         _previewNode.gameObject.name = "PreviewNode";
         ChangeMaterialPreviewNode(false);
         _previewNode.gameObject.SetActive(true);

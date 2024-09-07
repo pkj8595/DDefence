@@ -75,7 +75,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         }
     }
 
-    public virtual void Init(int characterNum)
+    public virtual void Init(int characterNum, bool isUpgrade = false)
     {
         //component setting
         if (AniController == null)
@@ -102,6 +102,11 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         GetComponent<Collider>().enabled = true;
         PawnSkills.Init(PawnStat.Mana);
         PawnSkills.SetBaseSkill(new Skill(CharacterData.basicSkill));
+
+        if (!isUpgrade)
+        {
+            ResetStatData();
+        }
 
         for (int i = 0; i < CharacterData.arr_rune.Length; i++)
         {
@@ -289,12 +294,9 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
 
     public void SetRuneData(Data.RuneData data, int index)
     {
-        if (RuneList.Count == 0)
+        for (int i = RuneList.Count; i < Define.Pawn_Rune_Limit_Count; i++)
         {
-            for (int i = RuneList.Count; i < Define.Pawn_Rune_Limit_Count; i++)
-            {
-                RuneList.Add(null);
-            }
+            RuneList.Add(null);
         }
 
         if (index < Define.Pawn_Rune_Limit_Count && index < RuneList.Count)
@@ -315,6 +317,16 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
             Debug.LogError($"인덱스의 크기가 범위를 넘었습니다.. : {index}");
         }
 
+    }
+
+    public void ResetStatData()
+    {
+        for (int i = 0; i < RuneList.Count; i++)
+        {
+            RuneList[i] = null;
+        }
+        PawnStat.ClearPropertyAndRune();
+        PawnSkills.ClearRuneSkill();
     }
 
 

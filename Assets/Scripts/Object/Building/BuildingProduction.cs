@@ -2,12 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IWaveEvent
-{
-    public void EndWave();
-    public void ReadyWave();
-}
-
 public class BuildingProduction : MonoBehaviour, IWaveEvent
 {
     BuildingBase _buildingBase;

@@ -11,7 +11,7 @@ public interface ISelectedable
 
 public class SelectedManager : MonoBehaviour
 {
-    private List<ISelectedable> _selectedObject = new List<ISelectedable>();
+    private List<ISelectedable> _selectedObjectList = new List<ISelectedable>();
 
 
     public void Init()
@@ -20,42 +20,69 @@ public class SelectedManager : MonoBehaviour
         Managers.Input.MouseAction += SelectMouseAction;
     }
 
-    private void SelectMouseAction(Define.MouseEvent mouse)
+    public void Update()
     {
-        if(mouse == Define.MouseEvent.Click)
+        // 마우스 우클릭으로 유닛 명령 (이동)
+        if (Input.GetMouseButtonDown(1) && _selectedObjectList.Count > 0)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, 100f))
+            int layerMask = (int)Define.Layer.Ground;
+            if (Physics.Raycast(ray, out RaycastHit hit, 100f, layerMask))
+            {
+                foreach (var selected in _selectedObjectList)
+                {
+                    PawnBase pawn = selected as PawnBase;
+                    if (pawn != null && pawn.Team == Define.ETeam.Playable)
+                    {
+                        pawn.SetDestination(hit.point);
+                    }
+                }
+            }
+            DeselectAllObject();
+        }
+        
+
+    }
+
+    private void SelectMouseAction(Define.MouseEvent mouse)
+    {
+        if (mouse == Define.MouseEvent.Click)
+        {
+            //if(Input.GetMouseButton)
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            int layerMask = (int)Define.Layer.Pawn | (int)Define.Layer.Building;
+            if (Physics.Raycast(ray, out RaycastHit hit, 100f, layerMask))
             {
                 if (hit.collider.TryGetComponent(out ISelectedable selectedable))
                 {
-                    selectedable.OnSelect();
+                    SelectObject(selectedable);
                 }
             }
         }
+
     }
 
     public void SelectObject(ISelectedable monster)
     {
-        if (!_selectedObject.Contains(monster))
+        if (!_selectedObjectList.Contains(monster))
         {
-            _selectedObject.Add(monster);
+            _selectedObjectList.Add(monster);
             monster.OnSelect();
         }
     }
 
     public void DeselectAllObject()
     {
-        foreach (var monster in _selectedObject)
+        foreach (var monster in _selectedObjectList)
         {
             monster.OnDeSelect();
         }
-        _selectedObject.Clear();
+        _selectedObjectList.Clear();
     }
 
     public List<ISelectedable> GetSelectedMonsters()
     {
-        return _selectedObject;
+        return _selectedObjectList;
     }
 
     

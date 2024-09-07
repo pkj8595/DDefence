@@ -35,6 +35,13 @@ public class UnitSkill
         SkillList.Remove(skill);
     }
 
+    public void ClearRuneSkill()
+    {
+        Skill baseSkill = SkillList[0];
+        SkillList.Clear();
+        SkillList.Add(baseSkill);
+    }
+
     public Skill GetCurrentSkill()
     {
         if (_currentSkill != null && _currentSkill.IsReady(_manaAmount.Value))
@@ -42,7 +49,7 @@ public class UnitSkill
 
         for (int i = 1; i < SkillList.Count; i++)
         {
-            if (SkillList[i].IsReady(_manaAmount.Value))
+            if (SkillList[i] != null && SkillList[i].IsReady(_manaAmount.Value))
             {
                 _currentSkill = SkillList[i];
                 return _currentSkill;

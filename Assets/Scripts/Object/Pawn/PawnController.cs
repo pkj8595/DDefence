@@ -11,9 +11,9 @@ public class PawnController : PawnBase
     {
     }
 
-    public override void Init(int characterNum)
+    public override void Init(int characterNum, bool isUpgrade = false)
     {
-        base.Init(characterNum);
+        base.Init(characterNum, isUpgrade);
     }
 
     protected override void Init()
