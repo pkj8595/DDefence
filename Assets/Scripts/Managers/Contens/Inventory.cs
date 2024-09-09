@@ -96,15 +96,28 @@ public class Inventory
         return false;
     }
 
-    public void SpendWaveCost(Define.EGoodsType goodsType,int itemAmount)
+    public void SpendMoveItem(Vector3 position, Define.EGoodsType goodsType, int itemAmount, Action<bool> action)
     {
-        if (!_itemDic.ContainsKey((int)goodsType))
+        var uimain = Managers.UI.GetUI<UIMain>() as UIMain;
+        if (uimain != null)
+            uimain.UIMoveResource.QueueSpendItem(position,goodsType,itemAmount,action);
+        else
         {
-            _itemDic.Add((int)goodsType, 0);
-        }
-        _itemDic[(int)goodsType] -= itemAmount;
-        OnItemAmountChanged?.Invoke((int)goodsType);
+            bool isAble = SpendItem(goodsType.ToInt(), itemAmount);
+            action?.Invoke(isAble);
+        } 
     }
+
+    public void AddMoveItem(Vector3 worldPosition, Define.EGoodsType goodsType, int amount)
+    {
+        var uimain = Managers.UI.GetUI<UIMain>() as UIMain;
+
+        if (uimain != null)
+            uimain.UIMoveResource.QueueAddItem(worldPosition, goodsType, amount);
+        else
+            AddItem(goodsType.ToInt(), amount);
+    }
+    
 
 
 }

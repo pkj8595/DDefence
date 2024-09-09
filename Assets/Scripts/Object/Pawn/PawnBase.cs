@@ -115,7 +115,16 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         if (!isUpgrade)
         {
             ResetStatData();
+            for (int i = 0; i < 2; i++)
+            {
+                float randomRange = UnityEngine.Random.value;
+                if (randomRange < 0.5f)
+                    PawnStat.AddNagativeProperty();
+                else
+                    PawnStat.AddPositiveProperty();
+            }
         }
+        
 
         for (int i = 0; i < CharacterData.arr_rune.Length; i++)
         {
@@ -540,11 +549,13 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
     {
         PawnStat.EndWaveEvent();
 
-        //소모에 실패하면 최대 체력의 20프로가 깍임
-        if (!Managers.Game.Inven.SpendItem((int)Define.EGoodsType.food, CharacterData.waveCost))
+        Managers.Game.Inven.SpendMoveItem(transform.position + StateBarOffset, Define.EGoodsType.food, CharacterData.waveCost, (isSpend) =>
         {
-            PawnStat.DontSpendCost();
-        }
+            if (isSpend)
+                PawnStat.SpendCost();
+            else
+                PawnStat.DontSpendCost();
+        });
     }
 
     public void ReadyWave()
@@ -557,4 +568,6 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
     {
         return _collider;
     }
+
+
 }

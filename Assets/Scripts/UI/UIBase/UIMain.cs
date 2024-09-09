@@ -10,8 +10,12 @@ public class UIMain : UIBase
 
     [SerializeField] private UI_RelicDesc _relicDesc;       //유물 설명 UI
 
+
+
     [Header("prefab")]
     [SerializeField] private UI_Relic _relicPrefab;
+
+    [field : SerializeField] public UI_MoveResource UIMoveResource { get; set; }
 
     public override void Init(UIData uiData)
     {
@@ -40,7 +44,6 @@ public class UIMain : UIBase
     {
         _btnNextPhase.SetActive(true);
     }
-
 
     public void SetRelicUI()
     {

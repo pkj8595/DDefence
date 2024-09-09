@@ -18,10 +18,8 @@ public class IdleState : IUnitState
 {
     UnitAI _unitAI;
     PawnBase _pawn;
-    public string GetNames()
-    {
-        return "IdleState";
-    }
+    public string GetNames() => GetType().Name;
+
     public void Init(UnitAI unitAI)
     {
         _unitAI = unitAI;
@@ -64,7 +62,7 @@ public class MoveState : IUnitState
 {
     private UnitAI _unitAI;
     PawnBase _pawn;
-    public string GetNames() => "MoveState";
+    public string GetNames() => GetType().Name;
 
 
     public void Init(UnitAI unitAI)
@@ -112,7 +110,7 @@ public class MoveState : IUnitState
 public class DeadState : IUnitState
 {
     private UnitAI _unitAI;
-    public string GetNames() => "DeadState";
+    public string GetNames() => GetType().Name;
 
     public void Init(UnitAI unitAI)
     {
@@ -170,6 +168,7 @@ public class ReturnToBaseState : IUnitState
 
     public void ExitState()
     {
+
     }
 
 
@@ -180,7 +179,7 @@ public class ChaseState : IUnitState
 {
     private UnitAI _unitAI;
     PawnBase _pawn;
-    public string GetNames() => "ChaseState";
+    public string GetNames() => GetType().Name;
 
     public void Init(UnitAI unitAI)
     {
@@ -209,7 +208,7 @@ public class SkillState : IUnitState
 {
     private UnitAI _unitAI;
     PawnBase _pawn;
-    public string GetNames() => "SkillState";
+    public string GetNames() => GetType().Name;
 
     public void Init(UnitAI unitAI)
     {

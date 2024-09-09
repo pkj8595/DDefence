@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CubeEventTest : MonoBehaviour
 {
-    public float size;
+    public Define.EGoodsType goods;
 
     public void Update()
     {
@@ -14,7 +14,12 @@ public class CubeEventTest : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            Managers.UI.ShowUIPopup<UIPopupShop>();
+            //Managers.UI.ShowUIPopup<UIPopupShop>();
+            Test2();
+        }
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            Test3();
         }
 
     }
@@ -30,7 +35,22 @@ public class CubeEventTest : MonoBehaviour
         Managers.Game.Inven.AddCard(Managers.Data.ShopDict[arr[Random.Range(0, arr.Length)]]);
     }
 
-    
+    public void Test2()
+    {
+        var uimain = Managers.UI.GetUI<UIMain>() as UIMain;
+        uimain.UIMoveResource.QueueAddItem(transform.position, goods, 100);
+    }
 
+    public void Test3()
+    {
+        var uimain = Managers.UI.GetUI<UIMain>() as UIMain;
+        uimain.UIMoveResource.QueueSpendItem(transform.position, goods, 100, (isSpend) =>
+        {
+            if (isSpend)
+                Debug.Log("isSpend true");
+            else
+                Debug.Log("isSpend false");
+        });
+    }
 
 }

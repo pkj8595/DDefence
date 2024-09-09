@@ -7,7 +7,7 @@ public class BuildingDamageable : MonoBehaviour, IDamageable
     public Define.ETeam Team { get=> _buildingBase.Team;}
     public Define.WorldObject WorldObjectType { get => _buildingBase.WorldObjectType; }
 
-    public Vector3 StateBarOffset => BuildingStateBarOffset;
+    public Vector3 StateBarOffset => _buildingBase.StateBarOffset;
 
     [SerializeField] private Vector3 BuildingStateBarOffset;
 

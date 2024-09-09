@@ -22,4 +22,21 @@ public class UIItem : MonoBehaviour
         gameObject.SetActive(true);
     }
 
+    public void Init(int itemNum, int amount, bool isSpend)
+    {
+        if (itemNum == 0 || amount == 0)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
+        var item = ItemBase.GetItem(itemNum);
+        _imgItem.sprite = Managers.Resource.Load<Sprite>($"Sprites/UI/Icon/{item.ImgStr}");
+        if (!isSpend)
+            _txtAmount.text = $"<color=red>{amount}</color>";
+        else
+            _txtAmount.text = amount.ToString();
+        gameObject.SetActive(true);
+    }
+
 }

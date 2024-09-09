@@ -6,6 +6,7 @@ public class BuildingBase : Unit, ISelectedable, IWaveEvent
 {
     [SerializeField] public GameObject _model;
     [SerializeField] private Collider _collider;
+    [field: SerializeField] public Vector3 StateBarOffset { get; set; }
     [field: SerializeField] public Define.ETeam Team { get; set; } = Define.ETeam.Playable;
     public Define.WorldObject WorldObjectType { get; set; } = Define.WorldObject.Building;
     public Data.BuildingData BuildingData { get; private set; }
@@ -154,15 +155,18 @@ public class BuildingBase : Unit, ISelectedable, IWaveEvent
 
     public void EndWave()
     {
-        if (!Managers.Game.Inven.SpendItem((int)Define.EGoodsType.gold, BuildingData.waveCost))
-        {
-            Stat.DontSpendCost();
-        }
-
-        if(_production != null)
+        if (_production != null)
         {
             _production.EndWave();
         }
+
+        Managers.Game.Inven.SpendMoveItem(transform.position, Define.EGoodsType.gold, BuildingData.waveCost, (isSpend) =>
+        {
+            if (isSpend)
+                Stat.SpendCost();
+            else
+                Stat.DontSpendCost();
+        });
     }
 
     public void ReadyWave()

@@ -162,4 +162,9 @@ public abstract class Stat : MonoBehaviour, IStat
         }
     }
 
+    public virtual void SpendCost()
+    {
+        Hp += MaxHp * 0.2f;
+    }
+
 }
