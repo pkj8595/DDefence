@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class UIStateBarGroup : UIBase
 {
+    //state bar
     public Dictionary<IDamageable, UI_HPbar> _dicUnit = new(); // 체력바를 가진 오브젝트들
     public Queue<UI_HPbar> _stateBarPool = new(); // hp바 풀링
     public UI_HPbar _stateBarPrefab; //hp 프리팹
 
+    //dialog
+    public Queue<UI_PawnDialog> _dialogPool = new(); // hp바 풀링
+    public UI_PawnDialog _pawnDialogPrefab; //dialog prefab
+    public Dictionary<Transform, UI_PawnDialog> _dicDialog = new();
 
     public override void Init(UIData uiData)
     {
         base.Init(uiData);
         _stateBarPrefab.gameObject.SetActive(false);
+        _pawnDialogPrefab.gameObject.SetActive(false);
     }
     public override void SetSortingOrder(int sortingOrder)
     {
@@ -33,7 +39,7 @@ public class UIStateBarGroup : UIBase
             Vector3 worldPosition = unit.Key.GetTransform().position + unit.Key.StateBarOffset;
             Vector3 screenPosition = Camera.main.WorldToScreenPoint(worldPosition);
 
-            //화면에 있다면 없다면
+            //화면 노출 여부
             if (screenPosition.z > 0 &&
                 screenPosition.x > 0 && screenPosition.x < Screen.width &&
                 screenPosition.y > 0 && screenPosition.y < Screen.height)
@@ -47,8 +53,16 @@ public class UIStateBarGroup : UIBase
                 unit.Value.gameObject.SetActive(false);
             }
         }
+
+        foreach(var pawnDialog in _dicDialog)
+        {
+            Vector3 screenPosition = Camera.main.WorldToScreenPoint(pawnDialog.Key.position + new Vector3(0,1.6f,0));
+            pawnDialog.Value.transform.position = screenPosition;
+        }
+
     }
 
+    #region StateBar
 
     public void AddUnit(IDamageable unit)
     {
@@ -97,6 +111,50 @@ public class UIStateBarGroup : UIBase
             _stateBarPool.Enqueue(stateBar);
         }
     }
+    #endregion
 
+    #region pawn dialog
+    public void ShowDialog(Transform pawn, string str)
+    {
+        UI_PawnDialog pawnDialog;
+        if (_dicDialog.ContainsKey(pawn))
+        {
+            pawnDialog = _dicDialog[pawn];
+        }
+        else
+        {
+            pawnDialog = GetOrCreateDialog();
+            _dicDialog.Add(pawn, pawnDialog);
+        }
+
+        
+        pawnDialog.ShowDialog(str, ()=> 
+        {
+            _dicDialog.Remove(pawn);
+            PushPoolDialog(pawnDialog);
+        });
+    }
+
+    private UI_PawnDialog GetOrCreateDialog()
+    {
+        UI_PawnDialog ret;
+        if (_dialogPool.Count > 0)
+            ret = _dialogPool.Dequeue();
+        else
+            ret = Instantiate(_pawnDialogPrefab, transform);
+
+        ret.gameObject.SetActive(true);
+        return ret;
+    }
+
+    private void PushPoolDialog(UI_PawnDialog dialog)
+    {
+        if (dialog != null)
+        {
+            dialog.gameObject.SetActive(false);
+            _dialogPool.Enqueue(dialog);
+        }
+    }
+    #endregion
 
 }

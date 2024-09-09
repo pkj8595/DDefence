@@ -68,8 +68,4 @@ public class UI_HPbar : MonoBehaviour
         }
     }
 
-    public void SetDialog(string str)
-    {
-
-    }
 }

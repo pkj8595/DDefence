@@ -11,6 +11,8 @@ public class UIManager : ManagerBase
     public int baseSortingOrder = 0;
     public int sortingOrderAddValue = 100;
 
+    UIStateBarGroup uiStateBarGroup;
+
     public void Init(GameObject root)
     {
         base.Init();
@@ -140,5 +142,13 @@ public class UIManager : ManagerBase
 
         GameObject.Destroy(_uiRoot);
         _uiStack.Clear();
+    }
+
+    public void ShowPawnDialog(Transform pawn, string str)
+    {
+        if (uiStateBarGroup == null)
+            uiStateBarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
+
+        uiStateBarGroup.ShowDialog(pawn, str);
     }
 }

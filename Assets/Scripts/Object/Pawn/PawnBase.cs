@@ -294,9 +294,11 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
                 //스킬이 실행 가능한지 체크 및 자원 소모
                 if (PawnSkills.ReadyCurrentSkill(PawnStat))
                 {
+                    Skill skill = PawnSkills.GetRunnigSkill();
+                    Managers.UI.ShowPawnDialog(transform, skill.Name);
+
                     AI.SetState(AI.GetSkillState());
                     transform.LookAt(LockTarget.GetTransform());
-                    Skill skill = PawnSkills.GetRunnigSkill();
                     //모션 시간이 있다면 unitask 실행
                     if (skill.MotionDuration > 0)
                     {

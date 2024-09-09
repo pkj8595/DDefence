@@ -3,18 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
-using DG.Tweening;
+using System;
 
 public class UI_PawnDialog : MonoBehaviour
 {
     public Text _txtDialog;
     public bool IsProcessing {get;set;}
-    public void ShowDialog(string str)
+    private Action _deActiveAction;
+
+    Coroutine coDialog;
+
+    public void ShowDialog(string str, Action DeActiveAction)
     {
-        ShowTask(str).Forget();
+        if (coDialog != null)
+        {
+            StopCoroutine(coDialog);
+            coDialog = null;
+        }
+
+        _deActiveAction = DeActiveAction;
+        coDialog = StartCoroutine(ShowTask(str));
     }
 
-    async UniTaskVoid ShowTask(string str)
+    IEnumerator ShowTask(string str)
     {
         IsProcessing = true;
         _txtDialog.gameObject.SetActive(true);
@@ -24,13 +35,14 @@ public class UI_PawnDialog : MonoBehaviour
         {
             index++;
             _txtDialog.text = str.Substring(0, index);
-            await UniTask.NextFrame();
+            yield return YieldCache.WaitForSeconds(0.1f);
         }
 
-        await UniTask.Delay(2000);
+        yield return YieldCache.WaitForSeconds(2.0f);
 
         _txtDialog.text = string.Empty;
         _txtDialog.gameObject.SetActive(false);
         IsProcessing = false;
+        _deActiveAction?.Invoke();
     }
 }

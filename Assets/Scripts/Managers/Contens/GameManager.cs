@@ -17,6 +17,7 @@ public partial class GameManager
         Inven.Init();
         InitWave();
     }
+
     public void Clear()
     {
         _enumyPawnGroup.Clear();
