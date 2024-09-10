@@ -33,22 +33,18 @@ public class IdleState : IUnitState
 
     public void UpdateState()
     {
-        _unitAI.TryExecuteSkill();
+        _unitAI.TrackingAndAttackTarget();
     }
 
     public void AdjustUpdate()
     {
-        if (!_pawn.HasTarget)
+        if (_pawn.HasTarget)
         {
-            _pawn.LockTarget = IAttackable.SearchTarget(_pawn, _pawn.SearchRange, _pawn.PawnSkills.GetCurrentSkill().TargetType);
-            //적을 발견 했을 경우 상태 전환
-            if (_pawn.LockTarget != null)
-                _pawn.SetDestination(_pawn.LockTarget.GetTransform().position);
+
         }
         else
         {
-            //타겟이 있을경우
-            _unitAI.CheckOutRangeTarget();
+            _unitAI.SearchTarget();
         }
     }
 
@@ -81,22 +77,23 @@ public class MoveState : IUnitState
     {
         //이동 체크
         _unitAI.Pawn.UpdateMove();
-
-        //타겟이 있다면 범위 체크 밖에 나갔다면 
-        if (_pawn.HasTarget)
-        {
-            if (!_unitAI.CheckOutRangeTarget())
-                _pawn.TrackingAndAttackTarget();
-        }
-        else
-        {
-         //   _unitAI.SetState(_unitAI.GetIdleState());
-        }
+       
     }
 
     public void AdjustUpdate()
     {
-        
+        //타겟이 있다면 범위 체크 밖에 나갔다면 
+        if (_pawn.HasTarget)
+        {
+            if (!_unitAI.CheckOutRangeTarget())
+            {
+                _unitAI.TrackingAndAttackTarget();
+            }
+        }
+        else
+        {
+            _unitAI.SearchTarget();
+        }
     }
 
     public void ExitState()
@@ -152,15 +149,15 @@ public class ReturnToBaseState : IUnitState
 
     public void EnterState()
     {
-        _pawn.SetDestination(_unitAI.OriginPosition.Value);
+        if (_unitAI.OriginPosition == null)
+            _unitAI.SetState(_unitAI.GetIdleState());
+        else
+            _pawn.SetDestination(_unitAI.OriginPosition.Value);
     }
 
     public void UpdateState()
     {
-        if (_unitAI.OriginPosition == null)
-        {
-            _unitAI.SetState(_unitAI.GetIdleState());
-        }
+        
     }
     public void AdjustUpdate()
     {

@@ -260,7 +260,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
 
 
     /// <summary>
-    /// 추척 대상이 있을때 이동 및 공격
+    /// 추적 대상이 있을때 이동 및 공격
     /// </summary>
     public void TrackingAndAttackTarget()
     {

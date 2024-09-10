@@ -34,6 +34,8 @@ public interface IAttackable
         int layerTarget = (int)Define.Layer.Pawn | (int)Define.Layer.Building;
         Collider[] colliders = Physics.OverlapSphere(transform.GetTransform().position, searchRange, layerTarget);
 
+        float minDistance = float.MaxValue;
+        IDamageable target = null;
         foreach (var collider in colliders)
         {
             if (collider.transform == transform.GetTransform())
@@ -42,10 +44,16 @@ public interface IAttackable
             IDamageable unit = collider.attachedRigidbody.GetComponent<IDamageable>();
             if (unit != null && !unit.IsDead() && unit.GetTargetType(transform.Team) == targetType)
             {
-                return unit;
+                float value = Vector3.Distance(transform.GetTransform().position, collider.transform.position);
+                if (value < minDistance)
+                {
+                    minDistance = value;
+                    target = unit;
+                }
             }
         }
-        return null;
+
+        return target;
     }
 }
 

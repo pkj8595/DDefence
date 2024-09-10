@@ -77,16 +77,20 @@ public class UnitAI
         return false;
     }
 
-    public void TryExecuteSkill()
+    public void TrackingAndAttackTarget()
     {
-        if (Pawn.HasTarget)
+        if (!Pawn.IsDead() && Pawn.HasTarget)
         {
-            Skill skill = Pawn.PawnSkills.GetCurrentSkill();
-            if (skill.IsReady(Pawn.PawnStat.Mana))
-            {
-                Pawn.TrackingAndAttackTarget();
-            }
+            Pawn.TrackingAndAttackTarget();
         }
+    }
+
+    public void SearchTarget()
+    {
+        Pawn.LockTarget = IAttackable.SearchTarget(Pawn, Pawn.SearchRange, Pawn.PawnSkills.GetCurrentSkill().TargetType);
+        //적을 발견 했을 경우 상태 전환
+        if (Pawn.LockTarget != null)
+            Pawn.SetDestination(Pawn.LockTarget.GetTransform().position);
     }
 
 }

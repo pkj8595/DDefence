@@ -176,8 +176,8 @@ public class PawnStat : Stat
         // 회피스탯 적용
         if (Random.Range(0, 1000) < _combatStat.dodgepChance)
         {
-            Debug.Log("회피");
-            //todo effectManager text
+            string[] dodgeStr = {"느려", "눈 감고도 피하겠군"};
+            Managers.UI.ShowPawnDialog(transform, dodgeStr[Random.Range(0, dodgeStr.Length)]);
             return;
         }
 

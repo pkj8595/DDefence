@@ -27,16 +27,42 @@ public class EnemyFindTarget : MonoBehaviour
                 (_pawnBase.State == Define.EPawnAniState.Idle ||
                  _pawnBase.State == Define.EPawnAniState.Ready))
             {
-                if (SearchTargetPosition(out Vector3 retPosition))
+                if (SearchRandomBuildingPosition(out Vector3 retPosition))
                 {
                     _pawnBase.SetDestination(retPosition);
                 }
             }
 
-            await UniTask.Delay(1000,cancellationToken: gameObject.GetCancellationTokenOnDestroy());
+            await UniTask.Delay(2000,cancellationToken: gameObject.GetCancellationTokenOnDestroy());
         }
     }
 
+    public bool SearchRandomBuildingPosition(out Vector3 retPosition)
+    {
+        retPosition = Vector3.zero;
+        List<BuildingNode> buildingList = GameView.Instance.ConstructedBuildingList;
+        List<Vector3> moveablePositionList = new();
+        for (int i = 0; i < buildingList.Count; i++)
+        {
+            if (buildingList[i].TryGetComponent(out IDamageable damageable) && !damageable.IsDead())
+            {
+                if (BoardManager.Instance.GetMoveablePosition(damageable.GetTransform().position,
+                                                        out Vector3 moveablePosition, 4f))
+                {
+                    moveablePositionList.Add(moveablePosition);
+                }
+            }
+        }
+
+        if (0 < moveablePositionList.Count)
+        {
+            int index = Random.Range(0, moveablePositionList.Count);
+            retPosition = moveablePositionList[index];
+            return true;
+        }
+        else
+            return false;
+    }
 
     public bool SearchTargetPosition(out Vector3 retPosition)
     {
@@ -69,7 +95,6 @@ public class EnemyFindTarget : MonoBehaviour
         }
         return isFind;
     }
-
     float GetPathLength(NavMeshPath path)
     {
         float length = 0.0f;
