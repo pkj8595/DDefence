@@ -19,6 +19,7 @@ public class UnitSkill
 
     public void SetBaseSkill(Skill baseSkill)
     {
+        baseSkill.IsBaseSkill = true;
         if (0 == SkillList.Count)
             SkillList.Add(baseSkill);
         else
@@ -27,12 +28,24 @@ public class UnitSkill
 
     public void SetSkill(Skill skill)
     {
+        skill.IsBaseSkill = false;
         SkillList.Add(skill);
     }
 
     public void RemoveSkill(Skill skill)
     {
         SkillList.Remove(skill);
+    }
+    public void RemoveSkill(Data.RuneData data)
+    {
+        for (int i = 0; i < SkillList.Count; i++)
+        {
+            if (SkillList[i].TableNum == data.skillTableNum)
+            {
+                SkillList.RemoveAt(i);
+                break;
+            }
+        }
     }
 
     public void ClearRuneSkill()

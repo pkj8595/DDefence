@@ -94,6 +94,18 @@ public class PawnStat : Stat
             Debug.Log($"index : {index} _runeStatList.Count : {_runeStatList.Count}");
     }
 
+    public void RemoveRuneStat(RuneData data)
+    {
+        if (_runeStatList.Remove(Managers.Data.StatDict[data.statTableNum]))
+        {
+            CalculateCombatStat();
+        }
+        else
+        {
+            Debug.LogError($"{data.tableNum} 룬 스탯 삭제 실패");
+        }
+    }
+
     public void AddPropertyStat(Data.StatData statData)
     {
         if (_propertyStatList.Count < Define.Trait_Count)
@@ -236,5 +248,12 @@ public class PawnStat : Stat
         AddPropertyStat(data[Random.Range(0, data.Count)]);
     }
 
-    
+    public override float GetSkillCooldown()
+    {
+        return _combatStat.skillCooldown;
+    }
+    public override float GetBaseSkillCooldown()
+    {
+        return _combatStat.baseSkillCooldown;
+    }
 }

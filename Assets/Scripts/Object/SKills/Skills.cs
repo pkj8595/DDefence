@@ -20,16 +20,18 @@ public class Skill
     public float MotionDuration { get => data.motionDuration; }
     public string EffectStr { get => data.effectStr; }
     public string ProjectileStr { get => data.projectile; }
+    public int TableNum => data.tableNum;
 
     public List<AffectBase> AffectList { get; } = new List<AffectBase>(Define.Affect_Count);
     public float LastRunTime { get; set; }
-    private IStat _attacker;
+    public bool IsBaseSkill { get; set; }
 
-    public Skill(int skillTableNum)
+    private Stat _stat;
+    public Skill(int skillTableNum, Stat stat)
     {
         data = Managers.Data.SkillDict[skillTableNum];
         LastRunTime = -1000f;
-
+        _stat = stat;
         for (int i = 0; i < data.arr_affect.Length; i++)
         {
             if (data.arr_affect[i] != 0)
@@ -108,7 +110,13 @@ public class Skill
 
     public bool IsCooltime()
     {
-        bool isCooltime = Time.time < LastRunTime + CoolTime;
+        float reducedCoolTime;
+        if (IsBaseSkill)
+            reducedCoolTime = CoolTime / (1f + _stat.GetBaseSkillCooldown());
+        else
+            reducedCoolTime = CoolTime / (1f + _stat.GetSkillCooldown());
+
+        bool isCooltime = Time.time < LastRunTime + reducedCoolTime;
 
         return isCooltime;
     }

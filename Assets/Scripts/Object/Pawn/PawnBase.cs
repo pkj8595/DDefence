@@ -105,12 +105,9 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         AniController.Init(CharacterData);
         PawnStat.Init(CharacterData.statDataNum, OnDead, OnDeadTarget, CharacterData.ignoreAttributeType);
         AI.Init(this);
-
-        _navAgent.enabled = true;
-        _navAgent.speed = PawnStat.MoveSpeed;
-        _collider.enabled = true;
+        
         PawnSkills.Init(PawnStat.Mana);
-        PawnSkills.SetBaseSkill(new Skill(CharacterData.basicSkill));
+        PawnSkills.SetBaseSkill(new Skill(CharacterData.basicSkill,PawnStat));
 
         if (!isUpgrade)
         {
@@ -131,6 +128,10 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
             if (CharacterData.arr_rune[i] != 0)
                 SetRuneData(Managers.Data.RuneDict[CharacterData.arr_rune[i]], i);
         }
+
+        _collider.enabled = true;
+        _navAgent.enabled = true;
+        _navAgent.speed = PawnStat.MoveSpeed;
 
         //stateBar setting
         UIStateBarGroup uiStatebarGroup = Managers.UI.ShowUI<UIStateBarGroup>() as UIStateBarGroup;
@@ -295,7 +296,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
                 if (PawnSkills.ReadyCurrentSkill(PawnStat))
                 {
                     Skill skill = PawnSkills.GetRunnigSkill();
-                    if (skill != PawnSkills.GetBaseSkill())
+                    if (!skill.IsBaseSkill)
                     {
                         Managers.UI.ShowPawnDialog(transform, skill.Name);
                     }
@@ -344,7 +345,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
             }
             if (data.skillTableNum != 0)
             {
-                PawnSkills.SetSkill(new Skill(data.skillTableNum));
+                PawnSkills.SetSkill(new Skill(data.skillTableNum,PawnStat));
             }
             
         }
@@ -353,6 +354,18 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
             Debug.LogError($"인덱스의 크기가 범위를 넘었습니다.. : {index}");
         }
 
+    }
+
+    public void RemoveRuneData(Data.RuneData data)
+    {
+        RuneList.Remove(data);
+        PawnStat.RemoveRuneStat(data);
+        PawnSkills.RemoveSkill(data);
+    }
+
+    public void RemoveRuneData(int index)
+    {
+        RemoveRuneData(RuneList[index]);
     }
 
     public void ResetStatData()

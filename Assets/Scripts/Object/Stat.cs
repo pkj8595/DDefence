@@ -166,5 +166,13 @@ public abstract class Stat : MonoBehaviour, IStat
     {
         Hp += MaxHp * 0.2f;
     }
+    public virtual float GetSkillCooldown()
+    {
+        return 0;
+    }
 
+    public virtual float GetBaseSkillCooldown()
+    {
+        return 0;
+    }
 }

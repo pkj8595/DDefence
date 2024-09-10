@@ -254,11 +254,11 @@ namespace Data
         public float rangedDamage;
         public float magicDamage;
         public float protection;
-        public float cooldownReduction;
+        public float baseSkillCooldown;
+        public float skillCooldown;
         public float movementSpeed;
         public float criticalHitChance;
         public float dodgepChance;
-        public float magicDuration;
         public float statusEffectResistance;
         public float balance;
         public float hpRegeneration;
@@ -274,11 +274,11 @@ namespace Data
             ret.rangedDamage            = a * b.rangedDamage;
             ret.magicDamage             = a * b.magicDamage;
             ret.protection              = a * b.protection;
-            ret.cooldownReduction       = a * b.cooldownReduction;
+            ret.baseSkillCooldown       = a * b.baseSkillCooldown;
             ret.movementSpeed           = a * b.movementSpeed;
             ret.criticalHitChance       = a * b.criticalHitChance;
             ret.dodgepChance            = a * b.dodgepChance;
-            ret.magicDuration           = a * b.magicDuration;
+            ret.skillCooldown           = a * b.skillCooldown;
             ret.statusEffectResistance  = a * b.statusEffectResistance;
             ret.balance                 = a * b.balance;
             ret.hpRegeneration          = a * b.hpRegeneration;

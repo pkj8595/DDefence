@@ -177,37 +177,37 @@
     {
       "tableNum": 103000000,
       "type": 0,
-      "maxHp": 10,
+      "maxHp": 4,
       "maxMana": 0,
       "meleeDamage": 0,
       "rangedDamage": 0,
       "magicDamage": 0,
       "protection": 1,
-      "cooldownReduction": 0.3,
-      "movementSpeed": 0.1,
+      "baseSkillCooldown": 0,
+      "movementSpeed": 0.2,
       "criticalHitChance": 0,
       "dodgepChance": 0,
-      "magicDuration": 0,
+      "skillCooldown": 0,
       "statusEffectResistance": 0.4,
       "balance": 0,
-      "hpRegeneration": 0.4,
+      "hpRegeneration": 0.1,
       "manaRegeneration": 0,
       "searchRange": 0.2
     },
     {
       "tableNum": 103000001,
       "type": 1,
-      "maxHp": 0.7,
+      "maxHp": 1,
       "maxMana": 0,
       "meleeDamage": 1,
       "rangedDamage": 0.3,
       "magicDamage": 0,
       "protection": 0.7,
-      "cooldownReduction": 0.5,
-      "movementSpeed": 0,
+      "baseSkillCooldown": 0.5,
+      "movementSpeed": 0.2,
       "criticalHitChance": 0,
       "dodgepChance": 0,
-      "magicDuration": 0,
+      "skillCooldown": 0,
       "statusEffectResistance": 0,
       "balance": 0.5,
       "hpRegeneration": 0,
@@ -217,17 +217,17 @@
     {
       "tableNum": 103000002,
       "type": 2,
-      "maxHp": 0,
+      "maxHp": 0.5,
       "maxMana": 0,
       "meleeDamage": 0.3,
       "rangedDamage": 1,
       "magicDamage": 0,
       "protection": 0,
-      "cooldownReduction": 1,
+      "baseSkillCooldown": 1,
       "movementSpeed": 0.2,
       "criticalHitChance": 0.5,
       "dodgepChance": 0.5,
-      "magicDuration": 0,
+      "skillCooldown": 0,
       "statusEffectResistance": 0,
       "balance": 0,
       "hpRegeneration": 0,
@@ -243,11 +243,11 @@
       "rangedDamage": 0,
       "magicDamage": 1,
       "protection": 0.3,
-      "cooldownReduction": 1,
+      "baseSkillCooldown": 1,
       "movementSpeed": 0,
       "criticalHitChance": 0,
       "dodgepChance": 0,
-      "magicDuration": 1,
+      "skillCooldown": 1,
       "statusEffectResistance": 0,
       "balance": 0,
       "hpRegeneration": 0,
@@ -263,11 +263,11 @@
       "rangedDamage": 0,
       "magicDamage": 0.5,
       "protection": 0.7,
-      "cooldownReduction": 0,
+      "baseSkillCooldown": 0,
       "movementSpeed": 0,
       "criticalHitChance": 0,
       "dodgepChance": 0,
-      "magicDuration": 0.5,
+      "skillCooldown": 0.5,
       "statusEffectResistance": 1,
       "balance": 0,
       "hpRegeneration": 0,
@@ -283,11 +283,11 @@
       "rangedDamage": 0.5,
       "magicDamage": 0,
       "protection": 0,
-      "cooldownReduction": 0.5,
-      "movementSpeed": 0,
+      "baseSkillCooldown": 0.5,
+      "movementSpeed": 0.2,
       "criticalHitChance": 1,
       "dodgepChance": 0.5,
-      "magicDuration": 0,
+      "skillCooldown": 0,
       "statusEffectResistance": 0,
       "balance": 1,
       "hpRegeneration": 0,
@@ -778,7 +778,7 @@
       "tableNum": 201001001,
       "name": "계단",
       "desc": "그냥 계단이다.",
-      "prefab": "StairwayNode1x1"
+      "prefab": "StairwayNode3x1"
     }
   ],
   "BuildingTable": [
@@ -996,7 +996,7 @@
   "ShopTable": [
     {
       "tableNum": 303001001,
-      "name": "일반 랜덤 캐릭터 뽑기",
+      "name": "일반 랜덤 캐릭터 소환권",
       "desc": "무슨 캐릭터가 나올까?",
       "minTableRange": 101001001,
       "maxTableRange": 101001002,
@@ -1007,40 +1007,6 @@
       ],
       "arr_goods_amount": [
         100,
-        null,
-        null
-      ]
-    },
-    {
-      "tableNum": 303001002,
-      "name": "희귀 랜덤 캐릭터 뽑기",
-      "desc": "무슨 캐릭터가 나올까?",
-      "minTableRange": 101001001,
-      "maxTableRange": 101001002,
-      "arr_goods": [
-        301001001,
-        null,
-        null
-      ],
-      "arr_goods_amount": [
-        200,
-        null,
-        null
-      ]
-    },
-    {
-      "tableNum": 303001003,
-      "name": "영웅 랜덤 캐릭터 뽑기",
-      "desc": "무슨 캐릭터가 나올까?",
-      "minTableRange": 101001001,
-      "maxTableRange": 101001002,
-      "arr_goods": [
-        301001001,
-        null,
-        null
-      ],
-      "arr_goods_amount": [
-        400,
         null,
         null
       ]
@@ -1525,7 +1491,7 @@
     {
       "tableNum": 500001001,
       "name": "세금 1",
-      "desc": "{0}턴간 {1}개의 금화를 획득합니다.",
+      "desc": "{0}턴마다 {1}개의 금화를 획득합니다.",
       "itemNum": 301001001,
       "itemAmount": 100,
       "waveCount": 1
@@ -1533,7 +1499,7 @@
     {
       "tableNum": 500004001,
       "name": "수확 1",
-      "desc": "{0}턴간 {1}개의 식량을 획득합니다.",
+      "desc": "{0}턴마다 {1}개의 식량을 획득합니다.",
       "itemNum": 301001004,
       "itemAmount": 50,
       "waveCount": 1
@@ -1541,7 +1507,7 @@
     {
       "tableNum": 500004002,
       "name": "수확 2",
-      "desc": "{0}턴간 {1}개의 식량을 획득합니다.",
+      "desc": "{0}턴마다 {1}개의 식량을 획득합니다.",
       "itemNum": 301001004,
       "itemAmount": 70,
       "waveCount": 1
