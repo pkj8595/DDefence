@@ -24,7 +24,7 @@ public class SelectedManager : MonoBehaviour
     {
         if (mouse == Define.MouseEvent.LClick)
         {
-            //if(Input.GetMouseButton)
+            DeselectAllObject();
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             int layerMask = (int)Define.Layer.Pawn | (int)Define.Layer.Building;
             if (Physics.Raycast(ray, out RaycastHit hit, 100f, layerMask))
@@ -43,7 +43,7 @@ public class SelectedManager : MonoBehaviour
             int layerMask = (int)Define.Layer.Ground;
             if (Physics.Raycast(ray, out RaycastHit hit, 100f, layerMask))
             {
-                foreach (var selected in _selectedObjectList)
+                foreach (ISelectedable selected in _selectedObjectList)
                 {
                     PawnBase pawn = selected as PawnBase;
                     if (pawn != null && pawn.Team == Define.ETeam.Playable)

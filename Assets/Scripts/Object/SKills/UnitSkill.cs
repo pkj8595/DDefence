@@ -77,5 +77,8 @@ public class UnitSkill
         _currentSkill = null;
         IsRunning = false;
     }
-
+    public Skill GetBaseSkill()
+    {
+        return SkillList[0];
+    }
 }

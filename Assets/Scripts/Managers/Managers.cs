@@ -76,7 +76,7 @@ public class Managers : MonoBehaviour
             s_Instance._effect.Init();
             s_Instance._game.Init();
 
-            DOTween.Init(true, true, LogBehaviour.Default).SetCapacity(200,10);
+            DOTween.Init(true, true, LogBehaviour.Default).SetCapacity(300,40);
             //Application.targetFrameRate = 30;
         }
     }

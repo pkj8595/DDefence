@@ -295,7 +295,10 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
                 if (PawnSkills.ReadyCurrentSkill(PawnStat))
                 {
                     Skill skill = PawnSkills.GetRunnigSkill();
-                    Managers.UI.ShowPawnDialog(transform, skill.Name);
+                    if (skill != PawnSkills.GetBaseSkill())
+                    {
+                        Managers.UI.ShowPawnDialog(transform, skill.Name);
+                    }
 
                     AI.SetState(AI.GetSkillState());
                     transform.LookAt(LockTarget.GetTransform());
@@ -477,6 +480,11 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         if (DestPos == destPosition)
             return;
         DestPos = destPosition;
+        if (!_navAgent.isActiveAndEnabled)
+        {
+            Debug.Log($"_navAgent.isActiveAndEnabled : {_navAgent.isActiveAndEnabled}");
+            Debug.Log(System.Environment.StackTrace);
+        }
         _navAgent.SetDestination(DestPos);
         AI.SetState(AI.GetMoveState());
     }

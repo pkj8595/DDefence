@@ -15,12 +15,9 @@ public class CubeEventTest : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             //Managers.UI.ShowUIPopup<UIPopupShop>();
-            Test2();
+            ShowShop();
         }
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            Test3();
-        }
+       
 
     }
 
@@ -51,6 +48,11 @@ public class CubeEventTest : MonoBehaviour
             else
                 Debug.Log("isSpend false");
         });
+    }
+
+    public void ShowShop()
+    {
+        Managers.UI.ShowUIPopup<UIPopupShop>();
     }
 
 }

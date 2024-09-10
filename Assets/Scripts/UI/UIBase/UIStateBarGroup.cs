@@ -14,6 +14,10 @@ public class UIStateBarGroup : UIBase
     public UI_PawnDialog _pawnDialogPrefab; //dialog prefab
     public Dictionary<Transform, UI_PawnDialog> _dicDialog = new();
 
+    //parent
+    public Transform dialogParent;
+    public Transform stateParent;
+
     public override void Init(UIData uiData)
     {
         base.Init(uiData);
@@ -56,7 +60,7 @@ public class UIStateBarGroup : UIBase
 
         foreach(var pawnDialog in _dicDialog)
         {
-            Vector3 screenPosition = Camera.main.WorldToScreenPoint(pawnDialog.Key.position + new Vector3(0,1.6f,0));
+            Vector3 screenPosition = Camera.main.WorldToScreenPoint(pawnDialog.Key.position + new Vector3(0,1.7f,0));
             pawnDialog.Value.transform.position = screenPosition;
         }
 
@@ -96,7 +100,7 @@ public class UIStateBarGroup : UIBase
         if (_stateBarPool.Count > 0)
             ret = _stateBarPool.Dequeue();
         else
-            ret = Instantiate(_stateBarPrefab, transform);
+            ret = Instantiate(_stateBarPrefab, stateParent);
 
         ret.gameObject.SetActive(true);
         return ret;
@@ -141,7 +145,7 @@ public class UIStateBarGroup : UIBase
         if (_dialogPool.Count > 0)
             ret = _dialogPool.Dequeue();
         else
-            ret = Instantiate(_pawnDialogPrefab, transform);
+            ret = Instantiate(_pawnDialogPrefab, dialogParent);
 
         ret.gameObject.SetActive(true);
         return ret;

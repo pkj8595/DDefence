@@ -38,7 +38,7 @@ public class UI_PawnDialog : MonoBehaviour
             yield return YieldCache.WaitForSeconds(0.1f);
         }
 
-        yield return YieldCache.WaitForSeconds(2.0f);
+        yield return YieldCache.WaitForSeconds(1.0f);
 
         _txtDialog.text = string.Empty;
         _txtDialog.gameObject.SetActive(false);

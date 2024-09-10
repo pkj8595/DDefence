@@ -40,15 +40,15 @@ public class UI_MoveResource : MonoBehaviour
         {
             var addItemAction = addItemQueue.Dequeue();
             addItemAction.Invoke();
-            await UniTask.Delay(TimeSpan.FromSeconds(0.3f)); // 0.5초마다 실행
+            await UniTask.Delay(TimeSpan.FromSeconds(0.3f)); 
         }
-
+        await UniTask.Delay(1000);
         // AddItem이 다 끝난 후 SpendItem 큐 처리
         while (spendItemQueue.Count > 0)
         {
             var spendItemAction = spendItemQueue.Dequeue();
             spendItemAction.Invoke();
-            await UniTask.Delay(TimeSpan.FromSeconds(0.3f)); // 0.5초마다 실행
+            await UniTask.Delay(TimeSpan.FromSeconds(0.3f));
         }
 
         isProcessing = false;
