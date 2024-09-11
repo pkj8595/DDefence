@@ -15,7 +15,7 @@ public class UI_UnitInfo : MonoBehaviour
     [SerializeField] private Text _unitDesc;
     [SerializeField] private List<Text> _stat;
     [SerializeField] private List<UI_PropertySlot> _propertyName;
-    [SerializeField] private List<UI_ImageText> _skill;
+    [SerializeField] private List<UI_SkillSlot> _skill;
     //[SerializeField] private List<UI_ImageText> _rune;
     [SerializeField] private List<UI_RuneSlot> _rune;
     [SerializeField] private UI_ImageText _upgrade;
@@ -118,14 +118,13 @@ public class UI_UnitInfo : MonoBehaviour
         {
             if (i < datas.Count)
             {
-                _skill[i].Icon.sprite = Managers.Resource.Load<Sprite>($"{Define.Path.UIIcon}{datas[i].Icon}");
-                _skill[i].Name.text = datas[i].Name;
-                _skill[i].Icon.gameObject.SetActive(true);
+                _skill[i].SetToolTip(_uiToolTip);
+                _skill[i].Init(datas[i]);
+                _skill[i].gameObject.SetActive(true);
             }
             else
             {
-                _skill[i].Name.text = string.Empty;
-                _skill[i].Icon.gameObject.SetActive(false);
+                _skill[i].gameObject.SetActive(false);
             }
         }
         

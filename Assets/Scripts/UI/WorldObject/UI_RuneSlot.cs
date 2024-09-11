@@ -52,7 +52,9 @@ public class UI_RuneSlot : UI_Slot, IDropHandler
         }
         if (_runeData.skillTableNum != 0)
         {
-            ret.Append(Utils.GetSkillStr(Managers.Data.SkillDict[_runeData.skillTableNum]));
+            var skillData = Managers.Data.SkillDict[_runeData.skillTableNum];
+            ret.Append(skillData.name);
+            ret.Append(Utils.GetSkillStr(skillData));
             ret.Append("\n");
         }
 

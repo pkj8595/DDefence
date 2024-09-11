@@ -191,8 +191,7 @@ public static class Utils
     public static string GetSkillStr(Data.SkillData data)
     {
         System.Text.StringBuilder str = new System.Text.StringBuilder();
-        str.Append(data.name);
-        str.Append("\n");
+        
         str.Append("\n");
         str.Append($"Target : {data.targetType}\n");
         if (0 < data.splashRange)

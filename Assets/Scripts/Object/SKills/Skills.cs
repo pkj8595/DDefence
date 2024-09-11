@@ -53,6 +53,11 @@ public class Skill
             reducedCoolTime = CoolTime / (1f + _stat.GetSkillCooldown());
     }
 
+    public float GetCulcalatePercentCoolTime()
+    {
+        return 1f - Mathf.Clamp(((Time.time - LastRunTime) / reducedCoolTime), 0f, 1f);
+    }
+
     /// <summary>
     /// 스킬이 실행 가능한지 체크
     /// </summary>
