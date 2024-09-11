@@ -8,7 +8,7 @@ public class UIMain : UIBase
     [SerializeField] private GameObject _btnNextPhase;
     [SerializeField] private Transform _relicParent;
 
-    [SerializeField] private UI_RelicDesc _relicDesc;       //유물 설명 UI
+    [SerializeField] private UI_ToolTip _itemDesc;       //유물 설명 UI
 
 
 

@@ -12,11 +12,11 @@ public class CubeEventTest : MonoBehaviour
         {
             Test();
         }
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        /*if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             //Managers.UI.ShowUIPopup<UIPopupShop>();
             ShowShop();
-        }
+        }*/
        
 
     }

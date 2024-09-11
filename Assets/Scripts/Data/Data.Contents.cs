@@ -231,12 +231,12 @@ namespace Data
         public static BaseStat operator +(StatData a, StatData b)
         {
             BaseStat ret = new BaseStat();
-            ret.vitality = a.vitality + b.vitality;
-            ret.strength = a.strength + b.strength;
-            ret.agility = a.agility + b.agility;
+            ret.vitality    = a.vitality + b.vitality;
+            ret.strength    = a.strength + b.strength;
+            ret.agility     = a.agility + b.agility;
             ret.intelligence = a.intelligence + b.intelligence;
-            ret.willpower = a.willpower + b.willpower;
-            ret.accuracy = a.accuracy + b.accuracy;
+            ret.willpower   = a.willpower + b.willpower;
+            ret.accuracy    = a.accuracy + b.accuracy;
             return ret;
         }
        

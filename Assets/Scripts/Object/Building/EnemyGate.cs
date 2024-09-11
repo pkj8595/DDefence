@@ -8,12 +8,6 @@ public class EnemyGate :MonoBehaviour
     {
         
     }
-
-    void Update()
-    {
-        
-    }
-
     
     private void OnDestroy()
     {

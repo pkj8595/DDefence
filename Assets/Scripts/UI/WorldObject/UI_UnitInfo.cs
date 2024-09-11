@@ -6,6 +6,8 @@ using System;
 
 public class UI_UnitInfo : MonoBehaviour
 {
+    [SerializeField] private UI_ToolTip _uiItemDesc;
+
     [SerializeField] private List<GameObject> _title;
     [SerializeField] private Image _unitIcon;
     [SerializeField] private Image _pawnIcon;
@@ -100,7 +102,9 @@ public class UI_UnitInfo : MonoBehaviour
         for (int i = 0; i < _propertyName.Count; i++)
         {
             if (i < stat.PropertyStatList.Count)
+            {
                 _propertyName[i].text = stat.PropertyStatList[i].name;
+            }
             else
                 _propertyName[i].gameObject.SetActive(false);
         }
@@ -129,6 +133,7 @@ public class UI_UnitInfo : MonoBehaviour
     {
         for (int i = 0; i < _rune.Count; i++)
         {
+            _rune[i].SetToolTip(_uiItemDesc);
             _rune[i].Init(pawn, i);
         }
     }
