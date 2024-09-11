@@ -136,5 +136,16 @@ public static class Utils
         return Color.white;
     }
 
-    
+    public static int[] StringToIntArray(string input)
+    {
+        string[] stringValues = input.Split(',');
+        int[] intValues = new int[stringValues.Length];
+
+        for (int i = 0; i < stringValues.Length; i++)
+        {
+            // 앞뒤 공백 제거 후 int로 변환하여 배열에 저장
+            intValues[i] = int.Parse(stringValues[i].Trim());
+        }
+        return intValues;
+    }
 }

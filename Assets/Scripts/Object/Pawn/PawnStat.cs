@@ -28,15 +28,19 @@ public class PawnStat : Stat
     public override float MaxMana { get => _combatStat.maxMana; }
     public override float Protection { get => _combatStat.protection;}
     public int EXP { get { return KillCount + (WaveCount * 10) + (-LevelUpCount * 100); }}
-    public float MoveSpeed { get { return _combatStat.movementSpeed; } }
     public CombatStat CombatStat { get => _combatStat; set => _combatStat = value; }
     public BaseStat CurrentBaseStat { get => _currentBaseStat; set => _currentBaseStat = value; }
-
     public List<StatData> PropertyStatList => _propertyStatList;
+    public float MoveSpeed { get 
+        {
+            return 2f * (1f + (_combatStat.movementSpeed));
+        }
+    }
 
-    public override void Init(int statDataNum, System.Action onDead, System.Action onDeadTarget)
+
+    public override void Init(int statDataNum, System.Action onDead, System.Action onDeadTarget, System.Action onChangeStatValue)
     {
-        base.Init(statDataNum, onDead, onDeadTarget);
+        base.Init(statDataNum, onDead, onDeadTarget, onChangeStatValue);
 
         SetBaseStat(Managers.Data.StatDict[statDataNum]);
         CalculateCombatStat();
@@ -44,9 +48,9 @@ public class PawnStat : Stat
         Mana = 0;
     }
 
-    public void Init(int statDataNum, System.Action onDead, System.Action onDeadTarget, Define.EAttributeType eAttributeType)
+    public void Init(int statDataNum, System.Action onDead, System.Action onDeadTarget, System.Action onChangeStatValue, Define.EAttributeType eAttributeType)
     {
-        Init(statDataNum, onDead, onDeadTarget);
+        Init(statDataNum, onDead, onDeadTarget, onChangeStatValue);
         ignoreAttributeType = eAttributeType;
     }
 
@@ -96,13 +100,9 @@ public class PawnStat : Stat
 
     public void RemoveRuneStat(RuneData data)
     {
-        if (_runeStatList.Remove(Managers.Data.StatDict[data.statTableNum]))
+        if (data.statTableNum != 0 && _runeStatList.Remove(Managers.Data.StatDict[data.statTableNum]))
         {
             CalculateCombatStat();
-        }
-        else
-        {
-            Debug.LogError($"{data.tableNum} 룬 스탯 삭제 실패");
         }
     }
 
@@ -149,6 +149,7 @@ public class PawnStat : Stat
                 _currentBaseStat += _propertyStatList[i];
         }
         _combatStat = CombatStat.ConvertStat(_currentBaseStat);
+        OnChangeStatValue();
     }
 
     
@@ -188,7 +189,7 @@ public class PawnStat : Stat
         // 회피스탯 적용
         if (Random.Range(0, 1000) < _combatStat.dodgepChance)
         {
-            string[] dodgeStr = {"느려", "눈 감고도 피하겠군"};
+            string[] dodgeStr = {"느려", "운 좋게 피했다."};
             Managers.UI.ShowPawnDialog(transform, dodgeStr[Random.Range(0, dodgeStr.Length)]);
             return;
         }
@@ -256,4 +257,6 @@ public class PawnStat : Stat
     {
         return _combatStat.baseSkillCooldown;
     }
+
+  
 }

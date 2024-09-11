@@ -44,15 +44,27 @@ public abstract class Stat : MonoBehaviour, IStat
     protected System.Action _OnDeadEvent;
     protected System.Action _OnDeadTargetEvent;
     protected System.Action _OnAffectEvent;
+    protected System.Action _OnChangeStatValueEvent;
     protected List<AffectBase> _affectList = new List<AffectBase>();
 
 
-    public virtual void Init(int statDataNum, System.Action onDead, System.Action onDeadTarget)
+    public virtual void Init(int statDataNum, System.Action onDead, System.Action onDeadTarget, System.Action onChangeStatValue)
     {
-        _OnDeadEvent = onDead;
-        _OnDeadTargetEvent = onDeadTarget;
+        _OnDeadEvent -= onDead;
+        _OnDeadTargetEvent -= onDeadTarget;
+        _OnChangeStatValueEvent -= onChangeStatValue;
+
+        _OnDeadEvent += onDead;
+        _OnDeadTargetEvent += onDeadTarget;
+        _OnChangeStatValueEvent += onChangeStatValue;
         IsDead = false;
         StartCoroutine(UpdateAffect());
+    }
+
+    public void SetActionOnChangeValue(System.Action onChangeStatValue)
+    {
+        _OnChangeStatValueEvent -= onChangeStatValue;
+        _OnChangeStatValueEvent += onChangeStatValue;
     }
 
     /// <summary>
@@ -174,5 +186,10 @@ public abstract class Stat : MonoBehaviour, IStat
     public virtual float GetBaseSkillCooldown()
     {
         return 0;
+    }
+
+    public void OnChangeStatValue()
+    {
+        _OnChangeStatValueEvent?.Invoke();
     }
 }

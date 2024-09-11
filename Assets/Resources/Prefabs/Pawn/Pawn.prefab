@@ -311,8 +311,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Team>k__BackingField: 0
-  _state: 0
   <DestPos>k__BackingField: {x: 0, y: 0, z: 0}
+  _state: 0
   _projectileTrans: {fileID: 4429359987017351780}
   _navAgent: {fileID: 1792929913}
   <AniController>k__BackingField: {fileID: 141670392}
@@ -342,11 +342,11 @@ MonoBehaviour:
     rangedDamage: 0
     magicDamage: 0
     protection: 0
-    cooldownReduction: 0
+    baseSkillCooldown: 0
     movementSpeed: 0
     criticalHitChance: 0
     dodgepChance: 0
-    magicDuration: 0
+    skillCooldown: 0
     statusEffectResistance: 0
     balance: 0
     hpRegeneration: 0
@@ -372,7 +372,7 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.4
   m_Speed: 3
-  m_Acceleration: 8
+  m_Acceleration: 10000
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0

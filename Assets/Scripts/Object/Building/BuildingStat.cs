@@ -12,9 +12,9 @@ public class BuildingStat : Stat
     public override float Protection => _data.protection;
     
 
-    public override void Init(int statDataNum, System.Action onDead, System.Action onDeadTarget)
+    public override void Init(int statDataNum, System.Action onDead, System.Action onDeadTarget, System.Action OnChangeStatValue)
     {
-        base.Init(statDataNum, onDead, onDeadTarget);
+        base.Init(statDataNum, onDead, onDeadTarget, OnChangeStatValue);
         _data = Managers.Data.BuildingDict[statDataNum];
         Hp = MaxHp;
         Mana = 0;

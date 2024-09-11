@@ -96,11 +96,11 @@ public class Inventory
         return false;
     }
 
-    public void SpendMoveItem(Vector3 position, Define.EGoodsType goodsType, int itemAmount, Action<bool> action)
+    public void SpendMoveItem(Transform transform, Vector3 offset, Define.EGoodsType goodsType, int itemAmount, Action<bool> action)
     {
         var uimain = Managers.UI.GetUI<UIMain>() as UIMain;
         if (uimain != null)
-            uimain.UIMoveResource.QueueSpendItem(position,goodsType,itemAmount,action);
+            uimain.UIMoveResource.QueueSpendItem(transform, offset, goodsType, itemAmount, action);
         else
         {
             bool isAble = SpendItem(goodsType.ToInt(), itemAmount);

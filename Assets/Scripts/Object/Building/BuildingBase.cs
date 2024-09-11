@@ -35,7 +35,7 @@ public class BuildingBase : Unit, ISelectedable, IWaveEvent
         BuildingData = data;
         if (Stat == null)
             Stat = gameObject.GetOrAddComponent<BuildingStat>();
-        Stat.Init(data.tableNum, OnDead, OnDeadTarget);
+        Stat.Init(data.tableNum, OnDead, OnChagneStatValue, OnDeadTarget);
 
         if (BuildingData.productionTable != 0)
         {
@@ -107,6 +107,10 @@ public class BuildingBase : Unit, ISelectedable, IWaveEvent
         return false;
     }
 
+    private void OnChagneStatValue()
+    {
+
+    }
    
     public void OnDeadTarget()
     {
@@ -160,7 +164,7 @@ public class BuildingBase : Unit, ISelectedable, IWaveEvent
             _production.EndWave();
         }
 
-        Managers.Game.Inven.SpendMoveItem(transform.position, Define.EGoodsType.gold, BuildingData.waveCost, (isSpend) =>
+        Managers.Game.Inven.SpendMoveItem(transform, StateBarOffset, Define.EGoodsType.gold, BuildingData.waveCost, (isSpend) =>
         {
             if (isSpend)
                 Stat.SpendCost();

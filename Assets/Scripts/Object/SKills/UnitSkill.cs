@@ -38,11 +38,17 @@ public class UnitSkill
     }
     public void RemoveSkill(Data.RuneData data)
     {
+        
         for (int i = 0; i < SkillList.Count; i++)
         {
             if (SkillList[i].TableNum == data.skillTableNum)
             {
+                if (_currentSkill == SkillList[i]) 
+                {
+                    ClearCurrentSkill();
+                }
                 SkillList.RemoveAt(i);
+
                 break;
             }
         }

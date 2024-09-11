@@ -25,6 +25,7 @@ public class Skill
     public List<AffectBase> AffectList { get; } = new List<AffectBase>(Define.Affect_Count);
     public float LastRunTime { get; set; }
     public bool IsBaseSkill { get; set; }
+    float reducedCoolTime = 0f;
 
     private Stat _stat;
     public Skill(int skillTableNum, Stat stat)
@@ -32,6 +33,8 @@ public class Skill
         data = Managers.Data.SkillDict[skillTableNum];
         LastRunTime = -1000f;
         _stat = stat;
+        _stat.SetActionOnChangeValue(CulcalateCoolTime);
+        CulcalateCoolTime();
         for (int i = 0; i < data.arr_affect.Length; i++)
         {
             if (data.arr_affect[i] != 0)
@@ -40,6 +43,14 @@ public class Skill
                 AffectList.Add(AffectFactory.CreateAffect(affectData));
             }
         }
+    }
+
+    public void CulcalateCoolTime()
+    {
+        if (IsBaseSkill)
+            reducedCoolTime = CoolTime / (1f + _stat.GetBaseSkillCooldown());
+        else
+            reducedCoolTime = CoolTime / (1f + _stat.GetSkillCooldown());
     }
 
     /// <summary>
@@ -110,12 +121,6 @@ public class Skill
 
     public bool IsCooltime()
     {
-        float reducedCoolTime;
-        if (IsBaseSkill)
-            reducedCoolTime = CoolTime / (1f + _stat.GetBaseSkillCooldown());
-        else
-            reducedCoolTime = CoolTime / (1f + _stat.GetSkillCooldown());
-
         bool isCooltime = Time.time < LastRunTime + reducedCoolTime;
 
         return isCooltime;

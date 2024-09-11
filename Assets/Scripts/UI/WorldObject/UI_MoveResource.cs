@@ -16,15 +16,18 @@ public class UI_MoveResource : MonoBehaviour
     private Queue<Action> spendItemQueue = new Queue<Action>();
     private bool isProcessing = false;
 
+    //setting
+    float duration = 0.8f;
+
     public void QueueAddItem(Vector3 worldPosition, Define.EGoodsType goodsType, int amount)
     {
         addItemQueue.Enqueue(() => AddItem(worldPosition, goodsType, amount));
         ProcessQueue().Forget();
     }
 
-    public void QueueSpendItem(Vector3 worldPosition, Define.EGoodsType goodsType, int amount, Action<bool> action)
+    public void QueueSpendItem(Transform transform, Vector3 offset, Define.EGoodsType goodsType, int amount, Action<bool> action)
     {
-        spendItemQueue.Enqueue(() => SpendItem(worldPosition, goodsType, amount, action));
+        spendItemQueue.Enqueue(() => SpendItem(transform, offset, goodsType, amount, action));
         ProcessQueue().Forget();
     }
 
@@ -54,15 +57,15 @@ public class UI_MoveResource : MonoBehaviour
         isProcessing = false;
     }
 
-    public void SpendItem(Vector3 worldPosition, Define.EGoodsType goodsType, int amount, Action<bool> action)
+    public void SpendItem(Transform worldPosition, Vector3 offset, Define.EGoodsType goodsType, int amount, Action<bool> action)
     {
         Vector3 fromPosition = _goodsTransform[GetGoodsIndex(goodsType)].position;
         bool able = Managers.Game.Inven.SpendItem(goodsType.ToInt(), amount);
 
-        MoveResourceTask(worldPosition, fromPosition, goodsType, amount, able,() =>
+        MoveResourceTask(worldPosition, offset, fromPosition, goodsType, amount, able,() =>
         {
             action?.Invoke(able);
-        },true).Forget();
+        }).Forget();
     }
 
     public void AddItem(Vector3 worldPosition, Define.EGoodsType goodsType, int amount)
@@ -77,29 +80,41 @@ public class UI_MoveResource : MonoBehaviour
 
     }
 
-    async UniTaskVoid MoveResourceTask(Vector3 to, Vector3 from, Define.EGoodsType goodsType, int amount, bool isSpend, Action action, bool isWorld = false)
+    async UniTaskVoid MoveResourceTask(Vector3 to, Vector3 from, Define.EGoodsType goodsType, int amount, bool isSpend, Action action)
     {
         UIItem uiItem = GetOrCreateItem();
         uiItem.Init((int)goodsType, amount, isSpend);
         uiItem.transform.position = from;
 
         float elapsedTime = 0f;
-        float duration = 0.8f; // 이동 시간 설정
-
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
             float t = elapsedTime / duration;
 
-            if (isWorld)
-            {
-                Vector3 toPosition = Camera.main.WorldToScreenPoint(to);
-                uiItem.transform.position = Vector3.Lerp(from, toPosition, t);
-            }
-            else
-            {
-                uiItem.transform.position = Vector3.Lerp(from, to, t);
-            }
+            uiItem.transform.position = Vector3.Lerp(from, to, t);
+            await UniTask.Yield();
+        }
+
+        DequeuePool(uiItem);
+        action?.Invoke();
+    }
+
+    async UniTaskVoid MoveResourceTask(Transform to, Vector3 offset, Vector3 from, Define.EGoodsType goodsType, int amount, bool isSpend, Action action)
+    {
+        UIItem uiItem = GetOrCreateItem();
+        uiItem.Init((int)goodsType, amount, isSpend);
+        uiItem.transform.position = from;
+
+        float elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / duration;
+
+            Vector3 toPosition = Camera.main.WorldToScreenPoint(to.position + offset);
+            uiItem.transform.position = Vector3.Lerp(from, toPosition, t);
+            
             await UniTask.Yield();
         }
 
@@ -132,10 +147,10 @@ public class UI_MoveResource : MonoBehaviour
     {
         switch (goods)
         {
-            case Define.EGoodsType.gold: return 0;
-            case Define.EGoodsType.manaStone: return 1;
-            case Define.EGoodsType.wood: return 2;
-            case Define.EGoodsType.food: return 3;
+            case Define.EGoodsType.gold:        return 0;
+            case Define.EGoodsType.manaStone:   return 1;
+            case Define.EGoodsType.wood:        return 2;
+            case Define.EGoodsType.food:        return 3;
             default: { Debug.LogError($"{goods} 식별되지않는 goodsType"); return -1; }
         }
     }

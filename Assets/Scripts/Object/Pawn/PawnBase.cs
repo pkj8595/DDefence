@@ -11,10 +11,10 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
     public Data.CharacterData CharacterData { get; private set; }
 
     //설정
-    [field: SerializeField] public Define.ETeam Team { get; set; } = Define.ETeam.Playable;
     public Define.WorldObject WorldObjectType { get; set; } = Define.WorldObject.Pawn;
-    [SerializeField] protected Define.EPawnAniState _state = Define.EPawnAniState.Idle;
+    [field: SerializeField] public Define.ETeam Team { get; set; } = Define.ETeam.Playable;
     [field : SerializeField] protected Vector3 DestPos { get; set; }
+    [SerializeField] protected Define.EPawnAniState _state = Define.EPawnAniState.Idle;
     [SerializeField] protected Transform _projectileTrans;
 
     //pawn 기능
@@ -69,6 +69,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
     public virtual void Update()
     {
         AI?.OnUpdate();
+        
     }
 
     private void OnDisable()
@@ -103,7 +104,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         //table data setting
         CharacterData = Managers.Data.CharacterDict[characterNum];
         AniController.Init(CharacterData);
-        PawnStat.Init(CharacterData.statDataNum, OnDead, OnDeadTarget, CharacterData.ignoreAttributeType);
+        PawnStat.Init(CharacterData.statDataNum, OnDead, OnDeadTarget, OnChangeStatValue, CharacterData.ignoreAttributeType);
         AI.Init(this);
         
         PawnSkills.Init(PawnStat.Mana);
@@ -444,6 +445,11 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         }
     }
 
+    private void OnChangeStatValue()
+    {
+        _navAgent.speed = PawnStat.MoveSpeed;
+    }
+
     async UniTaskVoid OnDeadEnemy()
     {
         await UniTask.Delay(3000);
@@ -572,7 +578,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
     {
         PawnStat.EndWaveEvent();
 
-        Managers.Game.Inven.SpendMoveItem(transform.position + StateBarOffset, Define.EGoodsType.food, CharacterData.waveCost, (isSpend) =>
+        Managers.Game.Inven.SpendMoveItem(transform, StateBarOffset, Define.EGoodsType.food, CharacterData.waveCost, (isSpend) =>
         {
             if (isSpend)
                 PawnStat.SpendCost();
