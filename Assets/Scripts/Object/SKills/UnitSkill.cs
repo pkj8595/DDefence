@@ -100,4 +100,12 @@ public class UnitSkill
     {
         return SkillList[0];
     }
+
+    public void EndWave()
+    {
+        for (int i = 0; i < SkillList.Count; i++)
+        {
+            SkillList[i].ResetCoolTime();
+        }
+    }
 }

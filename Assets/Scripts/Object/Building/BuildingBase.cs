@@ -164,6 +164,11 @@ public class BuildingBase : Unit, ISelectedable, IWaveEvent
             _production.EndWave();
         }
 
+        if (Skill != null)
+        {
+            Skill.EndWave();
+        }
+
         Managers.Game.Inven.SpendMoveItem(transform, StateBarOffset, Define.EGoodsType.gold, BuildingData.waveCost, (isSpend) =>
         {
             if (isSpend)

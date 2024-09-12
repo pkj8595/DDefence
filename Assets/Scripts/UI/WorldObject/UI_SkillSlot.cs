@@ -8,6 +8,7 @@ public class UI_SkillSlot : UI_Slot
     [SerializeField] private Image _imgSlot;
     [SerializeField] private Image _imgCoolTime;
     [SerializeField] private Text _txtName;
+    [SerializeField] private Text _txtCoolTime;
     Skill _skill;
 
     public void Init(Skill skill)
@@ -22,7 +23,12 @@ public class UI_SkillSlot : UI_Slot
     public void Update()
     {
         if (this.gameObject.activeSelf && _skill != null)
-            _imgCoolTime.fillAmount = _skill.GetCulcalatePercentCoolTime();
+        {
+            float percent = _skill.GetCulcalatePercentCoolTime();
+            _imgCoolTime.fillAmount = percent;
+            _txtCoolTime.gameObject.SetActive(percent != 0f);
+            _txtCoolTime.text = (_skill.CoolTime - (Time.time - _skill.LastRunTime)).ToString("0.0");
+        }
     }
 
     public override string SetTitleStr()

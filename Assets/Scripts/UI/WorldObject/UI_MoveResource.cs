@@ -89,6 +89,8 @@ public class UI_MoveResource : MonoBehaviour
         float elapsedTime = 0f;
         while (elapsedTime < duration)
         {
+            if (uiItem == null)
+                break;
             elapsedTime += Time.deltaTime;
             float t = elapsedTime / duration;
 
@@ -109,6 +111,8 @@ public class UI_MoveResource : MonoBehaviour
         float elapsedTime = 0f;
         while (elapsedTime < duration)
         {
+            if (uiItem == null || to == null)
+                break;
             elapsedTime += Time.deltaTime;
             float t = elapsedTime / duration;
 

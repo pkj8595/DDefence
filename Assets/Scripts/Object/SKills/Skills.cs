@@ -14,7 +14,8 @@ public class Skill
     public float MinRange { get => data.minRange; }
     public float MaxRange { get => data.maxRange; }
     public float SplashRange { get => data.splashRange; }
-    public float CoolTime { get => data.coolTime; }
+    public float CoolTime { get => reducedCoolTime; }
+    public float BaseCoolTime => data.coolTime;
     public Define.EPawnAniState MotionAni { get => data.motionAni; }
     public Define.EPawnAniTriger AniTriger { get => data.aniTriger; }
     public float MotionDuration { get => data.motionDuration; }
@@ -48,9 +49,9 @@ public class Skill
     public void CulcalateCoolTime()
     {
         if (IsBaseSkill)
-            reducedCoolTime = CoolTime / (1f + _stat.GetBaseSkillCooldown());
+            reducedCoolTime = BaseCoolTime / (1f + _stat.GetBaseSkillCooldown());
         else
-            reducedCoolTime = CoolTime / (1f + _stat.GetSkillCooldown());
+            reducedCoolTime = BaseCoolTime / (1f + _stat.GetSkillCooldown());
     }
 
     public float GetCulcalatePercentCoolTime()
@@ -157,5 +158,15 @@ public class Skill
 
         var obj = Managers.Resource.Instantiate(Define.Path.Prefab_Bullet + data.projectile, parent);
         return obj.GetComponent<ProjectileBase>();
+    }
+
+    public float RemainCoolTime()
+    {
+        return CoolTime - (Time.time - LastRunTime);
+    }
+
+    public void ResetCoolTime()
+    {
+        LastRunTime = -1000f;
     }
 }

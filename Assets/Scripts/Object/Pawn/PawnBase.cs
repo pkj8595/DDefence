@@ -110,6 +110,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         PawnSkills.Init(PawnStat.Mana);
         PawnSkills.SetBaseSkill(new Skill(CharacterData.basicSkill,PawnStat));
 
+        //초기화 데이터 리셋
         if (!isUpgrade)
         {
             ResetStatData();
@@ -123,13 +124,14 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
             }
         }
         
-
+        //룬 데이터 등록
         for (int i = 0; i < CharacterData.arr_rune.Length; i++)
         {
             if (CharacterData.arr_rune[i] != 0)
                 SetRuneData(Managers.Data.RuneDict[CharacterData.arr_rune[i]], i);
         }
 
+        //component data setting
         _collider.enabled = true;
         _navAgent.enabled = true;
         _navAgent.speed = PawnStat.MoveSpeed;
@@ -577,6 +579,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
     public void EndWave()
     {
         PawnStat.EndWaveEvent();
+        PawnSkills.EndWave();
 
         Managers.Game.Inven.SpendMoveItem(transform, StateBarOffset, Define.EGoodsType.food, CharacterData.waveCost, (isSpend) =>
         {

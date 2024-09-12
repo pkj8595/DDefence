@@ -136,6 +136,10 @@ public class BuildingSkill : MonoBehaviour, IAttackable
         return false;
     }
 
+    public void EndWave()
+    {
+        Skills.EndWave();
+    }
 
 
 }
