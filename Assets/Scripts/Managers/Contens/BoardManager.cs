@@ -677,7 +677,8 @@ public class BoardManager : MonoSingleton<BoardManager>
 
     public void OnCancelCard()
     {
-        _card.UseComplete(false);
+        if(_card != null)
+            _card.UseComplete(false);
         ClearPreviewNode();
         ClearCard();
     }

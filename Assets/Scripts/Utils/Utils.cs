@@ -227,9 +227,9 @@ public static class Utils
     {
         string ret;
         if (0 < value)
-            ret = $"<color=green>{str}</color>";
+            ret = $"<color=#85b576>{str}</color>";
         else
-            ret = $"<color=red>{str}</color>";
+            ret = $"<color=#eb2f3d>{str}</color>";
         return ret;
     }
 

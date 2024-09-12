@@ -48,7 +48,7 @@ public class SelectedManager : MonoBehaviour
                     PawnBase pawn = selected as PawnBase;
                     if (pawn != null && pawn.Team == Define.ETeam.Playable)
                     {
-                        pawn.SetDestination(hit.point);
+                        pawn.CommandMoveTo(hit.point);
                     }
                 }
             }

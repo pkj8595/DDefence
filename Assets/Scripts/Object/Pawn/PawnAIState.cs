@@ -54,12 +54,11 @@ public class IdleState : IUnitState
     }
 }
 
-public class MoveState : IUnitState
+public class ChaseState : IUnitState
 {
     private UnitAI _unitAI;
     PawnBase _pawn;
     public string GetNames() => GetType().Name;
-
 
     public void Init(UnitAI unitAI)
     {
@@ -157,7 +156,7 @@ public class ReturnToBaseState : IUnitState
 
     public void UpdateState()
     {
-        
+        _unitAI.Pawn.UpdateMove();
     }
     public void AdjustUpdate()
     {
@@ -165,14 +164,14 @@ public class ReturnToBaseState : IUnitState
 
     public void ExitState()
     {
-
+        _unitAI.Pawn.OnMoveStop();
     }
 
 
 }
 
 
-public class ChaseState : IUnitState
+public class MoveState : IUnitState
 {
     private UnitAI _unitAI;
     PawnBase _pawn;
@@ -186,10 +185,12 @@ public class ChaseState : IUnitState
 
     public void EnterState()
     {
+        _pawn.State = Define.EPawnAniState.Running;
     }
 
     public void UpdateState()
     {
+        _unitAI.Pawn.UpdateMove();
 
     }
     public void AdjustUpdate()
@@ -198,6 +199,7 @@ public class ChaseState : IUnitState
 
     public void ExitState()
     {
+        _unitAI.Pawn.OnMoveStop();
     }
 }
 

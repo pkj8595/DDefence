@@ -8,10 +8,10 @@ public class UnitAI
 {
     private IUnitState                  _currentState;
     private readonly IdleState          _idleState = new IdleState();
-    private readonly MoveState          _moveState = new MoveState();
+    private readonly ChaseState         _chaseState = new ChaseState();
     private readonly DeadState          _deadState = new DeadState();
     private readonly SkillState         _skillState = new SkillState();
-    private readonly ReturnToBaseState  _returnState = new ReturnToBaseState();
+    private readonly MoveState         _moveState = new MoveState();
 
     public PawnBase Pawn { get; private set; }
     public bool HasTarget => Pawn.HasTarget;
@@ -24,10 +24,10 @@ public class UnitAI
         Pawn = pawn;
 
         _idleState.Init(this);
-        _moveState.Init(this);
+        _chaseState.Init(this);
         _deadState.Init(this);
         _skillState.Init(this);
-        _returnState.Init(this);
+        _moveState.Init(this);
 
         SetState(_idleState);
     }
@@ -38,7 +38,7 @@ public class UnitAI
         if (_cooltime < 0)
         {
             _currentState.AdjustUpdate();
-            _cooltime += 0.2f;
+            _cooltime += 0.3f;
         }
         else
         {
@@ -59,10 +59,10 @@ public class UnitAI
 
     // 상태 객체들
     public IdleState GetIdleState() => _idleState;
-    public MoveState GetMoveState() => _moveState;
+    public ChaseState GetChaseState() => _chaseState;
     public DeadState GetDeadState() => _deadState;
     public SkillState GetSkillState() => _skillState;
-    public ReturnToBaseState GetReturnPosState() => _returnState;
+    public MoveState GetMoveState() => _moveState;
 
     /// <summary>
     /// 타겟이 범위 밖으로 나갔다면 target추적 중지

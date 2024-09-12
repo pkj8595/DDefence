@@ -70,6 +70,10 @@ public class ArrowProjectile : ProjectileBase
         }
         else if (1 << other.gameObject.layer == (int)Define.Layer.Ground)
         {
+            if (0 < _splashRange)
+            {
+                ApplyDamage(other);
+            }
             OnStopProjectile();
         }
     }

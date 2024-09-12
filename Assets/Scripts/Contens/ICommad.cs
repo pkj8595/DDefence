@@ -4,13 +4,7 @@ using UnityEngine;
 
 public interface ICommand 
 {
-    bool CanMove();
-    bool CanAttack();
-    bool CanBuild();
-    bool CanGather();
+    bool CanMove { get; }
 
-    void MoveTo(Vector3 targetPosition);
-    void Attack(Vector3 targetPosition);
-    void Build(Vector3 targetPosition);
-    void GatherResource(Vector3 targetPosition);
+    void CommandMoveTo(Vector3 targetPosition);
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Cysharp.Threading.Tasks;
 
-public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, IWaveEvent
+public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, IWaveEvent, ICommand
 {
     //data
     public Data.CharacterData CharacterData { get; private set; }
@@ -60,6 +60,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         }
     }
 
+    public bool CanMove { get; } = true;
 
     public virtual void SetTriggerAni(Define.EPawnAniTriger trigger)
     {
@@ -486,28 +487,31 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         }
     }
 
-    public void SetDestination(Vector3 position)
+    public void SetDestination(Vector3 position, bool isChase = true)
     {
         if (DestPos == position)
             return;
         if (BoardManager.Instance.GetMoveablePosition(position, out Vector3 moveablePosition))
         {
-            OnMove(moveablePosition);
+            OnMove(moveablePosition, isChase);
         }
     }
 
-    protected virtual void OnMove(Vector3 destPosition)
+    protected virtual void OnMove(Vector3 destPosition, bool isChase)
     {
         if (DestPos == destPosition)
             return;
         DestPos = destPosition;
         if (!_navAgent.isActiveAndEnabled)
         {
-            Debug.Log($"_navAgent.isActiveAndEnabled : {_navAgent.isActiveAndEnabled}");
-            Debug.Log(System.Environment.StackTrace);
+            Debug.LogError($"_navAgent.isActiveAndEnabled : {_navAgent.isActiveAndEnabled}");
+            Debug.LogError(System.Environment.StackTrace);
         }
         _navAgent.SetDestination(DestPos);
-        AI.SetState(AI.GetMoveState());
+        if (isChase)
+            AI.SetState(AI.GetChaseState());
+        else
+            AI.SetState(AI.GetMoveState());
     }
 
 
@@ -601,5 +605,8 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         return _collider;
     }
 
-
+    public void CommandMoveTo(Vector3 targetPosition)
+    {
+        SetDestination(targetPosition, false);
+    }
 }
