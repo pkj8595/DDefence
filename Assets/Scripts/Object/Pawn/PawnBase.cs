@@ -14,6 +14,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
     public Define.WorldObject WorldObjectType { get; set; } = Define.WorldObject.Pawn;
     [field: SerializeField] public Define.ETeam Team { get; set; } = Define.ETeam.Playable;
     [field : SerializeField] protected Vector3 DestPos { get; set; }
+    [field : SerializeField] public Vector3 OriginPosition { get; set; }
     [SerializeField] protected Define.EPawnAniState _state = Define.EPawnAniState.Idle;
     [SerializeField] protected Transform _projectileTrans;
 
@@ -596,7 +597,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
 
     public void ReadyWave()
     {
-        OnLive();
+        //OnLive();
         PawnStat.Mana = 0;
     }
 
@@ -607,6 +608,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
 
     public void CommandMoveTo(Vector3 targetPosition)
     {
+        OriginPosition = targetPosition;
         SetDestination(targetPosition, false);
     }
 }

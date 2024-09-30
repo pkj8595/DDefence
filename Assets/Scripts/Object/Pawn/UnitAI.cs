@@ -11,7 +11,8 @@ public class UnitAI
     private readonly ChaseState         _chaseState = new ChaseState();
     private readonly DeadState          _deadState = new DeadState();
     private readonly SkillState         _skillState = new SkillState();
-    private readonly MoveState         _moveState = new MoveState();
+    private readonly MoveState          _moveState = new MoveState();
+    private readonly ReturnToBaseState  _returnToBaseState = new ReturnToBaseState();
 
     public PawnBase Pawn { get; private set; }
     public bool HasTarget => Pawn.HasTarget;
@@ -22,7 +23,7 @@ public class UnitAI
     public void Init(PawnBase pawn)
     {
         Pawn = pawn;
-
+        OriginPosition = pawn.OriginPosition;
         _idleState.Init(this);
         _chaseState.Init(this);
         _deadState.Init(this);
@@ -63,6 +64,7 @@ public class UnitAI
     public DeadState GetDeadState() => _deadState;
     public SkillState GetSkillState() => _skillState;
     public MoveState GetMoveState() => _moveState;
+    public ReturnToBaseState GetReturnToBase() => _returnToBaseState;
 
     /// <summary>
     /// 타겟이 범위 밖으로 나갔다면 target추적 중지
@@ -71,9 +73,37 @@ public class UnitAI
     {
         if (SearchRange + 3 < Vector3.Distance(Pawn.LockTarget.GetTransform().position, Pawn.transform.position) && Pawn.Team == Define.ETeam.Playable)
         {
-            SetState(GetIdleState());
+            SetState(GetReturnToBase());
             return true;
         }
+        return false;
+    }
+
+    /// <summary>
+    /// origine position에서 현재 캐릭터가 SearchRange만큼 떨어지면 오리진 포지션으로
+    /// </summary>
+    /// <returns></returns>
+    public bool CheckOriginPosition()
+    {
+        if (OriginPosition != Vector3.zero)
+        {
+            if (SearchRange < Vector3.Distance(OriginPosition.Value, Pawn.transform.position))
+            {
+                SetState(GetReturnToBase());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool CheckChangeState()
+    {
+        if (CheckOriginPosition())
+            return true;
+
+        if (CheckOutRangeTarget())
+            return true;
+
         return false;
     }
 
@@ -92,5 +122,6 @@ public class UnitAI
         if (Pawn.LockTarget != null)
             Pawn.SetDestination(Pawn.LockTarget.GetTransform().position);
     }
+
 
 }

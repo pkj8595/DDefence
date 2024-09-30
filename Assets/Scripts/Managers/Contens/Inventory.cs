@@ -13,6 +13,34 @@ public class Inventory
 
     private UICardList uiCardList;
 
+    private int _currentPopulation;
+    private int _maxPopulation;
+    public int MaxPopulation 
+    {   
+        get => _maxPopulation; 
+        set 
+        {
+            _maxPopulation = value;
+            UpdatePopulation(); 
+        } 
+    }
+    public int CurrentPopulation
+    {
+        get => _currentPopulation; 
+        set
+        {
+            _currentPopulation = value;
+            UpdatePopulation();
+        }
+    }
+
+    public void UpdatePopulation()
+    {
+        string ret = $"{CurrentPopulation}/{MaxPopulation}";
+        UIMain uiMain = Managers.UI.GetUI<UIMain>() as UIMain;
+        uiMain.SetPopulation(ret);
+    }
+
     public void AddCard(Data.ShopData data)
     {
         if (uiCardList == null)

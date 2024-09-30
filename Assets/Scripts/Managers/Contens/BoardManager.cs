@@ -250,7 +250,7 @@ public class BoardManager : MonoSingleton<BoardManager>
             return;
         }
 
-        AddBuildingNode(_previewNode, _nodeList[index]);
+        //AddBuildingNode(_previewNode, _nodeList[index]);
     }
 
 
@@ -302,9 +302,8 @@ public class BoardManager : MonoSingleton<BoardManager>
 
     private bool AddBuildingNode(NodeBase previewNode)
     {
-        GameObject nodeprefab = Managers.Resource.Instantiate(_cardItemPath, this.transform);
-        nodeprefab.SetActive(false);
-        return AddBuildingNode(previewNode, nodeprefab, true);
+       
+        return AddBuildingNode(previewNode, true);
     }
 
     /// <summary>
@@ -312,13 +311,11 @@ public class BoardManager : MonoSingleton<BoardManager>
     /// </summary>
     /// <param name="previewNode"></param>
     /// <param name="nodePrefab"></param>
-    private bool AddBuildingNode(NodeBase previewNode, GameObject nodePrefab, bool isCard = false)
+    private bool AddBuildingNode(NodeBase previewNode, bool isCard = false)
     {
-        NodeBase node = nodePrefab.GetComponent<NodeBase>();
+        NodeBase node = previewNode.GetComponent<NodeBase>();
         if (node == null)
         {
-            if (isCard)
-                Destroy(node.gameObject);
             Debug.Log($"{previewNode.name}이 없습니다.");
             return false;
         }
@@ -326,10 +323,31 @@ public class BoardManager : MonoSingleton<BoardManager>
         Vector3Int gridPosition = previewNode.Position;
         if (!CanPlaceBuilding(gridPosition, node.NodeSize, previewNode))
         {
-            if (isCard)
-                Destroy(node.gameObject);
             Debug.Log("이미 설치된 위치입니다.");
             return false;
+        }
+
+        //생성 셋팅
+        bool isBuildingNode = previewNode is BuildingNode;
+        GameObject nodeprefab = Managers.Resource.Instantiate(_cardItemPath, isBuildingNode ? _buildingGroup.transform : this.transform);
+        NodeBase nodeObject = nodeprefab.GetComponent<NodeBase>();
+        // node 생성 및 초기화
+        nodeObject.gameObject.SetActive(false);
+        nodeObject.Init(gridPosition);
+        nodeObject.transform.position = previewNode.transform.position;
+        nodeObject.transform.rotation = previewNode.transform.rotation;
+
+        if (isBuildingNode)
+        {
+            _constructedBuildingList.Add(nodeObject as BuildingNode);
+        }
+        else
+        {
+            //blockNode 일 경우 메쉬 병합
+            nodeObject.SetActiveCompleteAction(() => {
+                AddMesh(nodeObject.GetComponentsInChildren<MeshFilter>());
+                nodeObject.transform.SetParent(_nodeGroup.transform);
+            });
         }
 
         // 차지하는 공간을 nodes 딕셔너리에 추가
@@ -342,35 +360,9 @@ public class BoardManager : MonoSingleton<BoardManager>
                     Vector3Int nodePosition = new Vector3Int(gridPosition.x + x,
                                                              gridPosition.y + y,
                                                              gridPosition.z + z);
-                    _dirNodes.Add(nodePosition, node);
+                    _dirNodes.Add(nodePosition, nodeObject);
                 }
             }
-        }
-
-        NodeBase nodeObject;
-        // 생성
-        if (isCard)
-            nodeObject = node;
-        else
-            nodeObject = Managers.Resource.Instantiate(node.gameObject).GetComponent<NodeBase>();
-
-        // node 생성 및 초기화
-        nodeObject.Init(gridPosition);
-        
-        nodeObject.transform.position = previewNode.transform.position;
-        nodeObject.transform.rotation = previewNode.transform.rotation;
-
-        if (nodeObject is BuildingNode)
-        {
-            nodeObject.transform.SetParent(_buildingGroup.transform);
-            _constructedBuildingList.Add(nodeObject as BuildingNode);
-        }
-        else
-        {
-            nodeObject.SetActiveCompleteAction(() => { 
-                AddMesh(nodeObject.GetComponentsInChildren<MeshFilter>()); 
-                nodeObject.transform.SetParent(_nodeGroup.transform);
-            });
         }
 
         nodeObject.SetActive(true);
@@ -612,6 +604,8 @@ public class BoardManager : MonoSingleton<BoardManager>
         _previewNode.gameObject.layer = 2;
         _previewNode.gameObject.name = "PreviewNode";
         ChangeMaterialPreviewNode(false);
+        var navObstacle = _previewNode.GetComponent<NavMeshObstacle>();
+        navObstacle.enabled = false;
         _previewNode.gameObject.SetActive(true);
 
         _isSelectNode = true;

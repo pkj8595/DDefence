@@ -84,7 +84,7 @@ public class ChaseState : IUnitState
         //타겟이 있다면 범위 체크 밖에 나갔다면 
         if (_pawn.HasTarget)
         {
-            if (!_unitAI.CheckOutRangeTarget())
+            if (!_unitAI.CheckChangeState())
             {
                 _unitAI.TrackingAndAttackTarget();
             }
@@ -148,10 +148,10 @@ public class ReturnToBaseState : IUnitState
 
     public void EnterState()
     {
-        if (_unitAI.OriginPosition == null)
+        if (_unitAI.OriginPosition == null || _unitAI.OriginPosition == Vector3.zero)
             _unitAI.SetState(_unitAI.GetIdleState());
         else
-            _pawn.SetDestination(_unitAI.OriginPosition.Value);
+            _pawn.SetDestination(_unitAI.OriginPosition.Value,false);
     }
 
     public void UpdateState()

@@ -147,7 +147,7 @@ public class ChoiceItem
         {
             if (chioseData.arr_requiredGoods[i] != 0)
             {
-                requiredItemStr.Append(GetItemAmountStr(new ItemBase(chioseData.arr_requiredGoods[i]),
+                requiredItemStr.Append(GetItemAmountStr(ItemBase.GetItem(chioseData.arr_requiredGoods[i]),
                                                         chioseData.arr_requiredAmount[i]));
             }
         }
@@ -171,7 +171,7 @@ public class ChoiceItem
 
     public string GetItemAmountStr(ItemBase itemBase, int amount)
     {
-        return $"{itemBase.Name} : {amount}\n";
+        return $"{itemBase.Name} {amount} 소모 ";
     }
 
     public void SetActive(bool isActive)

@@ -51,7 +51,10 @@ public class SpawningPool
             PawnBase obj = Managers.Game.SpawnPawn(_enemyQueue.Dequeue(), Define.ETeam.Enemy);
             int gateIndex = UnityEngine.Random.Range(0, _gateList.Count);
             obj.transform.position = _gateList[gateIndex].transform.position;
-
+            if (obj.transform.position == Vector3.zero)
+            {
+                Debug.LogError($"gateIndex :{gateIndex} _gateCount :{_gateList.Count} \n스폰 포인트가 (0,0,0)입니다.\n{System.Environment.StackTrace}");
+            }
             await UniTask.Delay(1000);
         }
 

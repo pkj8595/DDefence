@@ -31,6 +31,11 @@ public class BuildingBase : Unit, ISelectedable, IWaveEvent
 
     public virtual void Init(Data.BuildingData data)
     {
+        if (BuildingData != null)
+        {
+            Managers.Game.Inven.MaxPopulation -= BuildingData.popluation;
+        }
+
         //todo 건물 테이블 수정하고 구현
         BuildingData = data;
         if (Stat == null)
@@ -77,6 +82,9 @@ public class BuildingBase : Unit, ISelectedable, IWaveEvent
                 Destroy(skill);
             }
         }
+
+        Managers.Game.Inven.MaxPopulation += BuildingData.popluation;
+
     }
 
 
@@ -124,6 +132,7 @@ public class BuildingBase : Unit, ISelectedable, IWaveEvent
             UIStateBarGroup uiStatebarGroup = Managers.UI.GetUI<UIStateBarGroup>() as UIStateBarGroup;
             uiStatebarGroup.RemoveUnit(_damageable);
         }
+
     }
 
     public void OnDead()
@@ -191,10 +200,12 @@ public class BuildingBase : Unit, ISelectedable, IWaveEvent
     private void OnEnable()
     {
         Managers.Game.RegisterWaveObject(this);
+        
     }
 
     private void OnDisable()
     {
         Managers.Game.RemoveWaveObject(this);
+        Managers.Game.Inven.MaxPopulation -= BuildingData.popluation;
     }
 }

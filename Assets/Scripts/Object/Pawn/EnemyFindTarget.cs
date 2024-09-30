@@ -18,6 +18,8 @@ public class EnemyFindTarget : MonoBehaviour
 
     async UniTaskVoid StartSearchTask()
     {
+        await UniTask.Delay(1000);
+
         while (true)
         {
             if (_pawnBase.IsDead())
@@ -46,7 +48,8 @@ public class EnemyFindTarget : MonoBehaviour
         {
             if (buildingList[i].TryGetComponent(out IDamageable damageable) && !damageable.IsDead())
             {
-                if (BoardManager.Instance.GetMoveablePosition(damageable.GetTransform().position,
+                Vector3 closetPoint = damageable.GetCollider().ClosestPoint(transform.position);
+                if (BoardManager.Instance.GetMoveablePosition(closetPoint,
                                                         out Vector3 moveablePosition, 4f))
                 {
                     moveablePositionList.Add(moveablePosition);

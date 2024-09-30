@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public interface ISelectedable
 {
@@ -12,7 +14,11 @@ public interface ISelectedable
 public class SelectedManager : MonoBehaviour
 {
     private List<ISelectedable> _selectedObjectList = new List<ISelectedable>();
+    public RectTransform RtSelectionBox;
 
+    private Vector3 _startMousePos;
+    private Vector3 _endMousePos;
+    private bool _isDragging;
 
     public void Init()
     {
@@ -54,8 +60,54 @@ public class SelectedManager : MonoBehaviour
             }
             DeselectAllObject();
         }
+/*
+        if (mouse == Define.MouseEvent.LPointerDown)
+        {
+            _startMousePos = Input.mousePosition;
+            _isDragging = true;
+            RtSelectionBox.gameObject.SetActive(true);
+        }
+        if (mouse == Define.MouseEvent.LPointerUp)
+        {
+            _isDragging = false;
+            _endMousePos = Input.mousePosition;
+            RtSelectionBox.gameObject.SetActive(false);
+        }
+
+        if (_isDragging)
+        {
+            _endMousePos = Input.mousePosition;
+            UpdateSelectionBox();
+        }
+*/
+    }
+
+    private void UpdateSelectionBox()
+    {
+        Vector2 boxStart = _startMousePos;
+        Vector2 boxSize = _endMousePos - _startMousePos;
+
+        RtSelectionBox.anchoredPosition = boxStart;
+        RtSelectionBox.sizeDelta = new Vector2(Mathf.Abs(boxSize.x), Mathf.Abs(boxSize.y));
+
+        if (boxSize.x < 0)
+            RtSelectionBox.pivot = new Vector2(1, RtSelectionBox.pivot.y); 
+        else
+            RtSelectionBox.pivot = new Vector2(0, RtSelectionBox.pivot.y); 
+
+        if (boxSize.y < 0)
+            RtSelectionBox.pivot = new Vector2(RtSelectionBox.pivot.x, 1); 
+        else
+            RtSelectionBox.pivot = new Vector2(RtSelectionBox.pivot.x, 0); 
+    }
+
+
+    private void EndDrawSelectedBox()
+    {
+        DeselectAllObject();
 
     }
+
 
     public void SelectObject(ISelectedable monster)
     {

@@ -36,7 +36,9 @@ public class GameScene : BaseScene
 
     async UniTaskVoid StartGame()
     {
-        await UniTask.Delay(2000);
+        Managers.UI.ShowUI<UIMain>();
+        //Managers.UI
+        await UniTask.Delay(1000);
         Managers.Game.StartGame();
     }
 }

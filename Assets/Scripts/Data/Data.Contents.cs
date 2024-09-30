@@ -357,6 +357,7 @@ namespace Data
         public float damageValue;
         public float protection;
         public float manaRegeneration;
+        public int popluation;
         public int baseSkill;
         public int productionTable;
         public int upgradeNum;
