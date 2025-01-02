@@ -19,13 +19,3 @@ public struct DamageMessage
         this.skillAffectList = skill.AffectList.ToArray();
     }
 }
-/*
-데미지 계산식
-damage = ((Attack * 밸런스) * 크리 * skill value) ) 
-
-받는쪽 = 회피 판별 => damage - defence 
-
-
-
-
- */

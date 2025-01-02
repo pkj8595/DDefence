@@ -60,7 +60,8 @@ public class UIMain : UIBase
 
     public void SetPopulation(string population)
     {
-        _txtPopulation.text = population;
+        if (_txtPopulation != null)
+            _txtPopulation.text = population;
     }
 
 }

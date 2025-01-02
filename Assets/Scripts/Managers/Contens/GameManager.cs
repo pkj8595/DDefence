@@ -12,6 +12,7 @@ public partial class GameManager
     List<BuildingNode> BuildingGroup { get => GameView.Instance.ConstructedBuildingList; }
     public Action<int> OnSpawnEvent;
 
+
     public void Init()
     {
         Inven.Init();
@@ -79,5 +80,6 @@ public partial class GameManager
         else
             _enumyPawnGroup.Add(pawn);
     }
+
 
 }

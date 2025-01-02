@@ -100,11 +100,21 @@ public class UIStoryBook : UIBase
         if (data.pushWave != 0)
             Managers.Game.WaveStack.Push(Managers.Data.WaveDict[data.pushWave]);
 
+        //추가 되는 스토리 있다면 추가
+        for (int i = 0; i < data.arr_nextStoryTable.Length; i++)
+        {
+            if (data.arr_nextStoryTable[i] != 0)
+            {
+                var storyItem = Managers.Data.StoryDict[data.arr_nextStoryTable[i]];
+                Managers.Game.StoryStack.Enqueue(storyItem, storyItem.priority);
+            }
+        }
+
         var waveData = Managers.Game.WaveStack.Peek();
         StringBuilder builder = new StringBuilder();
         builder.Append(data.desc);
         builder.Append("\n\n");
-        builder.Append($"저 멀리 누군가 보입니다. 아~ {waveData.name}이네요!");
+        builder.Append($"{waveData.name} 출현!");
         builder.Append("\n");
         builder.Append(waveData.desc);
         _txtContent.text = builder.ToString();

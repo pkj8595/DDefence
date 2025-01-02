@@ -17,7 +17,7 @@ public class UI_MoveResource : MonoBehaviour
     private bool isProcessing = false;
 
     //setting
-    float duration = 0.8f;
+    float duration = 0.6f;
 
     public void QueueAddItem(Vector3 worldPosition, Define.EGoodsType goodsType, int amount)
     {

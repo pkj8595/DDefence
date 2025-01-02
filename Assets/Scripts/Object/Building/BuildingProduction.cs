@@ -25,15 +25,19 @@ public class BuildingProduction : MonoBehaviour, IWaveEvent
         if (_data.waveCount <= _waveCount)
         {
             _waveCount -= _data.waveCount;
-            if (Utils.CalculateTableNum(_data.itemNum) == Data.GoodsData.Table)
-            {
-                Managers.Game.Inven.AddMoveItem(transform.position, (Define.EGoodsType)_data.itemNum, _data.itemAmount);
-            }
-            else
-            {
-                Managers.Game.Inven.AddItem(_data.itemNum, _data.itemAmount);
-            }
+            CreateItem(_data.itemNum, _data.itemAmount);
+        }
+    }
 
+    public void CreateItem(int itemNum, int itemAmount)
+    {
+        if (Utils.CalculateTableNum(itemNum) == Data.GoodsData.Table)
+        {
+            Managers.Game.Inven.AddMoveItem(transform.position, (Define.EGoodsType)itemNum, itemAmount);
+        }
+        else
+        {
+            Managers.Game.Inven.AddItem(itemNum, itemAmount);
         }
     }
 

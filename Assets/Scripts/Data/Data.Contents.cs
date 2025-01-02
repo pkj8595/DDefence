@@ -322,7 +322,7 @@ namespace Data
         public string name;
         public string desc;
         public int priority;
-        public int nextStoryTable;
+        public int[] arr_nextStoryTable = new int[2];
         public int pushWave;
         public int[] arr_getItem = new int[2];
         public int[] arr_getItemAmount = new int[2];

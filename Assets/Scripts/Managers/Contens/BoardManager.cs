@@ -33,7 +33,7 @@ public class BoardManager : MonoSingleton<BoardManager>
 
     [SerializeField] private LineRenderer _lineRender;
 
-    [SerializeField] private NodeBase _previewNode;
+    private NodeBase _previewNode;
     [SerializeField] private Material _previewMaterial_Green;
     [SerializeField] private Material _previewMaterial_Red;
 

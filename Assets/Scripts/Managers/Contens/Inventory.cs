@@ -12,6 +12,7 @@ public class Inventory
     public List<ShopData> GetCardDataList => _cardDataList;
 
     private UICardList uiCardList;
+    private UIMain uiMain;
 
     private int _currentPopulation;
     private int _maxPopulation;
@@ -36,8 +37,11 @@ public class Inventory
 
     public void UpdatePopulation()
     {
+
         string ret = $"{CurrentPopulation}/{MaxPopulation}";
-        UIMain uiMain = Managers.UI.GetUI<UIMain>() as UIMain;
+
+        if (uiMain == null)
+            uiMain = Managers.UI.GetUI<UIMain>() as UIMain;
         uiMain.SetPopulation(ret);
     }
 

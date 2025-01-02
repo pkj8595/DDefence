@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ResourceManager : ManagerBase
 {
+    public Dictionary<string, object> _cacheResource = new ();
+
     public T Load<T>(string path) where T : Object
     {
         //1. original를 이미 들고 있으면 바로 사용

@@ -65,7 +65,7 @@ public class DamageAffect : AffectBase
 
     public override void ApplyAffect(Stat attacker, Stat taker)
     {
-        // 예시: target의 체력을 줄이는 로직
+        // target의 체력을 줄이는 로직
         taker.OnAttacked((DamageValue * 0.01f) * attacker.GetAttackValue(_data.damageType), attacker);
     }
 

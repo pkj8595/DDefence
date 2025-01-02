@@ -15,12 +15,6 @@ public class GameScene : BaseScene
         SelectedManager select = gameObject.GetOrAddComponent<SelectedManager>();
         select.Init();
 
-        var pawns = PawnObj.GetComponentsInChildren<PawnController>();
-        for (int i = 0; i < pawns.Length; i++)
-        {
-            Managers.Game.SetPawnInScene(pawns[i]);
-        }
-
         StartGame().Forget();
     }
 
@@ -37,6 +31,15 @@ public class GameScene : BaseScene
     async UniTaskVoid StartGame()
     {
         Managers.UI.ShowUI<UIMain>();
+        await UniTask.NextFrame();
+
+        //폰 셋팅
+        var pawns = PawnObj.GetComponentsInChildren<PawnController>();
+        for (int i = 0; i < pawns.Length; i++)
+        {
+            Managers.Game.SetPawnInScene(pawns[i]);
+        }
+
         //Managers.UI
         await UniTask.Delay(1000);
         Managers.Game.StartGame();

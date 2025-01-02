@@ -156,7 +156,7 @@
       "tableNum": 102301000,
       "name": "힘이 약한",
       "vitality": 0,
-      "strength": 1,
+      "strength": -1,
       "agility": 0,
       "intelligence": 0,
       "willpower": 0,
@@ -369,8 +369,8 @@
         null
       ],
       "arr_charAmount": [
-        3,
         2,
+        1,
         null,
         null,
         null
@@ -389,7 +389,7 @@
         null
       ],
       "arr_charAmount": [
-        5,
+        3,
         null,
         null,
         null,
@@ -409,7 +409,7 @@
         null
       ],
       "arr_charAmount": [
-        5,
+        2,
         2,
         null,
         null,
@@ -429,7 +429,7 @@
         null
       ],
       "arr_charAmount": [
-        5,
+        2,
         4,
         null,
         null,
@@ -465,8 +465,8 @@
       "desc": "어린 신과 만났고 적이 다가오고 있습니다.",
       "priority": 100,
       "arr_choice": [
-        111001000,
-        111001001,
+        112001000,
+        112001001,
         null
       ]
     },
@@ -477,8 +477,8 @@
       "desc": "모험가는 정착을 결정합니다.",
       "priority": 99,
       "arr_choice": [
-        111001003,
-        111001004,
+        112001003,
+        112001004,
         null
       ]
     },
@@ -489,7 +489,7 @@
       "desc": "테스트 3",
       "priority": 1,
       "arr_choice": [
-        111001004,
+        112001004,
         null,
         null
       ]
@@ -501,7 +501,7 @@
       "desc": "테스트 4",
       "priority": 1,
       "arr_choice": [
-        111001005,
+        112001005,
         null,
         null
       ]
@@ -593,11 +593,14 @@
   ],
   "StoryChoiceTable": [
     {
-      "tableNum": 111001000,
+      "tableNum": 112001000,
       "name": "맞서 싸운다.",
       "desc": "초이스 테스트1 내용",
-      "nextStoryTable": 111000001,
       "pushWave": 110000000,
+      "arr_nextStoryTable": [
+        null,
+        null
+      ],
       "arr_getItem": [
         null,
         null
@@ -618,11 +621,14 @@
       ]
     },
     {
-      "tableNum": 111001001,
+      "tableNum": 112001001,
       "name": "맞서 싸운다.test",
       "desc": "초이스 테스트2 내용",
-      "nextStoryTable": 111000001,
       "pushWave": 110100000,
+      "arr_nextStoryTable": [
+        null,
+        null
+      ],
       "arr_getItem": [
         null,
         null
@@ -643,11 +649,14 @@
       ]
     },
     {
-      "tableNum": 111001002,
+      "tableNum": 112001002,
       "name": "간호한다.",
       "desc": "정신을 차린 그는 감사의 표시로 약간의 답례를 합니다.",
-      "nextStoryTable": 111000002,
       "pushWave": 110100000,
+      "arr_nextStoryTable": [
+        null,
+        null
+      ],
       "arr_getItem": [
         302001001,
         301001001
@@ -668,11 +677,14 @@
       ]
     },
     {
-      "tableNum": 111001003,
+      "tableNum": 112001003,
       "name": "초이스 테스트4",
       "desc": "초이스 테스트4 내용",
-      "nextStoryTable": 111000003,
       "pushWave": 110100001,
+      "arr_nextStoryTable": [
+        null,
+        null
+      ],
       "arr_getItem": [
         null,
         null
@@ -693,11 +705,14 @@
       ]
     },
     {
-      "tableNum": 111001004,
+      "tableNum": 112001004,
       "name": "초이스 테스트5",
       "desc": "초이스 테스트5 내용",
-      "nextStoryTable": "",
       "pushWave": 110100002,
+      "arr_nextStoryTable": [
+        null,
+        null
+      ],
       "arr_getItem": [
         null,
         null
@@ -718,11 +733,14 @@
       ]
     },
     {
-      "tableNum": 111001005,
-      "name": "초이스 테스트6",
-      "desc": "초이스 테스트6 내용",
-      "nextStoryTable": "",
-      "pushWave": "",
+      "tableNum": 112001005,
+      "name": "누군가 땅에 누워있다.",
+      "desc": "땅에서 자고 있는 사람을 발견했다. 일단 깨워보려고 다가갔다. 근데 주변에 몬스터들이 보인다.",
+      "pushWave": 110000000,
+      "arr_nextStoryTable": [
+        null,
+        null
+      ],
       "arr_getItem": [
         null,
         null
@@ -793,6 +811,7 @@
       "damageValue": 50,
       "protection": 20,
       "manaRegeneration": 10,
+      "population": 0,
       "baseSkill": 400500001,
       "productionTable": "",
       "upgradeNum": 202101001,
@@ -811,6 +830,7 @@
       "damageValue": 70,
       "protection": 20,
       "manaRegeneration": 10,
+      "population": 0,
       "baseSkill": 400500001,
       "productionTable": "",
       "upgradeNum": 202101002,
@@ -829,6 +849,7 @@
       "damageValue": 100,
       "protection": 20,
       "manaRegeneration": 10,
+      "population": 0,
       "baseSkill": 400500001,
       "productionTable": "",
       "upgradeNum": "",
@@ -847,6 +868,7 @@
       "damageValue": 100,
       "protection": 20,
       "manaRegeneration": 10,
+      "population": 0,
       "baseSkill": 400500001,
       "productionTable": "",
       "upgradeNum": 202101002,
@@ -865,6 +887,7 @@
       "damageValue": 100,
       "protection": 20,
       "manaRegeneration": 10,
+      "population": 0,
       "baseSkill": 400500001,
       "productionTable": "",
       "upgradeNum": "",
@@ -883,6 +906,7 @@
       "damageValue": 0,
       "protection": 0,
       "manaRegeneration": 0,
+      "population": 0,
       "baseSkill": "",
       "productionTable": 402001001,
       "upgradeNum": 202200001,
@@ -901,6 +925,7 @@
       "damageValue": 0,
       "protection": 0,
       "manaRegeneration": 0,
+      "population": 0,
       "baseSkill": "",
       "productionTable": 402001002,
       "upgradeNum": "",
@@ -919,6 +944,7 @@
       "damageValue": 0,
       "protection": 0,
       "manaRegeneration": 0,
+      "population": 0,
       "baseSkill": "",
       "productionTable": 402001002,
       "upgradeNum": "",
@@ -937,6 +963,7 @@
       "damageValue": 30,
       "protection": 10,
       "manaRegeneration": 10,
+      "population": 3,
       "baseSkill": 400999000,
       "productionTable": 500001001,
       "upgradeNum": "",

@@ -206,6 +206,9 @@ public class BuildingBase : Unit, ISelectedable, IWaveEvent
     private void OnDisable()
     {
         Managers.Game.RemoveWaveObject(this);
-        Managers.Game.Inven.MaxPopulation -= BuildingData.popluation;
+        if (BuildingData != null)
+        {
+            Managers.Game.Inven.MaxPopulation -= BuildingData.popluation;
+        }
     }
 }

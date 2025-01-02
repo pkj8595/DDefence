@@ -27,7 +27,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
     [field : SerializeField] public List<Data.RuneData> RuneList { get; private set; } = new(Define.Pawn_Rune_Limit_Count);
     public PawnStat PawnStat { get; protected set; }
     public UnitSkill PawnSkills { get; } = new UnitSkill();
-    public UnitAI AI { get; } = new UnitAI();
+    public UnitAI AI { get; private set; }
 
     //option
     [field : SerializeField] public IDamageable LockTarget { get; set; }
@@ -71,7 +71,6 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
     public virtual void Update()
     {
         AI?.OnUpdate();
-        
     }
 
     private void OnDisable()
@@ -79,6 +78,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         if (Team == Define.ETeam.Playable)
         {
             Managers.Game.RemoveWaveObject(this);
+            Managers.Game.Inven.CurrentPopulation--;
         }
     }
 
@@ -107,6 +107,8 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         CharacterData = Managers.Data.CharacterDict[characterNum];
         AniController.Init(CharacterData);
         PawnStat.Init(CharacterData.statDataNum, OnDead, OnDeadTarget, OnChangeStatValue, CharacterData.ignoreAttributeType);
+        if(AI == null)
+            AI = new UnitAI();
         AI.Init(this);
         
         PawnSkills.Init(PawnStat.Mana);
@@ -146,6 +148,8 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         {
             Managers.Game.RegisterWaveObject(this);
         }
+
+        Managers.Game.Inven.CurrentPopulation++;
 
         Init();
     }
@@ -438,7 +442,7 @@ public abstract class PawnBase :Unit, ISelectedable, IDamageable, IAttackable, I
         _collider.enabled = false;
         OnDeadEnemy().Forget();
 
-        //사용하고 있는 pawn이 죽으면 20프로 확률로 부정기벽 획득
+        //사용하고 있는 pawn이 죽으면 50프로 확률로 부정기벽 획득
         if (Team == Define.ETeam.Playable)
         {
             float randomRange = UnityEngine.Random.value;
