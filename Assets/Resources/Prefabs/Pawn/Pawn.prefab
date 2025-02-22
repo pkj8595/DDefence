@@ -312,6 +312,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Team>k__BackingField: 0
   <DestPos>k__BackingField: {x: 0, y: 0, z: 0}
+  <OriginPosition>k__BackingField: {x: 0, y: 0, z: 0}
   _state: 0
   _projectileTrans: {fileID: 4429359987017351780}
   _navAgent: {fileID: 1792929913}
@@ -395,7 +396,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0

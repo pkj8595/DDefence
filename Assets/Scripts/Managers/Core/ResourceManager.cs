@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class ResourceManager : ManagerBase
 {
-    public Dictionary<string, object> _cacheResource = new ();
-
     public T Load<T>(string path) where T : Object
     {
         //1. original를 이미 들고 있으면 바로 사용
@@ -13,7 +11,8 @@ public class ResourceManager : ManagerBase
         {
             string name = GetObejctName(path);
 
-            GameObject go = Managers.Pool.GetOriginal(name);
+            //GameObject go = Managers.Pool.GetOriginal(name);
+            GameObject go = PoolManager1.Instance.GetOriginal(name);
             if (go != null)
                 return go as T;
         }
@@ -48,19 +47,24 @@ public class ResourceManager : ManagerBase
             return null;
         }
 
-        //2. 혹시 풀링된 애가 있을까?
+        /*//2. 혹시 풀링된 애가 있을까?
         if (original.GetComponent<Poolable>() != null)
-            return Managers.Pool.Pop(original, parent).gameObject;
+            return Managers.Pool.Pop(original, parent).gameObject;*/
+
+        if (original.GetComponent<Poolable>() != null)
+            return PoolManager1.Instance.Pop(original).gameObject;
+
 
         GameObject go = Object.Instantiate(original, parent);
-        go.name = original.name;
+        //go.name = original.name;
         return go;
     }
 
     public GameObject Instantiate(GameObject prefab, Transform parent = null)
     {
         if (prefab.GetComponent<Poolable>() != null)
-            return Managers.Pool.Pop(prefab, parent).gameObject;
+            //return Managers.Pool.Pop(prefab, parent).gameObject;
+            return PoolManager1.Instance.Pop(prefab).gameObject;
 
         GameObject go = Object.Instantiate(prefab, parent);
         go.name = prefab.name;
@@ -76,7 +80,8 @@ public class ResourceManager : ManagerBase
         Poolable poolable = go.GetComponent<Poolable>();
         if (poolable != null)
         {
-            Managers.Pool.Push(poolable);
+            //Managers.Pool.Push(poolable);
+            PoolManager1.Instance.Push(poolable);
             return;
         }
 
