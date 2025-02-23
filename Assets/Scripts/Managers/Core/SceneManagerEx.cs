@@ -23,7 +23,7 @@ public class SceneManagerEx : ManagerBase
         get 
         {
             if (SceneManager.GetActiveScene().name != _currentScene.GetType().Name)
-                _currentScene = GameObject.FindObjectOfType<BaseScene>();
+                _currentScene = GameObject.FindFirstObjectByType<BaseScene>();
 
             return _currentScene; 
         }

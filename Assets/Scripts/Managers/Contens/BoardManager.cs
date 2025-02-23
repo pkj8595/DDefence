@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
+//using UnityEngine.AI;
+using Unity.AI.Navigation;
 
 public class BoardManager : MonoSingleton<BoardManager>
 {
@@ -17,6 +18,7 @@ public class BoardManager : MonoSingleton<BoardManager>
     [SerializeField] private GameObject _combineMeshObject;
     [SerializeField] private GameObject _nodeGroup;
     [SerializeField] private GameObject _buildingGroup;
+    //[SerializeField] private NavMeshSurface navSurface;
     [SerializeField] private NavMeshSurface navSurface;
 
     [SerializeField] private List<GameObject> _nodeList;
@@ -502,7 +504,7 @@ public class BoardManager : MonoSingleton<BoardManager>
     public bool GetMoveablePosition(Vector3 worldPosition, out Vector3 movealbePosition, float maxDistance = 1f)
     {
         movealbePosition = Vector3.zero;
-        if (NavMesh.SamplePosition(worldPosition, out NavMeshHit hit, maxDistance, NavMesh.AllAreas))
+        if (UnityEngine.AI.NavMesh.SamplePosition(worldPosition, out UnityEngine.AI.NavMeshHit hit, maxDistance, UnityEngine.AI.NavMesh.AllAreas))
         {
             movealbePosition = hit.position;
             return true;
@@ -604,7 +606,7 @@ public class BoardManager : MonoSingleton<BoardManager>
         _previewNode.gameObject.layer = 2;
         _previewNode.gameObject.name = "PreviewNode";
         ChangeMaterialPreviewNode(false);
-        var navObstacle = _previewNode.GetComponent<NavMeshObstacle>();
+        var navObstacle = _previewNode.GetComponent<UnityEngine.AI.NavMeshObstacle>();
         navObstacle.enabled = false;
         _previewNode.gameObject.SetActive(true);
 

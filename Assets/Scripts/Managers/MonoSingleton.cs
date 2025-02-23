@@ -12,7 +12,7 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
         {
             if (m_instance == null)
             {
-                m_instance = GameObject.FindObjectOfType(typeof(T)) as T;
+                m_instance = GameObject.FindFirstObjectByType(typeof(T)) as T;
                 if (m_instance == null)
                 {
                     GameObject obj = new GameObject($"@{typeof(T).Name}");

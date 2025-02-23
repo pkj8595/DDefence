@@ -27,7 +27,7 @@ public class ArrowProjectile : ProjectileBase
         Vector3 velocity = Vector3.zero;
         if(_target.TryGetComponent(out Rigidbody rigidbody))
         {
-            velocity = rigidbody.velocity;
+            velocity = rigidbody.linearVelocity;
         }
         Vector3 startPosition = _startTrans.position;
         Vector3 targetPosition = _target.position + _offsetTarget + (velocity);
