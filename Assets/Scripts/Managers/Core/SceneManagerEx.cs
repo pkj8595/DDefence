@@ -10,7 +10,7 @@ public class SceneManagerEx : ManagerBase
     public override void Init()
     {
         base.Init();
-        _currentScene = GameObject.FindObjectOfType<BaseScene>();
+        _currentScene = GameObject.FindFirstObjectByType<BaseScene>();
     }
 
     public override void Clear()
@@ -32,7 +32,6 @@ public class SceneManagerEx : ManagerBase
     public void LoadScene(Define.Scene type)
     {
         SceneManager.LoadScene(type.ToString());
-        
     }
 
 }
